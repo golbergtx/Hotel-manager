@@ -1,0 +1,10 @@
+@import "fonts.css";
+html{
+	min-height: 100%;
+	height: auto;
+}
+body{
+	margin: 0;
+	font-family: Roboto, sans-serif;
+	background-color: #e6e5cf;
+}

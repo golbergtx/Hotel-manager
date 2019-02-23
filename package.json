@@ -13,6 +13,8 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"express": "^4.16.4"
+		"express": "^4.16.4",
+		"hbs": "^4.0.2",
+		"mysql": "^2.16.0"
 	}
 }
