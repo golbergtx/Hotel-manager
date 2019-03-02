@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+	      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="/css/registry.css">
+	<title>Registry</title>
+</head>
+<body>
+<div class="registry-form-wrapper">
+	<p class="registry-header">Регистрация:</p>
+	<form id="registryForm" class="registry-form" @submit.prevent="submit" action="#" method="post">
+		<p class="show-error-login-message" v-if="showErrorLoginMessage">Вы ввели не правильные данные!</p>
+		<p class="show-error-login-message" v-if="loginExist">Данный логин уже существует!</p>
+		<input type="text" maxlength="40" v-model="login" class="registry-input" placeholder="Логин" required>
+		<input type="password" maxlength="40" v-model="password" class="registry-input" placeholder="Пароль" required>
+		<input type="text" maxlength="40" v-model="firstName" class="registry-input" placeholder="Имя" required>
+		<button type="submit" class="btn registry-btn" :class="{ disable : disableSaveDataBtn }">Регистрация</button>
+	</form>
+</div>
+<script src="/js/vue.js"></script>
+<script src="/js/registry.js"></script>
+</body>
+</html>
