@@ -11,7 +11,7 @@ new Vue({
 	},
 	methods: {
 		submit: function () {
-			let data = "login=" + encodeURIComponent(this.login) + "&password=" + encodeURIComponent(this.password)
+			const data = "login=" + encodeURIComponent(this.login) + "&password=" + encodeURIComponent(this.password)
 				+ "&name=" + encodeURIComponent(this.firstName);
 			this.sendDataToServer(data);
 			if (this.registrySuccessFull) {
@@ -21,7 +21,7 @@ new Vue({
 			}
 		},
 		sendDataToServer: function (body) {
-			let xhr = new XMLHttpRequest();
+			const xhr = new XMLHttpRequest();
 			xhr.open('POST', 'registry-user', false);
 			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 			xhr.send(body);

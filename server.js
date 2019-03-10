@@ -54,7 +54,7 @@ app.post('/registry-user', (req, res) => {
 		});
 	});
 	promise.then(() => {
-			database.query("INSERT INTO users SET ?", data, function (err) {
+			database.query("INSERT INTO users SET ?", data, err => {
 				if (err) {
 					console.log(err);
 					return res.status(500).end();
@@ -68,9 +68,52 @@ app.post('/registry-user', (req, res) => {
 		}
 	);
 });
+app.post('/get-rooms', (req, res) => {
+	database.query(`SELECT * FROM rooms`, (err, result) => {
+		if (err) {
+			console.log(err);
+			res.status(500).end();
+		} else {
+			res.status(200).json(result);
+		}
+	});
+});
+app.post('/get-room', (req, res) => {
+	database.query(`SELECT * FROM rooms WHERE number = '${req.body.number}'`, (err, result) => {
+		if (err) {
+			console.log(err);
+			res.status(500).end();
+		} else if (result[0]) {
+			res.status(302).end();
+		} else {
+			res.status(404).end();
+		}
+	});
+});
+app.post('/update-room', (req, res) => {
+	const data = [
+		req.body.price,
+		req.body.status,
+		req.body.number,
+		req.body.category,
+		new Date(req.body.dateOfArrival),
+		new Date(req.body.dateOfDeparture),
+		req.body.editNumber
+	];
+	
+	database.query(`UPDATE rooms SET price = ?, status = ?, number = ?, category = ?, dateOfArrival = ?,
+	dateOfDeparture = ? WHERE number = ?`, data, err => {
+		if (err) {
+			console.log(err);
+			res.status(500).end();
+		} else {
+			res.status(200).end();
+		}
+	});
+});
 
 // middleware
-app.use('/', (req, res, next) => {
+app.use('disable/', (req, res, next) => {
 	if (req.path === "/login" || req.path === "/registry") {
 		if (isAuthorized) {
 			res.redirect("/");

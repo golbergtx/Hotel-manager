@@ -1,7 +1,7 @@
 const mysql = require('mysql');
 class Database {
 	static connection(host, user, password, database) {
-		let connection = mysql.createConnection({
+		const connection = mysql.createConnection({
 			host: host,
 			user: user,
 			password: password,

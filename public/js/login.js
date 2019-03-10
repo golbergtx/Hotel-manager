@@ -8,7 +8,7 @@ new Vue({
 	},
 	methods: {
 		submit: function () {
-			let data = "login=" + encodeURIComponent(this.login) + "&password=" + encodeURIComponent(this.password);
+			const data = "login=" + encodeURIComponent(this.login) + "&password=" + encodeURIComponent(this.password);
 			this.loginSuccessFull = this.loginToServer(data);
 			if (this.loginSuccessFull) {
 				window.location = "/";
@@ -17,7 +17,7 @@ new Vue({
 			}
 		},
 		loginToServer: function (body) {
-			let xhr = new XMLHttpRequest();
+			const xhr = new XMLHttpRequest();
 			xhr.open('POST', 'login', false);
 			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 			xhr.send(body);

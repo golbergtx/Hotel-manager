@@ -9,7 +9,53 @@
 	<title>Home</title>
 </head>
 <body>
+<article>
+	<input type="number" v-model="numberFilter" class="filter-input" placeholder="Номер">
+	<input type="text" v-model="categoryFilter" class="filter-input" placeholder="Категория">
+	<input type="checkbox" v-model="showAvailableRooms" class="checkbox-input">
 
+	<div v-for="(room, index) in displayedRooms">
+		<span v-text="room.number"></span>
+		<span v-text="room.category"></span>
+		<span v-text="getFormatDate(room.dateOfArrival)"></span>
+		<span v-text="getFormatDate(room.dateOfDeparture)"></span>
+		<span v-text="room.price"></span>
+		<span v-text="room.status"></span>
+		<button class="open-edit-popup-btn" @click="openEditPopup(index)"></button>
+	</div>
+
+	<div class="edit-popup" v-show="openedEditPopup">
+		<span class="edit-popup-error-message" v-text="editPopupErrorMessage"></span>
+		<div>
+			<label for="">Номер</label>
+			<input type="number" class="edit-number-input" v-model="editNumberData">
+		</div>
+		<div>
+			<label for="">Категорія</label>
+			<input type="text" class="edit-category-input" v-model="editCategoryData">
+		</div>
+		<div>
+			<label for="">Дата заселення</label>
+			<input type="text" class="edit-dateOfArrival-input" v-model="editDateOfArrivalData">
+		</div>
+		<div>
+			<label for="">Дата виселеня</label>
+			<input type="text" class="edit-dateOfDeparture-input" v-model="editDateOfDepartureData">
+		</div>
+		<div>
+			<label for="">Ціна</label>
+			<input type="text" class="edit-price-input" v-model="editPriceData">
+		</div>
+		<div>
+			<label for="">Статус</label>
+			<input type="checkbox" class="edit-status-input" v-model="editStatusData">
+		</div>
+		<button class="save-new-room-data-btn" @click="saveNewRoomData"></button>
+		<button class="close-edit-popup-btn" @click="closeEditPopup"></button>
+	</div>
+
+</article>
 <script src="/js/vue.js"></script>
+<script src="/js/home.js"></script>
 </body>
 </html>
