@@ -1,0 +1,34 @@
+***** table rooms *****
+
+CREATE TABLE `hotel`.`rooms` (
+	number INT  NOT NULL,
+	category VARCHAR(30) NOT NULL,
+	dateOfArrival DATE NOT NULL,
+	dateOfDeparture DATE NOT NULL,
+	status BOOL DEFAULT FALSE,
+	price DECIMAL  NOT NULL,
+	CONSTRAINT registration_rooms_fk 
+);
+INSERT rooms(number, category, dateOfArrival, dateOfDeparture, status, price) 
+VALUES (1, "Стандарт" , "2019-03-01", "2019-04-10", true, 300),
+(2, "Стандарт" , "2019-03-01", "2019-04-15", false, 400),
+(3, "Стандарт" , "2019-03-01", "2019-04-20", false, 500);
+
+
+***** table registration *****
+
+CREATE TABLE `hotel`.`registration` (
+	registrationID INT PRIMARY KEY AUTO_INCREMENT,
+	roomNumber INT,
+    CONSTRAINT registration_rooms_fk 
+    FOREIGN KEY (roomNumber) REFERENCES rooms (number)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+	dateOfArrival DATE NOT NULL,
+	dateOfDeparture DATE NOT NULL,
+	methodOfPayment VARCHAR(30) NOT NULL,
+	guestID INT  NOT NULL
+);
+INSERT rooms(number, category, dateOfArrival, dateOfDeparture, status, price) 
+VALUES (1, "Стандарт" , "2019-03-01", "2019-04-10", true, 300),
+(2, "Стандарт" , "2019-03-01", "2019-04-15", false, 400),
+(3, "Стандарт" , "2019-03-01", "2019-04-20", false, 500);

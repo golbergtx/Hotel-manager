@@ -141,6 +141,9 @@ app.get('/log-out', (req, res) => {
 	isAuthorized = false;
 	res.redirect("/login");
 });
+app.get('/registration', function (req, res) {
+	res.render("registration");
+});
 app.get('/', function (req, res) {
 	res.render("home");
 });
