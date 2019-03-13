@@ -1,38 +1,28 @@
-export default class Room {
-	constructor(number, category, dateOfArrival, dateOfDeparture, price) {
-		this.number = number;
-		this.category = category;
-		this.dateOfArrival = dateOfArrival;
-		this.dateOfDeparture = dateOfDeparture;
-		this.status = Boolean(dateOfArrival);
-		this.price = price;
+export default class Guest {
+	constructor(id, firstName, lastName, phone, address, passportDetails, dateOfBirth) {
+		this.id = id;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phone = phone;
+		this.address = address;
+		this.passportDetails = passportDetails;
+		this.dateOfBirth = dateOfBirth;
 	}
 	
-	editRoom(options) {
-		this.number = options.number;
-		this.category = options.category;
-		this.price = options.price;
+	editGuest(options) {
+		this.firstName = options.firstName;
+		this.lastName = options.lastName;
+		this.phone = options.phone;
+		this.address = options.address;
+		this.passportDetails = options.passportDetails;
+		this.dateOfBirth = options.dateOfBirth;
 	}
 	
-	static getRoomByNumber(rooms, number) {
-		const result = [];
-		const room = rooms.find(room => room.number === parseInt(number));
-		if (room) result.push(room);
-		return result;
+	static getGuestByFirstName(guests, firstName) {
+		return guests.filter(guest => guest.firstName.startsWith(firstName));
 	}
 	
-	static getPriceByNumber(rooms, number) {
-		let result = 0;
-		const room = rooms.find(room => room.number === parseInt(number));
-		if (room) result = room.price;
-		return result;
-	}
-	
-	static getRoomsByCategory(rooms, category) {
-		return rooms.filter(room => room.category.startsWith(category));
-	}
-	
-	static getAvailableRooms(rooms) {
-		return rooms.filter(room => !room.status);
+	static createGuest(firstName, lastName, phone, address, passportDetails, dateOfBirth) {
+		return new Guest(null, firstName, lastName, phone, address, passportDetails, dateOfBirth);
 	}
 }

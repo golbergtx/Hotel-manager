@@ -146,6 +146,56 @@ app.post('/delete-registration', (req, res) => {
 		}
 	});
 });
+app.post('/get-guests', (req, res) => {
+	database.query(`SELECT * FROM guests`, (err, result) => {
+		if (err) {
+			console.log(err);
+			res.status(500).end();
+		} else {
+			res.status(200).json(result);
+		}
+	});
+});
+app.post('/update-guest', (req, res) => {
+	const data = [
+		req.body.firstName,
+		req.body.lastName,
+		req.body.phone,
+		req.body.address,
+		req.body.passportDetails,
+		new Date(req.body.dateOfBirth),
+		parseInt(req.body.id)
+	];
+	
+	database.query(`UPDATE guests SET firstName = ?, lastName = ?, phone = ?, address = ?, passportDetails = ?,
+	dateOfBirth = ? WHERE id = ?`, data, err => {
+		if (err) {
+			console.log(err);
+			res.status(500).end();
+		} else {
+			res.status(200).end();
+		}
+	});
+});
+app.post('/add-guest', (req, res) => {
+	const data = [
+		req.body.firstName,
+		req.body.lastName,
+		req.body.phone,
+		req.body.address,
+		req.body.passportDetails,
+		new Date(req.body.dateOfBirth)
+	];
+	database.query(`INSERT INTO guests SET firstName = ?, lastName = ?, phone = ?, address = ?, passportDetails = ?,
+	dateOfBirth = ?`, data, (err, result) => {
+		if (err) {
+			console.log(err);
+			res.status(500).end();
+		} else {
+			res.status(200).json({id: result.insertId});
+		}
+	});
+});
 
 // middleware
 app.use('disable/', (req, res, next) => {
@@ -176,11 +226,14 @@ app.get('/log-out', (req, res) => {
 	isAuthorized = false;
 	res.redirect("/user-login");
 });
+app.get('/room', function (req, res) {
+	res.render("room");
+});
 app.get('/registration', function (req, res) {
 	res.render("registration");
 });
-app.get('/room', function (req, res) {
-	res.render("room");
+app.get('/guest', function (req, res) {
+	res.render("guest");
 });
 
 app.listen(3000);

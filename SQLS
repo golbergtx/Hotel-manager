@@ -1,34 +1,50 @@
-***** table rooms *****
+***** tables *****
 
 CREATE TABLE `hotel`.`rooms` (
-	number INT  NOT NULL,
+	number INT PRIMARY KEY NOT NULL,
 	category VARCHAR(30) NOT NULL,
-	dateOfArrival DATE NOT NULL,
-	dateOfDeparture DATE NOT NULL,
-	status BOOL DEFAULT FALSE,
-	price DECIMAL  NOT NULL,
-	CONSTRAINT registration_rooms_fk 
+	price DECIMAL  NOT NULL
 );
-INSERT rooms(number, category, dateOfArrival, dateOfDeparture, status, price) 
-VALUES (1, "Стандарт" , "2019-03-01", "2019-04-10", true, 300),
-(2, "Стандарт" , "2019-03-01", "2019-04-15", false, 400),
-(3, "Стандарт" , "2019-03-01", "2019-04-20", false, 500);
 
-
-***** table registration *****
-
-CREATE TABLE `hotel`.`registration` (
-	registrationID INT PRIMARY KEY AUTO_INCREMENT,
-	roomNumber INT,
-    CONSTRAINT registration_rooms_fk 
-    FOREIGN KEY (roomNumber) REFERENCES rooms (number)
-    ON DELETE CASCADE ON UPDATE CASCADE,
+CREATE TABLE `hotel`.`registrations` (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	roomNumber INT NOT NULL,
+	price DECIMAL  NOT NULL,
 	dateOfArrival DATE NOT NULL,
 	dateOfDeparture DATE NOT NULL,
 	methodOfPayment VARCHAR(30) NOT NULL,
-	guestID INT  NOT NULL
+	guestID INT  NOT NULL,
+	FOREIGN KEY (roomNumber) REFERENCES rooms (number)
+	ON DELETE CASCADE ON UPDATE CASCADE
 );
-INSERT rooms(number, category, dateOfArrival, dateOfDeparture, status, price) 
-VALUES (1, "Стандарт" , "2019-03-01", "2019-04-10", true, 300),
-(2, "Стандарт" , "2019-03-01", "2019-04-15", false, 400),
-(3, "Стандарт" , "2019-03-01", "2019-04-20", false, 500);
+
+CREATE TABLE `hotel`.`guests` (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	firstName VARCHAR(30) NOT NULL,
+	lastName VARCHAR(30) NOT NULL,
+	phone VARCHAR(30) NOT NULL,
+	address VARCHAR(30) NOT NULL,
+	passportDetails VARCHAR(30) NOT NULL,
+	dateOfBirth DATE NOT NULL
+);
+
+
+
+
+***** table registration ***** merged
+INSERT rooms(number, category, price)
+VALUES (1, "Стандарт" , 300),
+(2, "Стандарт" , 400),
+(3, "Стандарт" , 500);
+
+
+INSERT registration(roomNumber, dateOfArrival, dateOfDeparture, methodOfPayment, guestID)
+VALUES (1, "2019-03-01", "2019-04-10", "pay", 3),
+(2, "2019-03-01", "2019-04-15", "pay", 4),
+(3, "2019-03-01", "2019-04-20", "pay", 5);
+
+
+INSERT guests(firstName, lastName, phone, address, passportDetails, dateOfBirth)
+VALUES ("Вова", "Петров", "0981223763", "Войково 12", "ВН 325482", "1990-04-15"),
+ ("Денис", "Петров", "0981223763", "Войково 12", "ВН 325482", "1990-04-15"),
+ ("Костя", "Петров", "0981223763", "Войково 12", "ВН 325482", "1990-04-15");

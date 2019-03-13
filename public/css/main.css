@@ -8,3 +8,11 @@ body{
 	font-family: Roboto, sans-serif;
 	background-color: #e6e5cf;
 }
+
+
+/**TODO */
+
+button{
+	width: 100px;
+	height: 50px;
+}
