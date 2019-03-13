@@ -22,7 +22,7 @@ new Vue({
 		},
 		sendDataToServer: function (body) {
 			const xhr = new XMLHttpRequest();
-			xhr.open('POST', 'registry-user', false);
+			xhr.open('POST', 'registration-user', false);
 			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 			xhr.send(body);
 			if (xhr.status === 200) {

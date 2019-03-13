@@ -34,7 +34,7 @@ app.post('/login', (req, res) => {
 		}
 	});
 });
-app.post('/registry-user', (req, res) => {
+app.post('/registration-user', (req, res) => {
 	const data = {
 		login: req.body.login,
 		password: req.body.password,
@@ -93,16 +93,51 @@ app.post('/get-room', (req, res) => {
 app.post('/update-room', (req, res) => {
 	const data = [
 		req.body.price,
-		req.body.status,
 		req.body.number,
 		req.body.category,
-		new Date(req.body.dateOfArrival),
-		new Date(req.body.dateOfDeparture),
 		req.body.editNumber
 	];
 	
-	database.query(`UPDATE rooms SET price = ?, status = ?, number = ?, category = ?, dateOfArrival = ?,
-	dateOfDeparture = ? WHERE number = ?`, data, err => {
+	database.query(`UPDATE rooms SET price = ?, number = ?, category = ? WHERE number = ?`, data, err => {
+		if (err) {
+			console.log(err);
+			res.status(500).end();
+		} else {
+			res.status(200).end();
+		}
+	});
+});
+app.post('/get-registration', (req, res) => {
+	database.query(`SELECT * FROM registrations`, (err, result) => {
+		if (err) {
+			console.log(err);
+			res.status(500).end();
+		} else {
+			res.status(200).json(result);
+		}
+	});
+});
+app.post('/add-registration', (req, res) => {
+	const data = [
+		req.body.roomNumber,
+		req.body.price,
+		new Date(req.body.dateOfArrival),
+		new Date(req.body.dateOfDeparture),
+		req.body.methodOfPayment,
+		req.body.guestID
+	];
+	database.query(`INSERT INTO registrations SET roomNumber = ?, price = ?, dateOfArrival = ?, dateOfDeparture = ?, methodOfPayment = ?,
+	guestID = ?`, data, err => {
+		if (err) {
+			console.log(err);
+			res.status(500).end();
+		} else {
+			res.status(200).end();
+		}
+	});
+});
+app.post('/delete-registration', (req, res) => {
+	database.query(`DELETE FROM registrations WHERE roomNumber = "${req.body.roomNumber}"`, err => {
 		if (err) {
 			console.log(err);
 			res.status(500).end();
@@ -114,16 +149,16 @@ app.post('/update-room', (req, res) => {
 
 // middleware
 app.use('disable/', (req, res, next) => {
-	if (req.path === "/login" || req.path === "/registry") {
+	if (req.path === "/user-login" || req.path === "/user-registration") {
 		if (isAuthorized) {
-			res.redirect("/");
+			res.redirect("/room");
 		} else {
 			next();
 		}
 	} else {
 		if (!isAuthorized) {
 			console.warn("User unauthorized");
-			res.redirect("/login");
+			res.redirect("/user-login");
 		} else {
 			next();
 		}
@@ -131,21 +166,23 @@ app.use('disable/', (req, res, next) => {
 });
 
 // get requests
-app.get('/login', (req, res) => {
-	res.render("login");
+app.get('/user-login', (req, res) => {
+	res.render("user-login");
 });
-app.get('/registry', (req, res) => {
-	res.render("registry");
+app.get('/user-registration', (req, res) => {
+	res.render("user-registration");
 });
 app.get('/log-out', (req, res) => {
 	isAuthorized = false;
-	res.redirect("/login");
+	res.redirect("/user-login");
 });
 app.get('/registration', function (req, res) {
 	res.render("registration");
 });
-app.get('/', function (req, res) {
-	res.render("home");
+app.get('/room', function (req, res) {
+	res.render("room");
 });
 
 app.listen(3000);
+
+//TODO refactor / path
