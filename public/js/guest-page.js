@@ -6,7 +6,7 @@ new Vue({
 		guests: [],
 		displayedGuests: [],
 		nameFilter: "",
-		editGuestID: null,
+		editGuestIndex: null,
 		guest: {
 			firstName: "",
 			lastName: "",
@@ -31,10 +31,13 @@ new Vue({
 			this.openGuestPopup("edit", index);
 		},
 		deleteGuest(index) {
-		
+			this.sendGuestData("delete-guest", {guestID: this.displayedGuests[index].id}, () => {
+				this.displayedGuests.splice(index, 1);
+			})
 		},
 		openGuestPopup(type, index) {
 			this.editType = type;
+			this.editGuestIndex = index;
 			if (this.editType === "edit") this.guest = Object.assign({}, this.displayedGuests[index]);
 			this.openedGuestPopup = true;
 		},
@@ -53,45 +56,37 @@ new Vue({
 		},
 		saveGuestData() {
 			if (this.editType === "edit") {
-				this.updateGuestData(this.guest, () => {
-					this.closeGuestPopup();
+				this.sendGuestData("update-guest", this.guest, () => {
+					this.displayedGuests[this.editGuestIndex].firstName = this.guest.firstName;
+					this.displayedGuests[this.editGuestIndex].lastName = this.guest.lastName;
+					this.displayedGuests[this.editGuestIndex].phone = this.guest.phone;
+					this.displayedGuests[this.editGuestIndex].address = this.guest.address;
+					this.displayedGuests[this.editGuestIndex].passportDetails = this.guest.passportDetails;
+					this.displayedGuests[this.editGuestIndex].dateOfBirth = this.guest.dateOfBirth;
 					this.resetGuest();
 				});
 			} else if (this.editType === "create") {
-				this.createGuestData(this.guest, (result) => {
-					this.closeGuestPopup();
+				this.sendGuestData("add-guest", this.guest, (result) => {
+					this.guests.push(new Guest(JSON.parse(result).id,
+						this.guest.firstName,
+						this.guest.lastName,
+						this.guest.phone,
+						this.guest.address,
+						this.guest.passportDetails,
+						this.guest.dateOfBirth
+					));
 					this.resetGuest();
-					this.guests // push
-					console.log(result);
 				});
 			}
+			this.closeGuestPopup();
 		},
-		
-		createGuestData(guest, callback) {
+		sendGuestData(action, data, callback) {
 			const xhr = new XMLHttpRequest();
-			xhr.open('POST', 'add-guest');
+			xhr.open('POST', action);
 			xhr.setRequestHeader('Content-Type', 'application/json');
-			xhr.send(JSON.stringify(guest));
+			xhr.send(JSON.stringify(data));
 			xhr.onloadend = () => {
 				if (xhr.status === 200) callback && callback(xhr.response);
-			}
-		},
-		updateGuestData(guest, callback) {
-			const xhr = new XMLHttpRequest();
-			xhr.open('POST', 'update-guest');
-			xhr.setRequestHeader('Content-Type', 'application/json');
-			xhr.send(JSON.stringify(guest));
-			xhr.onloadend = () => {
-				if (xhr.status === 200) callback && callback();
-			}
-		},
-		deleteRGuestData(roomNumber, callback) {
-			const xhr = new XMLHttpRequest();
-			xhr.open('POST', 'delete-registration');
-			xhr.setRequestHeader('Content-Type', 'application/json');
-			xhr.send(JSON.stringify({roomNumber: roomNumber}));
-			xhr.onloadend = () => {
-				if (xhr.status === 200) callback && callback();
 			}
 		},
 		getGuestsData() {
@@ -102,7 +97,7 @@ new Vue({
 			if (xhr.status === 200) {
 				return JSON.parse(xhr.response);
 			}
-		},
+		}
 	},
 	mounted() {
 		const guestData = this.getGuestsData();

@@ -196,6 +196,16 @@ app.post('/add-guest', (req, res) => {
 		}
 	});
 });
+app.post('/delete-guest', (req, res) => {
+	database.query(`DELETE FROM guests WHERE id = "${req.body.guestID}"`, err => {
+		if (err) {
+			console.log(err);
+			res.status(500).end();
+		} else {
+			res.status(200).end();
+		}
+	});
+});
 
 // middleware
 app.use('disable/', (req, res, next) => {

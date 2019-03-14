@@ -20,8 +20,8 @@
 		<span v-text="guest.address"></span>
 		<span v-text="guest.passportDetails"></span>
 		<span v-text="guest.dateOfBirth"></span>
-		<button class="edit-guest-btn" @click="editGuest(index)"></button>
-		<button class="delete-guest-btn" @click="deleteGuest(index)"></button>
+		<button class="edit-guest-btn" @click="editGuest(index)">Редактировать</button>
+		<button class="delete-guest-btn" @click="deleteGuest(index)">Удалить</button>
 	</div>
 
 	<button class="add-guest-btn" @click="createGuest">Добавить</button>
@@ -52,8 +52,8 @@
 			<input type="date" v-model="guest.dateOfBirth">
 		</div>
 
-		<button class="save-new-guest-data-btn" @click="saveGuestData"></button>
-		<button class="close-edit-popup-btn" @click="closeGuestPopup"></button>
+		<button class="save-new-guest-data-btn" @click="saveGuestData">Сохранить</button>
+		<button class="close-edit-popup-btn" @click="closeGuestPopup">Закрыть</button>
 	</div>
 
 </article>
