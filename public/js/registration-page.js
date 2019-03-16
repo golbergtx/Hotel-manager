@@ -21,7 +21,7 @@ new Vue({
 			wholeAmount: 0
 		},
 		openedRegistrationPopup: false,
-		registrationPopupErrorMessage: ""
+		popupErrorMessage: ""
 	},
 	watch: {
 		guestNameFilter(val) {
@@ -39,11 +39,16 @@ new Vue({
 	},
 	methods: {
 		getFormatDate(date) {
-			return `${date.getDay()} : ${date.getMonth()} : ${date.getFullYear()}`
+			let day = date.getDate();
+			let month = date.getMonth() + 1;
+			if (day <= 9) day = `0${day}`;
+			if (month <= 9) month = `0${month}`;
+			return `${day} : ${month} : ${date.getFullYear()}`
 		},
 		openRegistrationPopup() {
 			this.freeRoomNumbers = Room.getAvailableRooms(this.rooms).map(element => element.number);
-			if (!this.freeRoomNumbers.length) this.registrationPopupErrorMessage = "Вільних номерів немає";
+			if (!this.freeRoomNumbers.length) this.popupErrorMessage = "Вільних номерів немає!";
+			else this.popupErrorMessage = "";
 			this.openedRegistrationPopup = true;
 		},
 		closeRegistrationPopup() {
@@ -190,3 +195,5 @@ new Vue({
 		this.displayedRegistrations = this.registrations;
 	}
 });
+
+/* TODO refactoring code */

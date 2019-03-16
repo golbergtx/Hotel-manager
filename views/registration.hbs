@@ -10,63 +10,83 @@
 	<title>Registration</title>
 </head>
 <body>
+{{>header}}
+<section class="title-wrapper">
+	<h1 class="title-text">Заселение</h1>
+</section>
 <article>
-	<input type="text" v-model="guestNameFilter" class="filter-input" placeholder="Имя">
-
-	<div v-for="(registration, index) in displayedRegistrations">
-		<span v-text="registration.roomNumber"></span>
-		<span v-text="registration.price"></span>
-		<span v-text="getFormatDate(registration.dateOfArrival)"></span>
-		<span v-text="getFormatDate(registration.dateOfDeparture)"></span>
-		<span v-text="registration.methodOfPayment"></span>
-		<span v-text="registration.getSumPrice()"></span>
-		<span v-text="registration.guestID"></span>
-		<button class="delete-registration-btn" @click="deleteRegistration(index)"></button>
+	<div class="filter-wrapper">
+		<p class="filter-text">Фильтр гостя</p>
+		<input type="text" placeholder="Имя гостя" v-model="guestNameFilter">
+		<button class="open-popup-btn" @click="openRegistrationPopup">Оформить</button>
 	</div>
 
-	<button class="open-registration-popup-btn" @click="openRegistrationPopup"></button>
+	<table class="table-content-wrapper">
+		<tr class="table-content-caption">
+			<td>Номер комнаты</td>
+			<td>Цена</td>
+			<td>Дата заселения</td>
+			<td>Дата выселения</td>
+			<td>Метод оплаты</td>
+			<td>Общая сумма</td>
+			<td>Гость ID</td>
+			<td>Удалить</td>
+		</tr>
+		<tr v-for="(registration, index) in displayedRegistrations">
+			<td v-text="registration.roomNumber"></td>
+			<td v-text="registration.getPrice()"></td>
+			<td v-text="getFormatDate(registration.dateOfArrival)"></td>
+			<td v-text="getFormatDate(registration.dateOfDeparture)"></td>
+			<td v-text="registration.methodOfPayment"></td>
+			<td v-text="registration.getSumPrice()"></td>
+			<td v-text="registration.guestID"></td>
+			<td>
+				<button class="delete-registration-btn" @click="deleteRegistration(index)"></button>
+			</td>
+		</tr>
+	</table>
 
-	<div class="registration-popup" v-show="openedRegistrationPopup">
-		<span class="registration-popup-error-message" v-if="registrationPopupErrorMessage"
-		      v-text="registrationPopupErrorMessage"></span>
-		<div>
+	<div class="popup-overlay" v-show="openedRegistrationPopup"></div>
+	<div class="popup" v-show="openedRegistrationPopup">
+		<h3 class="popup-caption">Оформить регистрацию:</h3>
+		<span class="popup-error-message" v-if="popupErrorMessage" v-text="popupErrorMessage"></span>
+		<div class="popup-input-wrapper">
 			<label for="">Номер</label>
-			<select class="registration-select" v-model="registration.roomNumber" @change="onChangeRoomNumber">
+			<select v-model="registration.roomNumber" @change="onChangeRoomNumber">
 				<option v-for="(roomNumber) in freeRoomNumbers" v-text="roomNumber"></option>
 			</select>
 		</div>
-		<div>
+		<div class="popup-input-wrapper">
 			<label for="">Цена</label>
-			<input type="text" readonly class="registration-category-input" v-model="registration.price">
+			<input type="text" readonly v-model="registration.price">
 		</div>
-		<div>
+		<div class="popup-input-wrapper">
 			<label for="">Дата заселення</label>
-			<input type="date" class="registration-dateOfArrival-input" v-model="registration.dateOfArrival"
-			       @change="setSumPrice">
+			<input type="date" v-model="registration.dateOfArrival" @change="setSumPrice">
 		</div>
-		<div>
-			<label for="">Дата виселеня</label>
-			<input type="date" class="registration-dateOfDeparture-input" v-model="registration.dateOfDeparture"
-			       @change="setSumPrice">
+		<div class="popup-input-wrapper">
+			<label for="">Дата выселения</label>
+			<input type="date" v-model="registration.dateOfDeparture" @change="setSumPrice">
 		</div>
-		<div>
+		<div class="popup-input-wrapper">
 			<label for="">Метод оплаты</label>
-			<input type="text" class="registration-price-input" v-model="registration.methodOfPayment">
+			<input type="text" v-model="registration.methodOfPayment">
 		</div>
-		<div>
+		<div class="popup-input-wrapper">
 			<label for="">Гость</label>
-			<select class="registration-select" @change="onChangeGuestID">
+			<select @change="onChangeGuestID">
 				<option v-for="guest in guests" v-text="guest.getFullName()"></option>
 			</select>
 		</div>
-		<div>
+		<div class="popup-input-wrapper">
 			<label for="">Общая сумма</label>
-			<input type="text" readonly class="registration-whole-amount-input" v-model="registration.wholeAmount">
+			<input type="text" readonly v-model="registration.wholeAmount">
 		</div>
-		<button class="save-new-registration-data-btn" @click="addRegistration"></button>
-		<button class="close-edit-popup-btn" @click="closeRegistrationPopup"></button>
+		<button class="save-data-btn" :class="{disable: popupErrorMessage}" @click="addRegistration">Подтвердить</button>
+		<button class="close-popup-btn" @click="closeRegistrationPopup"></button>
 	</div>
 </article>
+{{>footer}}
 <script src="/js/vue.js"></script>
 <script type="module" src="/js/registration-page.js"></script>
 </body>

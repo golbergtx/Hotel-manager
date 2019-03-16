@@ -1,0 +1,7 @@
+.delete-registration-btn{
+	width: 100%;
+	height: 50px;
+	border: none;
+	outline: none;
+	background: url("/images/cross.png") no-repeat center/contain;
+}

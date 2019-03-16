@@ -9,6 +9,10 @@ export default class Registration {
 		this.guestID = guestID;
 	}
 	
+	getPrice(){
+		return `${this.price} $`
+	}
+	
 	getSumPrice() {
 		let wholeAmount = 0;
 		if (this.dateOfArrival && this.dateOfDeparture) {
@@ -16,7 +20,7 @@ export default class Registration {
 			const price = this.price || 0;
 			wholeAmount = price * duration;
 		}
-		return wholeAmount;
+		return `${wholeAmount} $`;
 	}
 	
 	pay() {

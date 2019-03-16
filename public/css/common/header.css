@@ -1,0 +1,57 @@
+header{
+	height: 235px;
+}
+nav{
+	border-top: 2px solid #f1f1f1;
+	border-bottom: 2px solid #f1f1f1;
+}
+.top-container{
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	height: 40px;
+	padding: 0 30px;
+	background: url("/images/top-line.jpg") no-repeat center/cover;
+}
+.log-out{
+	position: relative;
+	color: #ffffff;
+	font-weight: 300;
+	text-decoration: none;
+}
+.log-out:before{
+	content: "";
+	position: absolute;
+	top: -4px;
+	left: -33px;
+	width: 27px;
+	height: 29px;
+	background: url("/images/logout.png") no-repeat center/contain;
+}
+.log-out:hover{
+	text-decoration: underline;
+}
+.site-logo{
+	display: block;
+	width: 200px;
+	margin: 30px auto;
+}
+.menu{
+	display: flex;
+	justify-content: space-between;
+	width: 500px;
+	height: 20px;
+	margin: 0 auto;
+	padding: 15px 0;
+	list-style: none;
+}
+.menu a{
+	color: #727475;
+	line-height: 1;
+	font-size: 18px;
+	font-weight: 500;
+	text-decoration: none;
+}
+.menu a:hover{
+	text-decoration: underline;
+}

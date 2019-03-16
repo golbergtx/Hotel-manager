@@ -10,6 +10,7 @@ const database = Database.connection("localhost", "root", "password", "hotel");
 
 //app config
 app.set('view engine', 'hbs');
+hbs.registerPartials(__dirname + '/views/partials');
 app.use(express.static(__dirname + '/public'));
 
 app.use(bodyParser.json()); // for parsing application/json
