@@ -18,6 +18,10 @@ export default class Guest {
 		this.dateOfBirth = options.dateOfBirth;
 	}
 	
+	getFullName(){
+		return `${this.firstName} ${this.lastName}`;
+	}
+	
 	static getGuestByFirstName(guests, firstName) {
 		return guests.filter(guest => guest.firstName.startsWith(firstName));
 	}

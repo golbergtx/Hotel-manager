@@ -11,7 +11,9 @@
 </head>
 <body>
 <article>
-	<div v-for="(registration, index) in registrations">
+	<input type="text" v-model="guestNameFilter" class="filter-input" placeholder="Имя">
+
+	<div v-for="(registration, index) in displayedRegistrations">
 		<span v-text="registration.roomNumber"></span>
 		<span v-text="registration.price"></span>
 		<span v-text="getFormatDate(registration.dateOfArrival)"></span>
@@ -53,7 +55,9 @@
 		</div>
 		<div>
 			<label for="">Гость</label>
-			<!--TODO add Guest ID -->
+			<select class="registration-select" @change="onChangeGuestID">
+				<option v-for="guest in guests" v-text="guest.getFullName()"></option>
+			</select>
 		</div>
 		<div>
 			<label for="">Общая сумма</label>

@@ -19,16 +19,16 @@ export default class Registration {
 		return wholeAmount;
 	}
 	
-	getRegistrationByGuest() {
-		//TODO implement method after guestID
-	}
-	
 	pay() {
 		//TODO implement method
 	}
 	
 	checkPaymentStatus() {
 		//TODO implement method
+	}
+	
+	static getRegistrationByGuestID(registrations, id) {
+		return registrations.filter(registration => registration.id === id);
 	}
 	
 	static createRegistration(roomNumber, price, dateOfArrival, dateOfDeparture, methodOfPayment, guestID) {

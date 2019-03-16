@@ -1,25 +1,42 @@
 import Room from "/js/data/Room.js";
+import Guest from "/js/data/Guest.js";
 import Registration from "/js/data/Registration.js";
 
 new Vue({
 	el: 'article',
 	data: {
 		rooms: [],
+		guests: [],
 		registrations: [],
 		freeRoomNumbers: [],
+		displayedRegistrations: [],
+		guestNameFilter: "",
 		registration: {
 			roomNumber: null,
 			price: null,
 			dateOfArrival: null,
 			dateOfDeparture: null,
 			methodOfPayment: null,
-			guestID: 1 /*TODO add Guest ID */,
+			guestID: 1,
 			wholeAmount: 0
 		},
 		openedRegistrationPopup: false,
 		registrationPopupErrorMessage: ""
 	},
-	watch: {},
+	watch: {
+		guestNameFilter(val) {
+			if (val !== "") {
+				const registration = [];
+				Guest.getGuestByFirstName(this.guests, val)
+					.map(guest => guest.id)
+					.forEach(id => registration.push(...Registration.getRegistrationByGuestID(this.registrations, id)));
+				this.displayedRegistrations = registration;
+			}
+			else {
+				this.displayedRegistrations = this.registrations;
+			}
+		}
+	},
 	methods: {
 		getFormatDate(date) {
 			return `${date.getDay()} : ${date.getMonth()} : ${date.getFullYear()}`
@@ -35,6 +52,9 @@ new Vue({
 		onChangeRoomNumber() {
 			this.registration.price = Room.getPriceByNumber(this.rooms, Number(this.registration.roomNumber));
 			this.setSumPrice();
+		},
+		onChangeGuestID(event) {
+			this.registration.guestID = this.guests[event.target.selectedIndex].id;
 		},
 		setSumPrice() {
 			if (this.registration.dateOfArrival && this.registration.dateOfDeparture) {
@@ -52,7 +72,7 @@ new Vue({
 				dateOfArrival: null,
 				dateOfDeparture: null,
 				methodOfPayment: null,
-				guestID: 1 /*TODO add Guest ID */,
+				guestID: 0,
 				wholeAmount: 0
 			};
 		},
@@ -86,7 +106,7 @@ new Vue({
 		},
 		addRegistrationData(registrationPage, callback) {
 			const xhr = new XMLHttpRequest();
-			xhr.open('POST', 'add-registrationPage');
+			xhr.open('POST', 'add-registration');
 			xhr.setRequestHeader('Content-Type', 'application/json');
 			xhr.send(JSON.stringify(registrationPage));
 			xhr.onloadend = () => {
@@ -111,6 +131,15 @@ new Vue({
 				return JSON.parse(xhr.response);
 			}
 		},
+		getGuestsData() {
+			const xhr = new XMLHttpRequest();
+			xhr.open('POST', 'get-guests', false);
+			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			xhr.send();
+			if (xhr.status === 200) {
+				return JSON.parse(xhr.response);
+			}
+		},
 		getRegistrationData() {
 			const xhr = new XMLHttpRequest();
 			xhr.open('POST', 'get-registration', false);
@@ -126,7 +155,9 @@ new Vue({
 	},
 	mounted() {
 		const roomsData = this.getRoomsData();
+		const guestData = this.getGuestsData();
 		const registrationsData = this.getRegistrationData();
+		
 		this.rooms = roomsData.map(room => {
 			const registration = registrationsData.find(element => element.roomNumber === room.number) || {};
 			return new Room(room.number,
@@ -134,6 +165,16 @@ new Vue({
 				registration.dateOfArrival,
 				registration.dateOfDeparture,
 				room.price
+			);
+		});
+		this.guests = guestData.map(guest => {
+			return new Guest(guest.id,
+				guest.firstName,
+				guest.lastName,
+				guest.phone,
+				guest.address,
+				guest.passportDetails,
+				guest.dateOfBirth
 			);
 		});
 		this.registrations = registrationsData.map(registration => {
@@ -146,9 +187,6 @@ new Vue({
 				registration.guestID
 			);
 		});
+		this.displayedRegistrations = this.registrations;
 	}
 });
-
-/*TODO refactoring edit registration */
-/*TODO methodOfPayment*/
-/*TODO guestID */
