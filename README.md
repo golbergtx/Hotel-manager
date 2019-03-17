@@ -2,24 +2,26 @@
 
 ### The launch of the project
 
-<b>1) Install modules</b>
+<b>1) Install MySQL `https://dev.mysql.com/downloads/installer/`</b>
+
+<b>2) Install modules</b>
 
 		npm i
 	
-<b>2) Config MySQL database</b>
+<b>3) Config MySQL database</b>
 
 		user :  "root"
 		password : "password"
 		
-<b>3) Create database, tables, insert data. Run sql script `init-database.sql` which is in the root project.</b>
+<b>4) Create database, tables, insert data. Run sql script `init-database.sql` which is in the root project.</b>
 
-<b>4) Run command</b>
+<b>5) Run command</b>
 
 		node server
 		
-<b>5) Go to `http://localhost:3000`</b>
+<b>6) Go to `http://localhost:3000`</b>
 
-<b>6) Login</b>
+<b>7) Login</b>
 
 		user :  "admin"
 		password : "admin"
