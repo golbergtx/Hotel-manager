@@ -1,4 +1,5 @@
 const mysql = require('mysql');
+
 class Database {
 	static connection(host, user, password, database) {
 		const connection = mysql.createConnection({
@@ -9,9 +10,10 @@ class Database {
 		});
 		connection.connect(err => {
 			if (err) throw err;
-			console.log("connected to database");
+			console.log("Connected to database");
 		});
 		return connection;
 	}
 }
+
 module.exports = Database;

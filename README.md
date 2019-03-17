@@ -6,15 +6,15 @@
 
 		npm i
 	
-2) Config MySQL database
+<b>2) Config MySQL database</b>
 
 		user :  "root"
 		password : "password"
 		
-3) Create database, tables, insert data. Run sql script `init-database.sql` which is in the root project.
+<b>3) Create database, tables, insert data. Run sql script `init-database.sql` which is in the root project.</b>
 
-4) Run command
+<b>4) Run command</b>
 
 		node server
 		
-5) Go to `http://localhost:3000`
+<b>5) Go to `http://localhost:3000`</b>

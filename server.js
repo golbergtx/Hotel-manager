@@ -2,13 +2,13 @@
 const express = require('express');
 const app = express();
 
-//modules
+// modules
 const hbs = require('hbs');
 const bodyParser = require('body-parser');
 const Database = require('./controllers/Database');
 const database = Database.connection("localhost", "root", "password", "hotel");
 
-//app config
+// app config
 app.set('view engine', 'hbs');
 hbs.registerPartials(__dirname + '/views/partials');
 app.use(express.static(__dirname + '/public'));
@@ -80,7 +80,9 @@ app.post('/get-rooms', (req, res) => {
 	});
 });
 app.post('/get-room', (req, res) => {
-	database.query(`SELECT * FROM rooms WHERE number = '${req.body.number}'`, (err, result) => {
+	const number = req.body.number;
+	
+	database.query(`SELECT * FROM rooms WHERE number = '${number}'`, (err, result) => {
 		if (err) {
 			console.log(err);
 			res.status(500).end();
@@ -127,6 +129,7 @@ app.post('/add-registration', (req, res) => {
 		req.body.methodOfPayment,
 		req.body.guestID
 	];
+	
 	database.query(`INSERT INTO registrations SET roomNumber = ?, price = ?, dateOfArrival = ?, dateOfDeparture = ?, methodOfPayment = ?,
 	guestID = ?`, data, err => {
 		if (err) {
@@ -138,7 +141,9 @@ app.post('/add-registration', (req, res) => {
 	});
 });
 app.post('/delete-registration', (req, res) => {
-	database.query(`DELETE FROM registrations WHERE roomNumber = "${req.body.roomNumber}"`, err => {
+	const roomNumber = req.body.roomNumber;
+	
+	database.query(`DELETE FROM registrations WHERE roomNumber = "${roomNumber}"`, err => {
 		if (err) {
 			console.log(err);
 			res.status(500).end();
@@ -187,6 +192,7 @@ app.post('/add-guest', (req, res) => {
 		req.body.passportDetails,
 		new Date(req.body.dateOfBirth)
 	];
+	
 	database.query(`INSERT INTO guests SET firstName = ?, lastName = ?, phone = ?, address = ?, passportDetails = ?,
 	dateOfBirth = ?`, data, (err, result) => {
 		if (err) {
@@ -198,7 +204,9 @@ app.post('/add-guest', (req, res) => {
 	});
 });
 app.post('/delete-guest', (req, res) => {
-	database.query(`DELETE FROM guests WHERE id = "${req.body.guestID}"`, err => {
+	const guestID = req.body.guestID;
+	
+	database.query(`DELETE FROM guests WHERE id = "${guestID}"`, err => {
 		if (err) {
 			console.log(err);
 			res.status(500).end();
@@ -209,7 +217,7 @@ app.post('/delete-guest', (req, res) => {
 });
 
 // middleware
-app.use('disable/', (req, res, next) => {
+app.use('/', (req, res, next) => {
 	if (req.path === "/user-login" || req.path === "/user-registration") {
 		if (isAuthorized) {
 			res.redirect("/room");
@@ -247,6 +255,8 @@ app.get('/guest', function (req, res) {
 	res.render("guest");
 });
 
-app.listen(3000);
+app.use('/', (req, res) => {
+	res.redirect("/room");
+});
 
-/* TODO refactoring code */
+app.listen(3000);

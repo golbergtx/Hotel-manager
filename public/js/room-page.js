@@ -1,5 +1,4 @@
 import Room from "/js/data/Room.js";
-import Registration from "/js/data/Registration.js";
 
 new Vue({
 	el: 'article',
