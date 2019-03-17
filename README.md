@@ -2,7 +2,7 @@
 
 ### The launch of the project
 
-1) Install modules
+<b>1) Install modules</b>
 
 		npm i
 	
