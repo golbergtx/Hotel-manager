@@ -14,6 +14,9 @@ button{
 	border: none;
 	cursor: pointer;
 }
+button:active{
+	transform: translate(1px, 1px);
+}
 button.disable{
 	opacity: 0.5;
 	pointer-events: none;

@@ -1,7 +1,66 @@
 footer{
+	display: flex;
+	justify-content: space-between;
 	height: 220px;
 	margin-top: 50px;
+	padding: 50px 100px 0;
 	background-color: #78635a;
-	background: url("/images/footer-screen.png") no-repeat center/cover;
 }
-/* TODO add styles */
+.title{
+	margin: 0;
+	color: #ffffff;
+	font-size: 24px;
+	font-weight: 500;
+}
+.subtitle{
+	margin: 10px 0;
+	color: #ffffff;
+	font-size: 14px;
+	font-weight: 300;
+}
+.phone{
+	margin: 50px 0 0 0;
+	color: #ffffff;
+	font-size: 24px;
+	font-weight: 300;
+}
+.social-btns-wrapper{
+	display: flex;
+	justify-content: space-between;
+	width: 210px;
+	height: 24px;
+	margin-top: 50px;
+}
+.social-btns-wrapper button{
+	width: 24px;
+	height: 24px;
+}
+.social-btn1{
+	background: url("/images/social-icons/icon1.png") no-repeat center/contain;
+}
+.social-btn2{
+	background: url("/images/social-icons/icon2.png") no-repeat center/contain;
+}
+.social-btn3{
+	background: url("/images/social-icons/icon3.png") no-repeat center/contain;
+}
+.social-btn4{
+	background: url("/images/social-icons/icon4.png") no-repeat center/contain;
+}
+.social-btn5{
+	background: url("/images/social-icons/icon5.png") no-repeat center/contain;
+}
+.input-wrapper{
+	display: flex;
+	height: 38px;
+	margin-top: 50px;
+}
+.subscribe-btn{
+	width: 180px;
+	height: 100%;
+	padding: 0 20px;
+	color: #ffffff;
+	font-size: 20px;
+	font-weight: 300;
+	background-color: #64524b;
+}
