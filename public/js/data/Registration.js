@@ -28,7 +28,7 @@ export default class Registration {
 		if (this.dateOfArrival && this.dateOfDeparture) {
 			const duration = (this.dateOfDeparture - this.dateOfArrival) / 86400000;
 			const price = this.price || 0;
-			wholeAmount = price * duration;
+			wholeAmount = Math.round(price * duration);
 		}
 		return `${wholeAmount} $`;
 	}
