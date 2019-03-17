@@ -121,7 +121,7 @@ input{
 	width: 30px;
 	height: 30px;
 	border: none;
-	background: url("/images/cross.png") no-repeat center/contain;
+	background: url("/images/cross-icon.png") no-repeat center/contain;
 }
 .popup-error-message{
 	display: block;

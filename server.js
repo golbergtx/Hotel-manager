@@ -249,4 +249,4 @@ app.get('/guest', function (req, res) {
 
 app.listen(3000);
 
-//TODO refactor / path
+/* TODO refactoring code */

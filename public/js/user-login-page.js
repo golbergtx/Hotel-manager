@@ -29,3 +29,5 @@ new Vue({
 		}
 	}
 });
+
+/* TODO refactoring code */

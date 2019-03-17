@@ -26,7 +26,7 @@ nav{
 	left: -33px;
 	width: 27px;
 	height: 29px;
-	background: url("/images/logout.png") no-repeat center/contain;
+	background: url("/images/logout-icon.png") no-repeat center/contain;
 }
 .log-out:hover{
 	text-decoration: underline;

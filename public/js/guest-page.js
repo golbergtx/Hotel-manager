@@ -38,6 +38,7 @@ new Vue({
 			})
 		},
 		openGuestPopup(type, index) {
+			this.resetGuest();
 			this.editType = type;
 			this.editGuestIndex = index;
 			if (this.editType === "edit") {
@@ -71,7 +72,6 @@ new Vue({
 					this.displayedGuests[this.editGuestIndex].address = this.guest.address;
 					this.displayedGuests[this.editGuestIndex].passportDetails = this.guest.passportDetails;
 					this.displayedGuests[this.editGuestIndex].dateOfBirth = this.guest.dateOfBirth;
-					this.resetGuest();
 				});
 			} else if (this.editType === "create") {
 				this.sendGuestData("add-guest", this.guest, (result) => {
@@ -83,7 +83,6 @@ new Vue({
 						this.guest.passportDetails,
 						this.guest.dateOfBirth
 					));
-					this.resetGuest();
 				});
 			}
 			this.closeGuestPopup();

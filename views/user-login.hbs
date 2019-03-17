@@ -10,20 +10,26 @@
 	<title>Login</title>
 </head>
 <body>
-<div class="login-form-wrapper">
-	<div class="login-header-wrapper">
-		<p class="login-header">Авторизация</p>
-	</div>
-	<form id="loginForm" @submit.prevent="submit" action="#" method="post" class="login-form">
-		<p v-if="showErrorLoginMessage" class="error-login">Неверный логин или пароль!</p>
-		<input type="text" v-model="login" class="login-input" placeholder="Логин" required>
-		<input type="password" v-model="password" class="login-input login-input-pass" placeholder="Пароль" required>
-		<button type="submit" class="login-btn">Войти</button>
+<div class="overlay"></div>
+<img src="/images/logo.png" class="site-logo" alt="Logo">
+<section class="login-form-wrapper">
+	<p class="login-caption">Авторизация</p>
+	<form id="loginForm" @submit.prevent="submit" action="#" method="post">
+		<p v-if="showErrorLoginMessage" class="error-message">Неверный логин или пароль!</p>
+		<div class="input-wrapper">
+			<label for="">Логин</label>
+			<input type="text" placeholder="Логин" required v-model="login">
+		</div>
+		<div class="input-wrapper">
+			<label for="">Пароль</label>
+			<input type="password" placeholder="Пароль" required v-model="password">
+		</div>
+		<button type="submit" class="form-btn">Войти</button>
+		<button class="form-btn">
+			<a href="/user-registration">Регистрация</a>
+		</button>
 	</form>
-	<div class="login-footer-wrapper">
-		<a class="login-footer-text1" href="/user-registration">Регистрация</a>
-	</div>
-</div>
+</section>
 <script src="/js/vue.js"></script>
 <script src="/js/user-login-page.js"></script>
 </body>
