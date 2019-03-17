@@ -18,3 +18,8 @@
 		node server
 		
 <b>5) Go to `http://localhost:3000`</b>
+
+<b>6) Login</b>
+
+		user :  "admin"
+		password : "admin"
