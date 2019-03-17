@@ -1,0 +1,91 @@
+@import "common/fonts.css";
+html{
+	min-height: 100%;
+	height: auto;
+}
+body{
+	margin: 0;
+	color: #727475;
+	font-family: Roboto, sans-serif;
+	background: url("/images/room-photo.jpg") no-repeat center/cover;
+}
+button{
+	outline: none;
+	border: none;
+	cursor: pointer;
+}
+button.disable{
+	opacity: 0.5;
+	pointer-events: none;
+}
+input{
+	color: #878787;
+	padding: 10px 20px;
+	border: 1px solid #f1f1f1;
+	background-color: #f9f9f9;
+	outline: none;
+}
+.site-logo{
+	position: absolute;
+	top: 80px;
+	left: 50%;
+	width: 200px;
+	transform: translate(-50%, -50%);
+}
+.overlay{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.7);
+}
+.registration-form-wrapper{
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	width: 500px;
+	padding: 20px;
+	border-radius: 20px;
+	background-color: #e4e4e4;
+	transform: translate(-50%, -50%);
+}
+.registration-caption{
+	margin: 0 0 10px 0;
+	font-size: 20px;
+	font-weight: 600;
+}
+.error-message{
+	display: block;
+	margin: 10px 0;
+	color: #da0e0e;
+	font-weight: 500;
+}
+.input-wrapper{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 500px;
+	margin-bottom: 15px;
+	font-size: 16px;
+	font-weight: 500;
+}
+.input-wrapper input{
+	width: 300px;
+	height: 22px;
+	border: 1px solid #727475;
+}
+.form-btn{
+	height: 38px;
+	margin: 20px 10px 0 0;
+	padding: 0 20px;
+	color: #ffffff;
+	font-size: 20px;
+	font-weight: 500;
+	border-radius: 5px;
+	background-color: #78635a;
+}
+.form-btn a{
+	color: #ffffff;
+	text-decoration: none;
+}

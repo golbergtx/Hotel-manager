@@ -1,5 +1,29 @@
+@import "common/fonts.css";
+html{
+	min-height: 100%;
+	height: auto;
+}
 body{
+	margin: 0;
+	color: #727475;
+	font-family: Roboto, sans-serif;
 	background: url("/images/room-photo.jpg") no-repeat center/cover;
+}
+button{
+	outline: none;
+	border: none;
+	cursor: pointer;
+}
+button.disable{
+	opacity: 0.5;
+	pointer-events: none;
+}
+input{
+	color: #878787;
+	padding: 10px 20px;
+	border: 1px solid #f1f1f1;
+	background-color: #f9f9f9;
+	outline: none;
 }
 .site-logo{
 	position: absolute;

@@ -7,20 +7,32 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<link rel="stylesheet" href="/css/main.css">
 	<link rel="stylesheet" href="/css/user-registration.css">
-	<title>Registry</title>
+	<title>Registration</title>
 </head>
 <body>
-<div class="registry-form-wrapper">
-	<p class="registry-header">Регистрация:</p>
-	<form id="registryForm" class="registry-form" @submit.prevent="submit" action="#" method="post">
-		<p class="show-error-login-message" v-if="showErrorLoginMessage">Вы ввели не правильные данные!</p>
-		<p class="show-error-login-message" v-if="loginExist">Данный логин уже существует!</p>
-		<input type="text" maxlength="40" v-model="login" class="registry-input" placeholder="Логин" required>
-		<input type="password" maxlength="40" v-model="password" class="registry-input" placeholder="Пароль" required>
-		<input type="text" maxlength="40" v-model="firstName" class="registry-input" placeholder="Имя" required>
-		<button type="submit" class="btn registry-btn" :class="{ disable : disableSaveDataBtn }">Регистрация</button>
+<div class="overlay"></div>
+<img src="/images/logo.png" class="site-logo" alt="Logo">
+
+<section class="registration-form-wrapper">
+	<p class="registration-caption">Регистрация:</p>
+	<form id="registrationForm" class="registry-form" @submit.prevent="submit" action="#" method="post">
+		<p class="error-message" v-if="showErrorLoginMessage">Вы ввели не правильные данные!</p>
+		<p class="error-message" v-if="loginExist">Данный логин уже существует!</p>
+		<div class="input-wrapper">
+			<label for="">Логин</label>
+			<input type="text" maxlength="40" placeholder="Логин" required v-model="login">
+		</div>
+		<div class="input-wrapper">
+			<label for="">Пароль</label>
+			<input type="password" maxlength="40" placeholder="Пароль" required v-model="password">
+		</div>
+		<div class="input-wrapper">
+			<label for="">Имя</label>
+			<input type="text" maxlength="40" placeholder="Имя" required v-model="firstName">
+		</div>
+		<button type="submit" class="form-btn">Регистрация</button>
 	</form>
-</div>
+</section>
 <script src="/js/vue.js"></script>
 <script src="/js/user-registration-page.js"></script>
 </body>

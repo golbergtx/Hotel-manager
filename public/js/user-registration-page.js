@@ -1,13 +1,12 @@
 new Vue({
-	el: '#registryForm',
+	el: '#registrationForm',
 	data: {
 		login: "",
 		password: "",
 		firstName: "",
 		registrySuccessFull: false,
 		loginExist: false,
-		showErrorLoginMessage: false,
-		disableSaveDataBtn: false
+		showErrorLoginMessage: false
 	},
 	methods: {
 		submit: function () {
@@ -35,3 +34,5 @@ new Vue({
 		}
 	}
 });
+
+/* TODO refactoring code */
