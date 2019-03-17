@@ -17,7 +17,7 @@ new Vue({
 			category: ""
 		},
 		editRoomNumber: null,
-		editPopupErrorMessage: ""
+		popupErrorMessage: ""
 	},
 	watch: {
 		numberFilter(val) {
@@ -34,10 +34,6 @@ new Vue({
 		}
 	},
 	methods: {
-		getFormatDate(date) {
-			if (!(date instanceof Date)) return "-";
-			return `${date.getDay()} : ${date.getMonth()} : ${date.getFullYear()}`
-		},
 		openEditPopup(index) {
 			this.openedEditPopup = true;
 			this.editRoomNumber = this.displayedRooms[index].number;
@@ -51,8 +47,8 @@ new Vue({
 		updateRoom() {
 			if (this.editRoomNumber !== Number(this.editRoomData.number)) {
 				if (this.checkRoom(this.editRoomData.number)) {
-					this.editPopupErrorMessage = "Цей номер вже існює";
-					setTimeout(() => this.editPopupErrorMessage = "", 3000);
+					this.popupErrorMessage = "Цей номер вже існює";
+					setTimeout(() => this.popupErrorMessage = "", 3000);
 					return;
 				}
 			}
@@ -120,3 +116,6 @@ new Vue({
 		this.displayedRooms = this.rooms;
 	}
 });
+
+
+/* TODO refactoring code */

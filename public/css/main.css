@@ -63,6 +63,9 @@ input{
 	font-size: 20px;
 	font-weight: 500;
 }
+.filter-wrapper input{
+	margin-right: 20px;
+}
 .open-popup-btn{
 	height: 38px;
 	margin-left: auto;

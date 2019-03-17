@@ -7,47 +7,66 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<link rel="stylesheet" href="/css/main.css">
 	<link rel="stylesheet" href="/css/room.css">
-	<title>Rooms</title>
+	<title>Room</title>
 </head>
 <body>
 {{>header}}
 <section class="title-wrapper">
-	<h1 class="title-text">Заселення</h1>
+	<h1 class="title-text">Номера</h1>
 </section>
 <article>
-	<input type="number" v-model="numberFilter" class="filter-input" placeholder="Номер">
-	<input type="text" v-model="categoryFilter" class="filter-input" placeholder="Категория">
-	<input type="checkbox" v-model="showAvailableRooms" class="checkbox-input">
-
-	<div v-for="(room, index) in displayedRooms">
-		<span v-text="room.number"></span>
-		<span v-text="room.category"></span>
-		<span v-text="getFormatDate(room.dateOfArrival)"></span>
-		<span v-text="getFormatDate(room.dateOfDeparture)"></span>
-		<span v-text="room.price"></span>
-		<span v-text="room.status"></span>
-		<button class="open-edit-popup-btn" @click="openEditPopup(index)"></button>
+	<div class="filter-wrapper">
+		<p class="filter-text">Фильтр:</p>
+		<input type="number" class="filter-input" placeholder="Номер" v-model="numberFilter">
+		<input type="text" class="filter-input" placeholder="Категория" v-model="categoryFilter">
+		<p class="filter-text">Показать свободные номера:</p>
+		<input type="checkbox" class="checkbox" v-model="showAvailableRooms">
 	</div>
 
-	<div class="edit-popup" v-show="openedEditPopup">
-		<span class="edit-popup-error-message" v-text="editPopupErrorMessage"></span>
-		<div>
+	<table class="table-content-wrapper">
+		<tr class="table-content-caption">
+			<td>Номер комнаты</td>
+			<td>Категория</td>
+			<td>Дата заселения</td>
+			<td>Дата выселения</td>
+			<td>Цена</td>
+			<td>Статус</td>
+			<td>Редактировать</td>
+		</tr>
+		<tr v-for="(room, index) in displayedRooms">
+			<td v-text="room.number"></td>
+			<td v-text="room.category"></td>
+			<td v-text="room.getDateOfArrival()"></td>
+			<td v-text="room.getDateOfDeparture()"></td>
+			<td v-text="room.getPrice()"></td>
+			<td v-text="room.getStatus()"></td>
+			<td>
+				<button class="open-edit-popup-btn" @click="openEditPopup(index)"></button>
+			</td>
+		</tr>
+	</table>
+
+	<div class="popup-overlay" v-show="openedEditPopup"></div>
+	<div class="popup" v-show="openedEditPopup">
+		<h3 class="popup-caption">Редактировать номер:</h3>
+		<span class="popup-error-message" v-if="popupErrorMessage" v-text="popupErrorMessage"></span>
+		<div class="popup-input-wrapper">
 			<label for="">Номер</label>
-			<input type="number" class="edit-number-input" v-model="editRoomData.number">
+			<input type="number" v-model="editRoomData.number">
 		</div>
-		<div>
-			<label for="">Категорія</label>
-			<input type="text" class="edit-category-input" v-model="editRoomData.category">
+		<div class="popup-input-wrapper">
+			<label for="">Категория</label>
+			<input type="text" v-model="editRoomData.category">
 		</div>
-		<div>
-			<label for="">Ціна</label>
-			<input type="number" class="edit-price-input" v-model="editRoomData.price">
+		<div class="popup-input-wrapper">
+			<label for="">Цена</label>
+			<input type="number" v-model="editRoomData.price">
 		</div>
-		<button class="save-new-room-data-btn" @click="updateRoom"></button>
-		<button class="close-edit-popup-btn" @click="closeEditPopup"></button>
+		<button class="save-data-btn" :class="{disable: popupErrorMessage}" @click="updateRoom">Подтвердить</button>
+		<button class="close-popup-btn" @click="closeEditPopup"></button>
 	</div>
-
 </article>
+{{>footer}}
 <script src="/js/vue.js"></script>
 <script type="module" src="/js/room-page.js"></script>
 </body>

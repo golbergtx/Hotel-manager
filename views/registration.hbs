@@ -16,7 +16,7 @@
 </section>
 <article>
 	<div class="filter-wrapper">
-		<p class="filter-text">Фильтр гостя</p>
+		<p class="filter-text">Фильтр:</p>
 		<input type="text" placeholder="Имя гостя" v-model="guestNameFilter">
 		<button class="open-popup-btn" @click="openRegistrationPopup">Оформить</button>
 	</div>
@@ -35,8 +35,8 @@
 		<tr v-for="(registration, index) in displayedRegistrations">
 			<td v-text="registration.roomNumber"></td>
 			<td v-text="registration.getPrice()"></td>
-			<td v-text="getFormatDate(registration.dateOfArrival)"></td>
-			<td v-text="getFormatDate(registration.dateOfDeparture)"></td>
+			<td v-text="registration.getDateOfArrival()"></td>
+			<td v-text="registration.getDateOfDeparture()"></td>
 			<td v-text="registration.methodOfPayment"></td>
 			<td v-text="registration.getSumPrice()"></td>
 			<td v-text="registration.guestID"></td>

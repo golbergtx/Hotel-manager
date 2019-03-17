@@ -38,13 +38,6 @@ new Vue({
 		}
 	},
 	methods: {
-		getFormatDate(date) {
-			let day = date.getDate();
-			let month = date.getMonth() + 1;
-			if (day <= 9) day = `0${day}`;
-			if (month <= 9) month = `0${month}`;
-			return `${day} : ${month} : ${date.getFullYear()}`
-		},
 		openRegistrationPopup() {
 			this.freeRoomNumbers = Room.getAvailableRooms(this.rooms).map(element => element.number);
 			if (!this.freeRoomNumbers.length) this.popupErrorMessage = "Вільних номерів немає!";
