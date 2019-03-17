@@ -1,4 +1,5 @@
 import Guest from "/js/data/Guest.js";
+import DateFormater from "/js/data/Date-formater.js";
 
 new Vue({
 	el: 'article',
@@ -15,7 +16,8 @@ new Vue({
 			passportDetails: "",
 			dateOfBirth: ""
 		},
-		openedGuestPopup: false
+		openedGuestPopup: false,
+		guestPopupCaption: "",
 	},
 	watch: {
 		nameFilter(val) {
@@ -38,7 +40,13 @@ new Vue({
 		openGuestPopup(type, index) {
 			this.editType = type;
 			this.editGuestIndex = index;
-			if (this.editType === "edit") this.guest = Object.assign({}, this.displayedGuests[index]);
+			if (this.editType === "edit") {
+				this.guestPopupCaption = "Редактировать гостя:";
+				this.guest = Object.assign({}, this.displayedGuests[index]);
+				this.guest.dateOfBirth = DateFormater.getFormatDate(this.guest.dateOfBirth, "-", true)
+			} else if (this.editType === "create") {
+				this.guestPopupCaption = "Добавить гостя:";
+			}
 			this.openedGuestPopup = true;
 		},
 		closeGuestPopup() {
@@ -95,7 +103,10 @@ new Vue({
 			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 			xhr.send();
 			if (xhr.status === 200) {
-				return JSON.parse(xhr.response);
+				return JSON.parse(xhr.response, (key, value) => {
+					if (key.startsWith("date")) return new Date(value);
+					return value
+				});
 			}
 		}
 	},
@@ -114,3 +125,5 @@ new Vue({
 		this.displayedGuests = this.guests;
 	}
 });
+
+/* TODO refactoring code */

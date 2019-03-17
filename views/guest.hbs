@@ -7,60 +7,79 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<link rel="stylesheet" href="/css/main.css">
 	<link rel="stylesheet" href="/css/guest.css">
-	<title>Guests</title>
+	<title>Guest</title>
 </head>
 <body>
 {{>header}}
 <section class="title-wrapper">
-	<h1 class="title-text">Заселення</h1>
+	<h1 class="title-text">Гости</h1>
 </section>
 <article>
-	<input type="text" v-model="nameFilter" class="filter-input" placeholder="Имя">
-
-	<div v-for="(guest, index) in displayedGuests">
-		<span v-text="guest.firstName"></span>
-		<span v-text="guest.lastName"></span>
-		<span v-text="guest.phone"></span>
-		<span v-text="guest.address"></span>
-		<span v-text="guest.passportDetails"></span>
-		<span v-text="guest.dateOfBirth"></span>
-		<button class="edit-guest-btn" @click="editGuest(index)">Редактировать</button>
-		<button class="delete-guest-btn" @click="deleteGuest(index)">Удалить</button>
+	<div class="filter-wrapper">
+		<p class="filter-text">Фильтр:</p>
+		<input type="text" class="filter-input" placeholder="Имя" v-model="nameFilter">
+		<button class="open-popup-btn" @click="createGuest">Добавить</button>
 	</div>
 
-	<button class="add-guest-btn" @click="createGuest">Добавить</button>
+	<table class="table-content-wrapper">
+		<tr class="table-content-caption">
+			<td>Имя</td>
+			<td>Фамилия</td>
+			<td>Номер телефона</td>
+			<td>Адрес</td>
+			<td>Паспорт</td>
+			<td>Дата рождения</td>
+			<td>Редактировать</td>
+			<td>Удалить</td>
+		</tr>
+		<tr v-for="(guest, index) in displayedGuests">
+			<td v-text="guest.firstName"></td>
+			<td v-text="guest.lastName"></td>
+			<td v-text="guest.phone"></td>
+			<td v-text="guest.address"></td>
+			<td v-text="guest.passportDetails"></td>
+			<td v-text="guest.getDateOfBirth()"></td>
+			<td>
+				<button class="edit-guest-btn" @click="editGuest(index)"></button>
+			</td>
+			<td>
+				<button class="delete-guest-btn" @click="deleteGuest(index)"></button>
+			</td>
+		</tr>
+	</table>
 
-	<div class="guest-popup" v-show="openedGuestPopup">
-		<div>
+	<div class="popup-overlay" v-show="openedGuestPopup"></div>
+	<div class="popup" v-show="openedGuestPopup">
+		<h3 class="popup-caption" v-text="guestPopupCaption"></h3>
+		<div class="popup-input-wrapper">
 			<label for="">Имя</label>
 			<input type="text" v-model="guest.firstName">
 		</div>
-		<div>
+		<div class="popup-input-wrapper">
 			<label for="">Фамилия</label>
 			<input type="text" v-model="guest.lastName">
 		</div>
-		<div>
+		<div class="popup-input-wrapper">
 			<label for="">Номер тефона</label>
 			<input type="text" v-model="guest.phone">
 		</div>
-		<div>
+		<div class="popup-input-wrapper">
 			<label for="">Адрес</label>
 			<input type="text" v-model="guest.address">
 		</div>
-		<div>
+		<div class="popup-input-wrapper">
 			<label for="">Паспорт</label>
 			<input type="text" v-model="guest.passportDetails">
 		</div>
-		<div>
+		<div class="popup-input-wrapper">
 			<label for="">Дата рождения</label>
 			<input type="date" v-model="guest.dateOfBirth">
 		</div>
-
-		<button class="save-new-guest-data-btn" @click="saveGuestData">Сохранить</button>
-		<button class="close-edit-popup-btn" @click="closeGuestPopup">Закрыть</button>
+		<button class="save-data-btn" @click="saveGuestData">Подтвердить</button>
+		<button class="close-popup-btn" @click="closeGuestPopup"></button>
 	</div>
-
 </article>
+{{>footer}}
 <script src="/js/vue.js"></script>
 <script type="module" src="/js/guest-page.js"></script>
 </body>

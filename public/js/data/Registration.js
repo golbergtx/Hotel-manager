@@ -1,3 +1,5 @@
+import DateFormater from "/js/data/Date-formater.js";
+
 export default class Registration {
 	constructor(id, roomNumber, price, dateOfArrival, dateOfDeparture, methodOfPayment, guestID) {
 		this.id = id;
@@ -10,11 +12,11 @@ export default class Registration {
 	}
 	
 	getDateOfArrival() {
-		return getFormatDate(this.dateOfArrival);
+		return DateFormater.getFormatDate(this.dateOfArrival);
 	}
 	
 	getDateOfDeparture() {
-		return getFormatDate(this.dateOfDeparture);
+		return DateFormater.getFormatDate(this.dateOfDeparture);
 	}
 	
 	getPrice() {
@@ -46,12 +48,4 @@ export default class Registration {
 	static createRegistration(roomNumber, price, dateOfArrival, dateOfDeparture, methodOfPayment, guestID) {
 		return new Registration(null, roomNumber, price, dateOfArrival, dateOfDeparture, methodOfPayment, guestID)
 	}
-}
-
-function getFormatDate(date) {
-	let day = date.getDate();
-	let month = date.getMonth() + 1;
-	if (day <= 9) day = `0${day}`;
-	if (month <= 9) month = `0${month}`;
-	return `${day} : ${month} : ${date.getFullYear()}`
 }

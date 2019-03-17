@@ -1,3 +1,5 @@
+import DateFormater from "/js/data/Date-formater.js";
+
 export default class Room {
 	constructor(number, category, dateOfArrival, dateOfDeparture, price) {
 		this.number = number;
@@ -17,11 +19,11 @@ export default class Room {
 	}
 	
 	getDateOfArrival() {
-		return getFormatDate(this.dateOfArrival);
+		return DateFormater.getFormatDate(this.dateOfArrival);
 	}
 	
 	getDateOfDeparture() {
-		return getFormatDate(this.dateOfDeparture);
+		return DateFormater.getFormatDate(this.dateOfDeparture);
 	}
 	
 	editRoom(options) {
@@ -51,13 +53,4 @@ export default class Room {
 	static getAvailableRooms(rooms) {
 		return rooms.filter(room => !room.status);
 	}
-}
-
-function getFormatDate(date) {
-	if (!(date instanceof Date)) return "-";
-	let day = date.getDate();
-	let month = date.getMonth() + 1;
-	if (day <= 9) day = `0${day}`;
-	if (month <= 9) month = `0${month}`;
-	return `${day} : ${month} : ${date.getFullYear()}`
 }

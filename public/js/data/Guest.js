@@ -1,3 +1,5 @@
+import DateFormater from "/js/data/Date-formater.js";
+
 export default class Guest {
 	constructor(id, firstName, lastName, phone, address, passportDetails, dateOfBirth) {
 		this.id = id;
@@ -9,6 +11,14 @@ export default class Guest {
 		this.dateOfBirth = dateOfBirth;
 	}
 	
+	getFullName() {
+		return `${this.firstName} ${this.lastName}`;
+	}
+	
+	getDateOfBirth() {
+		return DateFormater.getFormatDate(this.dateOfBirth);
+	}
+	
 	editGuest(options) {
 		this.firstName = options.firstName;
 		this.lastName = options.lastName;
@@ -16,10 +26,6 @@ export default class Guest {
 		this.address = options.address;
 		this.passportDetails = options.passportDetails;
 		this.dateOfBirth = options.dateOfBirth;
-	}
-	
-	getFullName(){
-		return `${this.firstName} ${this.lastName}`;
 	}
 	
 	static getGuestByFirstName(guests, firstName) {
