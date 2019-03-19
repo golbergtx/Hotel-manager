@@ -1,17 +1,17 @@
 new Vue({
-	el: '#registrationForm',
+	el: "#registrationForm",
 	data: {
 		login: "",
 		password: "",
 		firstName: "",
-		registrySuccessFull: false,
 		loginExist: false,
+		registrySuccessFull: false,
 		showErrorLoginMessage: false
 	},
 	methods: {
-		submit: function () {
-			const data = "login=" + encodeURIComponent(this.login) + "&password=" + encodeURIComponent(this.password)
-				+ "&name=" + encodeURIComponent(this.firstName);
+		submit() {
+			const data = `login=${encodeURIComponent(this.login)}&password=${encodeURIComponent(this.password)}
+				&name=${encodeURIComponent(this.firstName)}`;
 			this.sendDataToServer(data);
 			if (this.registrySuccessFull) {
 				window.location = "/";
@@ -19,10 +19,10 @@ new Vue({
 				this.showErrorLoginMessage = true;
 			}
 		},
-		sendDataToServer: function (body) {
+		sendDataToServer(body) {
 			const xhr = new XMLHttpRequest();
-			xhr.open('POST', 'registration-user', false);
-			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			xhr.open("POST", "registration-user", false);
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			xhr.send(body);
 			if (xhr.status === 200) {
 				this.registrySuccessFull = true;
@@ -34,5 +34,3 @@ new Vue({
 		}
 	}
 });
-
-/* TODO refactoring code */

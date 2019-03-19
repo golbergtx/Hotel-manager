@@ -49,7 +49,7 @@
 	<div class="popup-overlay" v-show="openedRegistrationPopup"></div>
 	<div class="popup" v-show="openedRegistrationPopup">
 		<h3 class="popup-caption">Оформить регистрацию:</h3>
-		<span class="popup-error-message" v-if="popupErrorMessage" v-text="popupErrorMessage"></span>
+		<span class="popup-error-message" v-if="showPopupErrorMessage" v-text="popupErrorMessage"></span>
 		<div class="popup-input-wrapper">
 			<label for="">Номер</label>
 			<select v-model="registration.roomNumber" @change="onChangeRoomNumber">
@@ -82,7 +82,7 @@
 			<label for="">Общая сумма</label>
 			<input type="text" readonly v-model="registration.wholeAmount">
 		</div>
-		<button class="save-data-btn" :class="{disable: popupErrorMessage}" @click="addRegistration">Подтвердить</button>
+		<button class="save-data-btn" :class="{disable: showPopupErrorMessage}" @click="addRegistration">Подтвердить</button>
 		<button class="close-popup-btn" @click="closeRegistrationPopup"></button>
 	</div>
 </article>

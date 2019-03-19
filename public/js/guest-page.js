@@ -2,7 +2,7 @@ import Guest from "/js/data/Guest.js";
 import DateFormater from "/js/data/Date-formater.js";
 
 new Vue({
-	el: 'article',
+	el: "article",
 	data: {
 		guests: [],
 		displayedGuests: [],
@@ -54,14 +54,9 @@ new Vue({
 			this.openedGuestPopup = false;
 		},
 		resetGuest() {
-			this.guest = {
-				firstName: "",
-				lastName: "",
-				phone: "",
-				address: "",
-				passportDetails: "",
-				dateOfBirth: ""
-			};
+			for (let key in this.guest) {
+				this.guest[key] = "";
+			}
 		},
 		saveGuestData() {
 			if (this.editType === "edit") {
@@ -89,8 +84,8 @@ new Vue({
 		},
 		sendGuestData(action, data, callback) {
 			const xhr = new XMLHttpRequest();
-			xhr.open('POST', action);
-			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.open("POST", action);
+			xhr.setRequestHeader("Content-Type", "application/json");
 			xhr.send(JSON.stringify(data));
 			xhr.onloadend = () => {
 				if (xhr.status === 200) callback && callback(xhr.response);
@@ -98,8 +93,8 @@ new Vue({
 		},
 		getGuestsData() {
 			const xhr = new XMLHttpRequest();
-			xhr.open('POST', 'get-guests', false);
-			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			xhr.open("POST", "get-guests", false);
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			xhr.send();
 			if (xhr.status === 200) {
 				return JSON.parse(xhr.response, (key, value) => {
@@ -124,5 +119,3 @@ new Vue({
 		this.displayedGuests = this.guests;
 	}
 });
-
-/* TODO refactoring code */

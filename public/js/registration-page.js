@@ -3,7 +3,7 @@ import Guest from "/js/data/Guest.js";
 import Registration from "/js/data/Registration.js";
 
 new Vue({
-	el: 'article',
+	el: "article",
 	data: {
 		rooms: [],
 		guests: [],
@@ -21,7 +21,8 @@ new Vue({
 			wholeAmount: 0
 		},
 		openedRegistrationPopup: false,
-		popupErrorMessage: ""
+		popupErrorMessage: "Вільних номерів немає!",
+		showPopupErrorMessage: false,
 	},
 	watch: {
 		guestNameFilter(val) {
@@ -40,8 +41,8 @@ new Vue({
 	methods: {
 		openRegistrationPopup() {
 			this.freeRoomNumbers = Room.getAvailableRooms(this.rooms).map(element => element.number);
-			if (!this.freeRoomNumbers.length) this.popupErrorMessage = "Вільних номерів немає!";
-			else this.popupErrorMessage = "";
+			if (!this.freeRoomNumbers.length) this.showPopupErrorMessage = true;
+			else this.showPopupErrorMessage = false;
 			this.openedRegistrationPopup = true;
 		},
 		closeRegistrationPopup() {
@@ -104,8 +105,8 @@ new Vue({
 		},
 		addRegistrationData(registrationPage, callback) {
 			const xhr = new XMLHttpRequest();
-			xhr.open('POST', 'add-registration');
-			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.open("POST", "add-registration");
+			xhr.setRequestHeader("Content-Type", "application/json");
 			xhr.send(JSON.stringify(registrationPage));
 			xhr.onloadend = () => {
 				if (xhr.status === 200) callback && callback();
@@ -113,8 +114,8 @@ new Vue({
 		},
 		deleteRegistrationData(roomNumber, callback) {
 			const xhr = new XMLHttpRequest();
-			xhr.open('POST', 'delete-registration');
-			xhr.setRequestHeader('Content-Type', 'application/json');
+			xhr.open("POST", "delete-registration");
+			xhr.setRequestHeader("Content-Type", "application/json");
 			xhr.send(JSON.stringify({roomNumber: roomNumber}));
 			xhr.onloadend = () => {
 				if (xhr.status === 200) callback && callback();
@@ -122,8 +123,8 @@ new Vue({
 		},
 		getRoomsData() {
 			const xhr = new XMLHttpRequest();
-			xhr.open('POST', 'get-rooms', false);
-			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			xhr.open("POST", "get-rooms", false);
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			xhr.send();
 			if (xhr.status === 200) {
 				return JSON.parse(xhr.response);
@@ -131,8 +132,8 @@ new Vue({
 		},
 		getGuestsData() {
 			const xhr = new XMLHttpRequest();
-			xhr.open('POST', 'get-guests', false);
-			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			xhr.open("POST", "get-guests", false);
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			xhr.send();
 			if (xhr.status === 200) {
 				return JSON.parse(xhr.response);
@@ -140,8 +141,8 @@ new Vue({
 		},
 		getRegistrationData() {
 			const xhr = new XMLHttpRequest();
-			xhr.open('POST', 'get-registration', false);
-			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			xhr.open("POST", "get-registration", false);
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			xhr.send();
 			if (xhr.status === 200) {
 				return JSON.parse(xhr.response, (key, value) => {
@@ -188,5 +189,3 @@ new Vue({
 		this.displayedRegistrations = this.registrations;
 	}
 });
-
-/* TODO refactoring code */

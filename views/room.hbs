@@ -49,7 +49,7 @@
 	<div class="popup-overlay" v-show="openedEditPopup"></div>
 	<div class="popup" v-show="openedEditPopup">
 		<h3 class="popup-caption">Редактировать номер:</h3>
-		<span class="popup-error-message" v-if="popupErrorMessage" v-text="popupErrorMessage"></span>
+		<span class="popup-error-message" v-if="showPopupErrorMessage" v-text="popupErrorMessage"></span>
 		<div class="popup-input-wrapper">
 			<label for="">Номер</label>
 			<input type="number" v-model="editRoomData.number">
@@ -62,7 +62,7 @@
 			<label for="">Цена</label>
 			<input type="number" v-model="editRoomData.price">
 		</div>
-		<button class="save-data-btn" :class="{disable: popupErrorMessage}" @click="updateRoom">Подтвердить</button>
+		<button class="save-data-btn" :class="{disable: showPopupErrorMessage}" @click="updateRoom">Подтвердить</button>
 		<button class="close-popup-btn" @click="closeEditPopup"></button>
 	</div>
 </article>

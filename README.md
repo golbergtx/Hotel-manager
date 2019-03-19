@@ -2,9 +2,11 @@
 
 ### The launch of the project
 
-<b>1) Install MySQL `https://dev.mysql.com/downloads/installer/`</b>
+<b>1) Install:</b>
+* Node.js `https://nodejs.org`
+* MySQL `https://dev.mysql.com/downloads/installer/`
 
-<b>2) Install modules</b>
+<b>2) Install modules, run command in console</b>
 
 		npm i
 	
@@ -15,7 +17,7 @@
 		
 <b>4) Create database, tables, insert data. Run sql script `init-database.sql` which is in the root project.</b>
 
-<b>5) Run command</b>
+<b>5) Run command in console</b>
 
 		node server
 		

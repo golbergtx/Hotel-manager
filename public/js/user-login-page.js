@@ -1,5 +1,5 @@
 new Vue({
-	el: '#loginForm',
+	el: "#loginForm",
 	data: {
 		login: "",
 		password: "",
@@ -7,8 +7,8 @@ new Vue({
 		showErrorLoginMessage: false
 	},
 	methods: {
-		submit: function () {
-			const data = "login=" + encodeURIComponent(this.login) + "&password=" + encodeURIComponent(this.password);
+		submit() {
+			const data = `login=${encodeURIComponent(this.login)}&password=${encodeURIComponent(this.password)}`;
 			this.loginSuccessFull = this.loginToServer(data);
 			if (this.loginSuccessFull) {
 				window.location = "/";
@@ -16,10 +16,10 @@ new Vue({
 				this.showErrorLoginMessage = true;
 			}
 		},
-		loginToServer: function (body) {
+		loginToServer(body) {
 			const xhr = new XMLHttpRequest();
-			xhr.open('POST', 'login', false);
-			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			xhr.open("POST", "/login", false);
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			xhr.send(body);
 			if (xhr.status != 200) {
 				return false;
@@ -29,5 +29,3 @@ new Vue({
 		}
 	}
 });
-
-/* TODO refactoring code */
