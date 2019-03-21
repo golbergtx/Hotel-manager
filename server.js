@@ -5,6 +5,7 @@ const app = express();
 // modules
 const hbs = require("hbs");
 const bodyParser = require("body-parser");
+const User = require("./controllers/User");
 const Database = require("./controllers/Database");
 const database = Database.connection("localhost", "root", "password", "hotel");
 
@@ -15,7 +16,7 @@ app.use(express.static(__dirname + "/public"));
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded
-let isAuthorized = false;
+let user = null;
 
 // post requests
 app.post("/login", (req, res) => {
@@ -28,7 +29,7 @@ app.post("/login", (req, res) => {
 			res.status(500).end();
 		}
 		if (result[0]) {
-			isAuthorized = result[0].password === userPassword;
+			user = new User(result[0].login, result[0].password, result[0].name);
 			res.status(200).end();
 		} else {
 			res.status(401).end();
@@ -219,13 +220,13 @@ app.post("/delete-guest", (req, res) => {
 // middleware
 app.use("/", (req, res, next) => {
 	if (req.path === "/user-login" || req.path === "/user-registration") {
-		if (isAuthorized) {
+		if (user) {
 			res.redirect("/room");
 		} else {
 			next();
 		}
 	} else {
-		if (!isAuthorized) {
+		if (!user) {
 			console.warn("User unauthorized");
 			res.redirect("/user-login");
 		} else {
@@ -242,7 +243,7 @@ app.get("/user-registration", (req, res) => {
 	res.render("user-registration");
 });
 app.get("/log-out", (req, res) => {
-	isAuthorized = false;
+	user = null;
 	res.redirect("/user-login");
 });
 app.get("/room", function (req, res) {
