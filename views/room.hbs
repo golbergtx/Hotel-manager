@@ -17,10 +17,16 @@
 <article>
 	<div class="filter-wrapper">
 		<p class="filter-text">Фильтр:</p>
-		<input type="number" class="filter-input" placeholder="Номер" v-model="numberFilter">
-		<input type="text" class="filter-input" placeholder="Категория" v-model="categoryFilter">
+		<input type="number" class="filter-input" placeholder="Номер" v-model="numberFilter" @input="applyFilters">
+		<input type="text" class="filter-input" placeholder="Категория" v-model="categoryFilter" @input="applyFilters">
 		<p class="filter-text">Показать свободные номера:</p>
-		<input type="checkbox" class="checkbox" v-model="showAvailableRooms">
+		<input type="checkbox" class="checkbox" v-model="showAvailableRooms" @change="applyFilters">
+	</div>
+	<div class="filter-wrapper date-filter-wrapper">
+		<p class="filter-text">Дата заселения :</p>
+		<input type="date" class="filter-input" v-model="dateOfArrivalFilter" @change="applyFilters">
+		<p class="filter-text">Дата выселения :</p>
+		<input type="date" class="filter-input" v-model="dateOfDepartureFilter" @change="applyFilters">
 	</div>
 
 	<table class="table-content-wrapper">

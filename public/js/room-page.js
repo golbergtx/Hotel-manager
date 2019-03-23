@@ -8,6 +8,8 @@ new Vue({
 		displayedRooms: [],
 		numberFilter: "",
 		categoryFilter: "",
+		dateOfArrivalFilter: "",
+		dateOfDepartureFilter: "",
 		showAvailableRooms: false,
 		openedEditPopup: false,
 		editRoomNumber: null,
@@ -19,21 +21,23 @@ new Vue({
 		popupErrorMessage: "Цей номер вже існює",
 		showPopupErrorMessage: false
 	},
-	watch: {
-		numberFilter(val) {
-			if (val !== "") this.displayedRooms = Room.getRoomByNumber(this.rooms, val);
-			else this.displayedRooms = this.rooms;
-		},
-		categoryFilter(val) {
-			if (val !== "") this.displayedRooms = Room.getRoomsByCategory(this.rooms, val);
-			else this.displayedRooms = this.rooms;
-		},
-		showAvailableRooms(val) {
-			if (val) this.displayedRooms = Room.getAvailableRooms(this.rooms, val);
-			else this.displayedRooms = this.rooms;
-		}
-	},
 	methods: {
+		applyFilters() {
+			this.displayedRooms = this.rooms;
+			if (this.numberFilter) {
+				this.displayedRooms = Room.getRoomByNumber(this.displayedRooms, this.numberFilter);
+			}
+			if (this.categoryFilter) {
+				this.displayedRooms = Room.getRoomsByCategory(this.displayedRooms, this.categoryFilter);
+			}
+			if (this.showAvailableRooms) {
+				this.displayedRooms = Room.getAvailableRooms(this.displayedRooms, this.showAvailableRooms);
+			}
+			this.displayedRooms = Room.getRoomsByPeriod(this.displayedRooms,
+				new Date(this.dateOfArrivalFilter),
+				new Date(this.dateOfDepartureFilter)
+			);
+		},
 		openEditPopup(index) {
 			this.openedEditPopup = true;
 			this.editRoomNumber = this.displayedRooms[index].number;

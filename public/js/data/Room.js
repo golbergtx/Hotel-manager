@@ -50,6 +50,23 @@ export default class Room {
 		return rooms.filter(room => room.category.startsWith(category));
 	}
 	
+	static getRoomsByPeriod(rooms, start, end) {
+		let result = [];
+		if (start.toString() !== "Invalid Date") {
+			result = rooms.filter(room => {
+				return DateFormater.getFormatDate(room.dateOfArrival, "-") >= DateFormater.getFormatDate(start, "-");
+			});
+		} else {
+			result = rooms;
+		}
+		if (end.toString() !== "Invalid Date") {
+			result = result.filter(room => {
+				return DateFormater.getFormatDate(room.dateOfDeparture, "-") <= DateFormater.getFormatDate(end, "-");
+			});
+		}
+		return result;
+	}
+	
 	static getAvailableRooms(rooms) {
 		return rooms.filter(room => !room.status);
 	}
