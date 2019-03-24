@@ -99,8 +99,16 @@
 	<div class="popup" v-show="openedServicesPopup">
 		<h3 class="popup-caption">Дополнительные услуги:</h3>
 		<div class="popup-input-wrapper">
-			<label for="">Цена</label>
-			<input type="number" v-model.number="registration.priceServices" @input="onChangePriceServices">
+			<label for="">Цена завтрака</label>
+			<input type="number" v-model.number="services.breakfast" @input="onChangePriceServices">
+		</div>
+		<div class="popup-input-wrapper">
+			<label for="">Цена такси</label>
+			<input type="number" v-model.number="services.taxi" @input="onChangePriceServices">
+		</div>
+		<div class="popup-input-wrapper">
+			<label for="">Цена прачечной</label>
+			<input type="number" v-model.number="services.washing" @input="onChangePriceServices">
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Общая сумма</label>

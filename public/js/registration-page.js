@@ -18,9 +18,14 @@ new Vue({
 			dateOfArrival: null,
 			dateOfDeparture: null,
 			methodOfPayment: null,
-			guestID: 1,
+			guestID: 0,
 			wholeAmount: 0,
 			paidStatus: false
+		},
+		services: {
+			breakfast: 0,
+			taxi: 0,
+			washing: 0
 		},
 		openedRegistrationPopup: false,
 		openedServicesPopup: false,
@@ -48,6 +53,7 @@ new Vue({
 	methods: {
 		openRegistrationPopup() {
 			this.freeRoomNumbers = Room.getAvailableRooms(this.rooms).map(element => element.number);
+			this.registration.guestID = this.guests[0].id;
 			if (!this.freeRoomNumbers.length) this.showPopupErrorMessage = true;
 			else this.showPopupErrorMessage = false;
 			this.openedRegistrationPopup = true;
@@ -63,6 +69,7 @@ new Vue({
 			this.registration.guestID = this.guests[event.target.selectedIndex].id;
 		},
 		onChangePriceServices() {
+			this.registration.priceServices = this.services.breakfast + this.services.taxi + this.services.washing;
 			this.setSumPrice();
 		},
 		setSumPrice() {
@@ -84,7 +91,13 @@ new Vue({
 				dateOfDeparture: null,
 				methodOfPayment: null,
 				guestID: 0,
-				wholeAmount: 0
+				wholeAmount: 0,
+				paidStatus: false
+			};
+			this.services = {
+				breakfast: 0,
+				taxi: 0,
+				washing: 0
 			};
 		},
 		openServicesPopup() {
