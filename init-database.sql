@@ -1,4 +1,4 @@
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password'
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
 CREATE DATABASE hotel;
 USE hotel;
 
@@ -28,6 +28,7 @@ CREATE TABLE `hotel`.`registrations` (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	roomNumber INT NOT NULL,
 	price DECIMAL  NOT NULL,
+    priceServices DECIMAL  NOT NULL,
 	dateOfArrival DATE NOT NULL,
 	dateOfDeparture DATE NOT NULL,
 	methodOfPayment VARCHAR(30) NOT NULL,
@@ -67,10 +68,10 @@ VALUES
 ("Николай", "Фокин", "0936723145", "Новоселки 23", "ВН 976009", "1993-10-01"),
 ("Александр", "Князев", "0935472631", "Маликова 17", "ВН 689592", "1995-11-15");
 
-INSERT registrations(roomNumber, price, dateOfArrival, dateOfDeparture, methodOfPayment, guestID)
+INSERT registrations(roomNumber, price, priceServices, dateOfArrival, dateOfDeparture, methodOfPayment, guestID)
 VALUES
-(1, 400, "2019-03-01", "2019-04-10", "pay", 1),
-(2, 400, "2019-03-02", "2019-04-15", "pay", 2),
-(3, 400, "2019-03-03", "2019-04-20", "pay", 3),
-(4, 600, "2019-03-04", "2019-04-25", "pay", 4),
-(5, 600, "2019-03-05", "2019-04-30", "pay", 5);
+(1, 400, 0, "2019-03-01", "2019-04-10", "Наличный", 1),
+(2, 400, 200, "2019-03-02", "2019-04-15", "Безналичный", 2),
+(3, 400, 0, "2019-03-03", "2019-04-20", "Наличный", 3),
+(4, 600, 0, "2019-03-04", "2019-04-25", "Безналичный", 4),
+(5, 600, 0, "2019-03-05", "2019-04-30", "Наличный", 5);

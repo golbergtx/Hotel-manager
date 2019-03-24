@@ -70,7 +70,9 @@
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Метод оплаты</label>
-			<input type="text" v-model="registration.methodOfPayment">
+			<select v-model="registration.methodOfPayment">
+				<option v-for="(method) in methodsOfPayment" v-text="method"></option>
+			</select>
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Гость</label>
@@ -82,8 +84,29 @@
 			<label for="">Общая сумма</label>
 			<input type="text" readonly v-model="registration.wholeAmount">
 		</div>
-		<button class="save-data-btn" :class="{disable: showPopupErrorMessage}" @click="addRegistration">Подтвердить</button>
+		<div class="popup-footer">
+			<button class="save-data-btn" :class="{disable: showPopupErrorMessage || !registration.paidStatus}"
+			        @click="addRegistration">Подтвердить</button>
+			<button class="save-data-btn" :class="{disable: showPopupErrorMessage}"
+			        @click="openServicesPopup">Доп. услуги</button>
+			<span class="approve-pay-text">Подтвердить оплату</span>
+			<input type="checkbox" class="approve-pay-checkbox" v-model="registration.paidStatus">
+		</div>
 		<button class="close-popup-btn" @click="closeRegistrationPopup"></button>
+	</div>
+
+	<div class="popup-overlay" v-show="openedServicesPopup"></div>
+	<div class="popup" v-show="openedServicesPopup">
+		<h3 class="popup-caption">Дополнительные услуги:</h3>
+		<div class="popup-input-wrapper">
+			<label for="">Цена</label>
+			<input type="number" v-model.number="registration.priceServices" @input="onChangePriceServices">
+		</div>
+		<div class="popup-input-wrapper">
+			<label for="">Общая сумма</label>
+			<input type="number" readonly v-model="registration.wholeAmount">
+		</div>
+		<button class="close-popup-btn" @click="closeServicesPopup"></button>
 	</div>
 </article>
 {{>footer}}

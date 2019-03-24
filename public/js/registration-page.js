@@ -14,13 +14,20 @@ new Vue({
 		registration: {
 			roomNumber: null,
 			price: null,
+			priceServices: 0,
 			dateOfArrival: null,
 			dateOfDeparture: null,
 			methodOfPayment: null,
 			guestID: 1,
-			wholeAmount: 0
+			wholeAmount: 0,
+			paidStatus: false
 		},
 		openedRegistrationPopup: false,
+		openedServicesPopup: false,
+		methodsOfPayment: [
+			"Наличный",
+			"Безналичный"
+		],
 		popupErrorMessage: "Вільних номерів немає!",
 		showPopupErrorMessage: false,
 	},
@@ -55,6 +62,9 @@ new Vue({
 		onChangeGuestID(event) {
 			this.registration.guestID = this.guests[event.target.selectedIndex].id;
 		},
+		onChangePriceServices() {
+			this.setSumPrice();
+		},
 		setSumPrice() {
 			if (this.registration.dateOfArrival && this.registration.dateOfDeparture) {
 				const duration = (new Date(this.registration.dateOfDeparture) - new Date(this.registration.dateOfArrival)) / 86400000;
@@ -63,11 +73,13 @@ new Vue({
 			} else {
 				this.registration.wholeAmount = 0;
 			}
+			this.registration.wholeAmount += this.registration.priceServices;
 		},
 		resetRegistrationData() {
 			this.registration = {
 				roomNumber: null,
 				price: null,
+				priceServices: 0,
 				dateOfArrival: null,
 				dateOfDeparture: null,
 				methodOfPayment: null,
@@ -75,12 +87,20 @@ new Vue({
 				wholeAmount: 0
 			};
 		},
+		openServicesPopup() {
+			this.openedServicesPopup = true;
+			this.registration.paidStatus = false;
+		},
+		closeServicesPopup() {
+			this.openedServicesPopup = false;
+		},
 		addRegistration() {
 			this.addRegistrationData(this.registration, () => {
 				this.registrations.push(
 					Registration.createRegistration(
 						this.registration.roomNumber,
 						this.registration.price,
+						this.registration.priceServices,
 						new Date(this.registration.dateOfArrival),
 						new Date(this.registration.dateOfDeparture),
 						this.registration.methodOfPayment,
@@ -180,6 +200,7 @@ new Vue({
 			return new Registration(registration.id,
 				registration.roomNumber,
 				registration.price,
+				registration.priceServices,
 				registration.dateOfArrival,
 				registration.dateOfDeparture,
 				registration.methodOfPayment,

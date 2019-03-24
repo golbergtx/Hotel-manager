@@ -1,10 +1,11 @@
 import DateFormater from "/js/data/Date-formater.js";
 
 export default class Registration {
-	constructor(id, roomNumber, price, dateOfArrival, dateOfDeparture, methodOfPayment, guestID) {
+	constructor(id, roomNumber, price, priceServices, dateOfArrival, dateOfDeparture, methodOfPayment, guestID) {
 		this.id = id;
 		this.roomNumber = roomNumber;
 		this.price = price;
+		this.priceServices = priceServices;
 		this.dateOfArrival = dateOfArrival;
 		this.dateOfDeparture = dateOfDeparture;
 		this.methodOfPayment = methodOfPayment;
@@ -30,22 +31,15 @@ export default class Registration {
 			const price = this.price || 0;
 			wholeAmount = Math.round(price * duration);
 		}
+		wholeAmount += this.priceServices;
 		return `${wholeAmount} $`;
-	}
-	
-	pay() {
-		//TODO implement method
-	}
-	
-	checkPaymentStatus() {
-		//TODO implement method
 	}
 	
 	static getRegistrationByGuestID(registrations, id) {
 		return registrations.filter(registration => registration.id === id);
 	}
 	
-	static createRegistration(roomNumber, price, dateOfArrival, dateOfDeparture, methodOfPayment, guestID) {
-		return new Registration(null, roomNumber, price, dateOfArrival, dateOfDeparture, methodOfPayment, guestID)
+	static createRegistration(roomNumber, price, priceServices, dateOfArrival, dateOfDeparture, methodOfPayment, guestID) {
+		return new Registration(null, roomNumber, price, priceServices, dateOfArrival, dateOfDeparture, methodOfPayment, guestID)
 	}
 }

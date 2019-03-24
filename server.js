@@ -125,13 +125,14 @@ app.post("/add-registration", (req, res) => {
 	const data = [
 		req.body.roomNumber,
 		req.body.price,
+		req.body.priceServices,
 		new Date(req.body.dateOfArrival),
 		new Date(req.body.dateOfDeparture),
 		req.body.methodOfPayment,
 		req.body.guestID
 	];
 	
-	database.query(`INSERT INTO registrations SET roomNumber = ?, price = ?, dateOfArrival = ?, dateOfDeparture = ?, methodOfPayment = ?,
+	database.query(`INSERT INTO registrations SET roomNumber = ?, price = ?, priceServices = ?, dateOfArrival = ?, dateOfDeparture = ?, methodOfPayment = ?,
 	guestID = ?`, data, err => {
 		if (err) {
 			console.log(err);
