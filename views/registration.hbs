@@ -92,6 +92,8 @@
 			<span class="approve-pay-text">Подтвердить оплату</span>
 			<input type="checkbox" class="approve-pay-checkbox" v-model="registration.paidStatus">
 		</div>
+		<button class="save-data-btn" :class="{disable: showPopupErrorMessage || !registration.paidStatus}"
+		        @click="openPDFCheck">Получить чек</button>
 		<button class="close-popup-btn" @click="closeRegistrationPopup"></button>
 	</div>
 
@@ -119,6 +121,8 @@
 </article>
 {{>footer}}
 <script src="/js/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.54/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.54/vfs_fonts.js"></script>
 <script type="module" src="/js/registration-page.js"></script>
 </body>
 </html>

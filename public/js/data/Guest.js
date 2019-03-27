@@ -32,6 +32,10 @@ export default class Guest {
 		return guests.filter(guest => guest.firstName.startsWith(firstName));
 	}
 	
+	static getGuestByID(guests, id) {
+		return guests.find(guest => guest.id === id);
+	}
+	
 	static createGuest(firstName, lastName, phone, address, passportDetails, dateOfBirth) {
 		return new Guest(null, firstName, lastName, phone, address, passportDetails, dateOfBirth);
 	}

@@ -107,6 +107,39 @@ new Vue({
 		closeServicesPopup() {
 			this.openedServicesPopup = false;
 		},
+		openPDFCheck() {
+			const clientName = Guest.getGuestByID(this.guests, this.registration.guestID).getFullName();
+			const docDefinition = {
+				content: [
+					{text: 'HOTEL', style: ['header']},
+					`Клиент:  ${clientName}`,
+					`Номер комнаты:  ${this.registration.roomNumber}`,
+					`Дата заселения:  ${this.registration.dateOfArrival}`,
+					`Дата выселения:  ${this.registration.dateOfDeparture}`,
+					`Цена за сутки:  ${this.registration.price} $`,
+					`Метод оплаты:  ${this.registration.methodOfPayment}`,
+					`____________________________________________________`,
+					{text: 'Дополнительные услуги:', style: ['subHeader']},
+					`Цена завтрака:  ${this.services.breakfast} $`,
+					`Цена такси:  ${this.services.taxi} $`,
+					`Цена прачечной:  ${this.services.washing} $`,
+					`____________________________________________________`,
+					{text: `Общая сумма: ${this.registration.wholeAmount} $`, style: ['subHeader']},
+				],
+				styles: {
+					header: {
+						fontSize: 22,
+						bold: true,
+						alignment: 'center'
+					},
+					subHeader: {
+						fontSize: 16,
+						bold: true
+					}
+				}
+			};
+			pdfMake.createPdf(docDefinition).open();
+		},
 		addRegistration() {
 			this.addRegistrationData(this.registration, () => {
 				this.registrations.push(
