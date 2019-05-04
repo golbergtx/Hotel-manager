@@ -1,4 +1,4 @@
-import Room from "/js/data/Room.js";
+import Room from "./data/Room.js";
 
 new Vue({
 	el: "article",

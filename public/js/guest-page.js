@@ -1,5 +1,5 @@
-import Guest from "/js/data/Guest.js";
-import DateFormater from "/js/data/Date-formater.js";
+import Guest from "./data/Guest.js";
+import DateFormater from "./data/Date-formater.js";
 
 new Vue({
 	el: "article",
