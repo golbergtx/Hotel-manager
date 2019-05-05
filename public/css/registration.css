@@ -1,5 +1,16 @@
+.edit-td{
+	display: flex;
+	justify-content: center;
+}
+.edit-registration-btn{
+	width: 70px;
+	height: 50px;
+	border: none;
+	outline: none;
+	background: url("/images/edit-icon.png") no-repeat center/contain;
+}
 .delete-registration-btn{
-	width: 100%;
+	width: 70px;
 	height: 50px;
 	border: none;
 	outline: none;
@@ -18,4 +29,7 @@
 .approve-pay-checkbox{
 	width: 38px;
 	height: 38px;
+}
+select.multiple-input{
+	height: 100px;
 }

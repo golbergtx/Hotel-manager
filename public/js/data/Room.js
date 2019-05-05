@@ -67,7 +67,7 @@ export default class Room {
 		return result;
 	}
 	
-	static getAvailableRooms(rooms) {
-		return rooms.filter(room => !room.status);
+	static getAvailableRooms(rooms, dateOfArrival) {
+		return rooms.filter(room => !room.status || dateOfArrival > room.dateOfDeparture);
 	}
 }

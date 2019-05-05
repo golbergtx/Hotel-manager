@@ -133,7 +133,7 @@ app.post("/add-registration", (req, res) => {
 	];
 	
 	database.query(`INSERT INTO registrations SET roomNumber = ?, price = ?, priceServices = ?, dateOfArrival = ?, dateOfDeparture = ?, methodOfPayment = ?,
-	guestID = ?`, data, err => {
+	guestsID = ?`, data, err => {
 		if (err) {
 			console.log(err);
 			res.status(500).end();

@@ -29,8 +29,8 @@
 			<td>Дата выселения</td>
 			<td>Метод оплаты</td>
 			<td>Общая сумма</td>
-			<td>Гость ID</td>
-			<td>Удалить</td>
+			<td>ID гостей</td>
+			<td>Редактировать</td>
 		</tr>
 		<tr v-for="(registration, index) in displayedRegistrations">
 			<td v-text="registration.roomNumber"></td>
@@ -39,9 +39,10 @@
 			<td v-text="registration.getDateOfDeparture()"></td>
 			<td v-text="registration.methodOfPayment"></td>
 			<td v-text="registration.getSumPrice()"></td>
-			<td v-text="registration.guestID"></td>
-			<td>
+			<td v-text="registration.guestsID"></td>
+			<td class="edit-td">
 				<button class="delete-registration-btn" @click="deleteRegistration(index)"></button>
+				<button class="edit-registration-btn" @click="openRegistrationPopup($event, index)"></button>
 			</td>
 		</tr>
 	</table>
@@ -62,11 +63,11 @@
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Дата заселення</label>
-			<input type="date" v-model="registration.dateOfArrival" @change="setSumPrice">
+			<input type="date" v-model="registration.dateOfArrival" @change="changeDateOfArrival">
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Дата выселения</label>
-			<input type="date" v-model="registration.dateOfDeparture" @change="setSumPrice">
+			<input type="date" v-model="registration.dateOfDeparture" @change="changeDateOfDeparture">
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Метод оплаты</label>
@@ -76,7 +77,7 @@
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Гость</label>
-			<select @change="onChangeGuestID">
+			<select class="multiple-input" @change="onChangeGuestsID" multiple>
 				<option v-for="guest in guests" v-text="guest.getFullName()"></option>
 			</select>
 		</div>

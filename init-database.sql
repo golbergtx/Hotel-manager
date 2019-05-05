@@ -32,10 +32,8 @@ CREATE TABLE `hotel`.`registrations` (
 	dateOfArrival DATE NOT NULL,
 	dateOfDeparture DATE NOT NULL,
 	methodOfPayment VARCHAR(30) NOT NULL,
-	guestID INT  NOT NULL,
+	guestsID VARCHAR(30) NOT NULL,
 	FOREIGN KEY (roomNumber) REFERENCES rooms (number)
-	ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (guestID) REFERENCES guests (id)
 	ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -68,10 +66,10 @@ VALUES
 ("Николай", "Фокин", "0936723145", "Новоселки 23", "ВН 976009", "1993-10-01"),
 ("Александр", "Князев", "0935472631", "Маликова 17", "ВН 689592", "1995-11-15");
 
-INSERT registrations(roomNumber, price, priceServices, dateOfArrival, dateOfDeparture, methodOfPayment, guestID)
+INSERT registrations(roomNumber, price, priceServices, dateOfArrival, dateOfDeparture, methodOfPayment, guestsID)
 VALUES
-(1, 400, 0, "2019-03-01", "2019-04-10", "Наличный", 1),
-(2, 400, 200, "2019-03-02", "2019-04-15", "Безналичный", 2),
-(3, 400, 0, "2019-03-03", "2019-04-20", "Наличный", 3),
-(4, 600, 0, "2019-03-04", "2019-04-25", "Безналичный", 4),
-(5, 600, 0, "2019-03-05", "2019-04-30", "Наличный", 5);
+(1, 400, 0, "2019-03-01", "2019-04-10", "Наличный", "1"),
+(2, 400, 200, "2019-03-02", "2019-04-15", "Безналичный", "2"),
+(3, 400, 0, "2019-03-03", "2019-04-20", "Наличный", "3"),
+(4, 600, 0, "2019-03-04", "2019-04-25", "Безналичный", "4"),
+(5, 600, 0, "2019-03-05", "2019-04-30", "Наличный", "5,6,7");

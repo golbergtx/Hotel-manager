@@ -1,6 +1,7 @@
-import Room from "/js/data/Room.js";
-import Guest from "/js/data/Guest.js";
-import Registration from "/js/data/Registration.js";
+import Room from "./data/Room.js";
+import Guest from "./data/Guest.js";
+import Registration from "./data/Registration.js";
+import DateFormater from "./data/Date-formater.js";
 
 new Vue({
 	el: "article",
@@ -18,7 +19,7 @@ new Vue({
 			dateOfArrival: null,
 			dateOfDeparture: null,
 			methodOfPayment: null,
-			guestID: 0,
+			guestsID: "",
 			wholeAmount: 0,
 			paidStatus: false
 		},
@@ -51,22 +52,40 @@ new Vue({
 		}
 	},
 	methods: {
-		openRegistrationPopup() {
+		openRegistrationPopup(event, index) {
 			this.freeRoomNumbers = Room.getAvailableRooms(this.rooms).map(element => element.number);
-			this.registration.guestID = this.guests[0].id;
-			if (!this.freeRoomNumbers.length) this.showPopupErrorMessage = true;
-			else this.showPopupErrorMessage = false;
+			this.registration.guestsID = this.guests[0].id;
+			
+			if (index) {
+				this.freeRoomNumbers.push(this.displayedRegistrations[index].roomNumber);
+				this.registration.roomNumber = this.displayedRegistrations[index].roomNumber;
+				this.registration.dateOfArrival = DateFormater.getFormatDate(this.displayedRegistrations[index].dateOfArrival, "-", true);
+				this.registration.dateOfDeparture = DateFormater.getFormatDate(this.displayedRegistrations[index].dateOfDeparture, "-", true);
+				this.registration.price = this.displayedRegistrations[index].price;
+				this.setSumPrice();
+			}
+			
 			this.openedRegistrationPopup = true;
 		},
 		closeRegistrationPopup() {
 			this.openedRegistrationPopup = false;
 		},
+		changeDateOfArrival() {
+			this.freeRoomNumbers = Room.getAvailableRooms(this.rooms, new Date(this.registration.dateOfArrival)).map(element => element.number);
+			this.showPopupErrorMessage = !this.freeRoomNumbers.length;
+			this.setSumPrice();
+		},
+		changeDateOfDeparture() {
+			this.setSumPrice();
+		},
 		onChangeRoomNumber() {
 			this.registration.price = Room.getPriceByNumber(this.rooms, Number(this.registration.roomNumber));
 			this.setSumPrice();
 		},
-		onChangeGuestID(event) {
-			this.registration.guestID = this.guests[event.target.selectedIndex].id;
+		onChangeGuestsID(event) {
+			this.registration.guestsID = "";
+			[...event.target.selectedOptions].forEach((option) => this.registration.guestsID += `${option.index},`);
+			this.registration.guestsID = this.registration.guestsID.slice(0, -1);
 		},
 		onChangePriceServices() {
 			this.registration.priceServices = this.services.breakfast + this.services.taxi + this.services.washing;
@@ -90,7 +109,7 @@ new Vue({
 				dateOfArrival: null,
 				dateOfDeparture: null,
 				methodOfPayment: null,
-				guestID: 0,
+				guestsID: 0,
 				wholeAmount: 0,
 				paidStatus: false
 			};
@@ -108,7 +127,7 @@ new Vue({
 			this.openedServicesPopup = false;
 		},
 		openPDFCheck() {
-			const clientName = Guest.getGuestByID(this.guests, this.registration.guestID).getFullName();
+			const clientName = Guest.getGuestByID(this.guests, this.registration.guestsID).getFullName();
 			const docDefinition = {
 				content: [
 					{text: 'HOTEL', style: ['header']},
@@ -150,7 +169,7 @@ new Vue({
 						new Date(this.registration.dateOfArrival),
 						new Date(this.registration.dateOfDeparture),
 						this.registration.methodOfPayment,
-						this.registration.guestID)
+						this.registration.guestsID)
 				);
 				const room = Room.getRoomByNumber(this.rooms, this.registration.roomNumber)[0];
 				room.dateOfArrival = new Date(this.registration.dateOfArrival);
@@ -250,9 +269,16 @@ new Vue({
 				registration.dateOfArrival,
 				registration.dateOfDeparture,
 				registration.methodOfPayment,
-				registration.guestID
+				registration.guestsID
 			);
 		});
 		this.displayedRegistrations = this.registrations;
 	}
 });
+
+//TODO 1 popup
+// TODO filter bi period
+// change room
+// full edit
+// more guest
+// bron
