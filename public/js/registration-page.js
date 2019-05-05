@@ -34,6 +34,7 @@ new Vue({
 			"Наличный",
 			"Безналичный"
 		],
+		popupHeader: "",
 		popupErrorMessage: "Вільних номерів немає!",
 		showPopupErrorMessage: false,
 	},
@@ -53,14 +54,17 @@ new Vue({
 	},
 	methods: {
 		openRegistrationPopup(event, index) {
+			this.popupHeader = "Оформить регистрацию:";
 			this.freeRoomNumbers = Room.getAvailableRooms(this.rooms).map(element => element.number);
-			this.registration.guestsID = this.guests[0].id;
 			
-			if (index) {
+			if (index !== undefined) {
+				this.popupHeader = "Редактировать регистрацию:";
 				this.freeRoomNumbers.push(this.displayedRegistrations[index].roomNumber);
 				this.registration.roomNumber = this.displayedRegistrations[index].roomNumber;
 				this.registration.dateOfArrival = DateFormater.getFormatDate(this.displayedRegistrations[index].dateOfArrival, "-", true);
 				this.registration.dateOfDeparture = DateFormater.getFormatDate(this.displayedRegistrations[index].dateOfDeparture, "-", true);
+				this.registration.methodOfPayment = this.displayedRegistrations[index].methodOfPayment;
+				this.registration.guestsID = this.displayedRegistrations[index].guestsID;
 				this.registration.price = this.displayedRegistrations[index].price;
 				this.setSumPrice();
 			}
@@ -68,14 +72,18 @@ new Vue({
 			this.openedRegistrationPopup = true;
 		},
 		closeRegistrationPopup() {
+			this.clearRegistration();
 			this.openedRegistrationPopup = false;
 		},
-		changeDateOfArrival() {
+		isSelectedGuest(id) {
+			return this.registration.guestsID.split(",").includes(id.toString());
+		},
+		onChangeDateOfArrival() {
 			this.freeRoomNumbers = Room.getAvailableRooms(this.rooms, new Date(this.registration.dateOfArrival)).map(element => element.number);
 			this.showPopupErrorMessage = !this.freeRoomNumbers.length;
 			this.setSumPrice();
 		},
-		changeDateOfDeparture() {
+		onChangeDateOfDeparture() {
 			this.setSumPrice();
 		},
 		onChangeRoomNumber() {
@@ -158,6 +166,19 @@ new Vue({
 				}
 			};
 			pdfMake.createPdf(docDefinition).open();
+		},
+		clearRegistration() {
+			this.registration = {
+				roomNumber: null,
+				price: null,
+				priceServices: 0,
+				dateOfArrival: null,
+				dateOfDeparture: null,
+				methodOfPayment: null,
+				guestsID: "",
+				wholeAmount: 0,
+				paidStatus: false
+			}
 		},
 		addRegistration() {
 			this.addRegistrationData(this.registration, () => {
@@ -276,9 +297,7 @@ new Vue({
 	}
 });
 
-//TODO 1 popup
-// TODO filter bi period
-// change room
-// full edit
-// more guest
-// bron
+//TODO surcharge or return cost
+//TODO price services independent
+
+//TODO Services module

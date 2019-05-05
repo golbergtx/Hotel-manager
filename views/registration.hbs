@@ -49,7 +49,7 @@
 
 	<div class="popup-overlay" v-show="openedRegistrationPopup"></div>
 	<div class="popup" v-show="openedRegistrationPopup">
-		<h3 class="popup-caption">Оформить регистрацию:</h3>
+		<h3 class="popup-caption" v-text="popupHeader"></h3>
 		<span class="popup-error-message" v-if="showPopupErrorMessage" v-text="popupErrorMessage"></span>
 		<div class="popup-input-wrapper">
 			<label for="">Номер</label>
@@ -63,11 +63,11 @@
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Дата заселення</label>
-			<input type="date" v-model="registration.dateOfArrival" @change="changeDateOfArrival">
+			<input type="date" v-model="registration.dateOfArrival" @change="onChangeDateOfArrival">
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Дата выселения</label>
-			<input type="date" v-model="registration.dateOfDeparture" @change="changeDateOfDeparture">
+			<input type="date" v-model="registration.dateOfDeparture" @change="onChangeDateOfDeparture">
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Метод оплаты</label>
@@ -76,9 +76,9 @@
 			</select>
 		</div>
 		<div class="popup-input-wrapper">
-			<label for="">Гость</label>
+			<label for="">Гости</label>
 			<select class="multiple-input" @change="onChangeGuestsID" multiple>
-				<option v-for="guest in guests" v-text="guest.getFullName()"></option>
+				<option v-for="guest in guests" v-text="guest.getFullName()" :selected="isSelectedGuest(guest.id)"></option>
 			</select>
 		</div>
 		<div class="popup-input-wrapper">
