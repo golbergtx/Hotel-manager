@@ -15,12 +15,14 @@ new Vue({
 		registration: {
 			roomNumber: null,
 			price: null,
+			surchargeCost: 0,
 			priceServices: 0,
 			dateOfArrival: null,
 			dateOfDeparture: null,
 			methodOfPayment: null,
 			guestsID: "",
 			wholeAmount: 0,
+			initialWholeAmount: 0,
 			paidStatus: false
 		},
 		services: {
@@ -70,6 +72,8 @@ new Vue({
 				this.registration.guestsID = this.displayedRegistrations[index].guestsID;
 				this.registration.price = this.displayedRegistrations[index].price;
 				this.setSumPrice();
+				this.registration.initialWholeAmount = this.registration.wholeAmount;
+				this.registration.surchargeCost = 0;
 			}
 			
 			this.openedRegistrationPopup = true;
@@ -112,6 +116,7 @@ new Vue({
 				this.registration.wholeAmount = 0;
 			}
 			this.registration.wholeAmount += this.registration.priceServices;
+			this.registration.surchargeCost = this.registration.wholeAmount - this.registration.initialWholeAmount;
 		},
 		resetRegistrationData() {
 			this.registration = {
@@ -176,11 +181,13 @@ new Vue({
 				roomNumber: null,
 				price: null,
 				priceServices: 0,
+				surchargeCost: 0,
 				dateOfArrival: null,
 				dateOfDeparture: null,
 				methodOfPayment: null,
 				guestsID: "",
 				wholeAmount: 0,
+				initialWholeAmount: 0,
 				paidStatus: false
 			}
 		},
@@ -300,8 +307,5 @@ new Vue({
 		this.displayedRegistrations = this.registrations;
 	}
 });
-
-//TODO surcharge or return cost
-//TODO price services independent
 
 //TODO Services module
