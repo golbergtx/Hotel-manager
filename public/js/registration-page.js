@@ -29,6 +29,7 @@ new Vue({
 			washing: 0
 		},
 		openedRegistrationPopup: false,
+		isEditRegistrationMode: false,
 		openedServicesPopup: false,
 		methodsOfPayment: [
 			"Наличный",
@@ -58,12 +59,14 @@ new Vue({
 			this.freeRoomNumbers = Room.getAvailableRooms(this.rooms).map(element => element.number);
 			
 			if (index !== undefined) {
+				this.isEditRegistrationMode = true;
 				this.popupHeader = "Редактировать регистрацию:";
 				this.freeRoomNumbers.push(this.displayedRegistrations[index].roomNumber);
 				this.registration.roomNumber = this.displayedRegistrations[index].roomNumber;
 				this.registration.dateOfArrival = DateFormater.getFormatDate(this.displayedRegistrations[index].dateOfArrival, "-", true);
 				this.registration.dateOfDeparture = DateFormater.getFormatDate(this.displayedRegistrations[index].dateOfDeparture, "-", true);
 				this.registration.methodOfPayment = this.displayedRegistrations[index].methodOfPayment;
+				this.registration.priceServices = this.displayedRegistrations[index].priceServices;
 				this.registration.guestsID = this.displayedRegistrations[index].guestsID;
 				this.registration.price = this.displayedRegistrations[index].price;
 				this.setSumPrice();
@@ -74,6 +77,7 @@ new Vue({
 		closeRegistrationPopup() {
 			this.clearRegistration();
 			this.openedRegistrationPopup = false;
+			this.isEditRegistrationMode = false;
 		},
 		isSelectedGuest(id) {
 			return this.registration.guestsID.split(",").includes(id.toString());
