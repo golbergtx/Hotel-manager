@@ -33,3 +33,7 @@
 select.multiple-input{
 	height: 100px;
 }
+.popup-input-wrapper input[type="checkbox"]{
+	width: 30px;
+	margin-right: auto;
+}

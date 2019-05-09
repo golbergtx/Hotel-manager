@@ -106,19 +106,23 @@
 	<div class="popup" v-show="openedServicesPopup">
 		<h3 class="popup-caption">Дополнительные услуги:</h3>
 		<div class="popup-input-wrapper">
-			<label for="">Цена завтрака</label>
-			<input type="number" v-model.number="services.breakfast" @input="onChangePriceServices">
+			<label for="">Завтрак:</label>
+			<input type="checkbox" v-model.number="services.enableBreakfast" @change="onChangeServices">
 		</div>
 		<div class="popup-input-wrapper">
-			<label for="">Цена такси</label>
-			<input type="number" v-model.number="services.taxi" @input="onChangePriceServices">
+			<label for="">Трансфер:</label>
+			<input type="checkbox" v-model.number="services.enableTransfer" @change="onChangeServices">
 		</div>
 		<div class="popup-input-wrapper">
-			<label for="">Цена прачечной</label>
-			<input type="number" v-model.number="services.washing" @input="onChangePriceServices">
+			<label for="">Рум сервис:</label>
+			<input type="checkbox" v-model.number="services.enableRestaurantService" @change="onChangeServices">
 		</div>
 		<div class="popup-input-wrapper">
-			<label for="">Общая сумма</label>
+			<label for="">Прачечная:</label>
+			<input type="checkbox" v-model.number="services.enableLaundryService" @change="onChangeServices">
+		</div>
+		<div class="popup-input-wrapper">
+			<label for="">Общая сумма:</label>
 			<input type="number" readonly v-model="registration.wholeAmount">
 		</div>
 		<button class="close-popup-btn" @click="closeServicesPopup"></button>

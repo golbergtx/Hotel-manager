@@ -26,9 +26,10 @@ new Vue({
 			paidStatus: false
 		},
 		services: {
-			breakfast: 0,
-			taxi: 0,
-			washing: 0
+			enableBreakfast: false,
+			enableTransfer: false,
+			enableRestaurantService: false,
+			enableLaundryService: false,
 		},
 		openedRegistrationPopup: false,
 		isEditRegistrationMode: false,
@@ -37,6 +38,10 @@ new Vue({
 			"Наличный",
 			"Безналичный"
 		],
+		priceServices: {
+			breakfast: 30,
+			transfer: 50,
+		},
 		popupHeader: "",
 		popupErrorMessage: "Вільних номерів немає!",
 		showPopupErrorMessage: false,
@@ -103,8 +108,15 @@ new Vue({
 			[...event.target.selectedOptions].forEach((option) => this.registration.guestsID += `${option.index},`);
 			this.registration.guestsID = this.registration.guestsID.slice(0, -1);
 		},
-		onChangePriceServices() {
-			this.registration.priceServices = this.services.breakfast + this.services.taxi + this.services.washing;
+		onChangeServices(event) {
+			this.registration.priceServices = 0;
+			const duration = (new Date(this.registration.dateOfDeparture) - new Date(this.registration.dateOfArrival)) / 86400000;
+			if (this.services.enableBreakfast) {
+				this.registration.priceServices += this.priceServices.breakfast * duration * this.registration.guestsID.split(",").length;
+			}
+			if (this.services.enableTransfer) {
+				this.registration.priceServices += this.priceServices.transfer * duration * this.registration.guestsID.split(",").length;
+			}
 			this.setSumPrice();
 		},
 		setSumPrice() {
