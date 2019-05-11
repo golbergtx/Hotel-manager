@@ -8,7 +8,7 @@ export default class Registration {
 		this.priceServices = priceServices;
 		this.dateOfArrival = dateOfArrival;
 		this.dateOfDeparture = dateOfDeparture;
-		this.methodOfPayment = methodOfPayment;
+		this.methodOfPayment = methodOfPayment || "Бронь";
 		this.guestsID = guestsID;
 	}
 	

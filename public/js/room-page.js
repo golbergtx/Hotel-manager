@@ -114,7 +114,8 @@ new Vue({
 				room.category,
 				registration.dateOfArrival,
 				registration.dateOfDeparture,
-				room.price
+				room.price,
+				(registration.methodOfPayment === null)
 			);
 		});
 		this.displayedRooms = this.rooms;

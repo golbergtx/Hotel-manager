@@ -31,7 +31,7 @@ CREATE TABLE `hotel`.`registrations` (
     priceServices DECIMAL  NOT NULL,
 	dateOfArrival DATE NOT NULL,
 	dateOfDeparture DATE NOT NULL,
-	methodOfPayment VARCHAR(30) NOT NULL,
+	methodOfPayment VARCHAR(30),
 	guestsID VARCHAR(30) NOT NULL,
 	FOREIGN KEY (roomNumber) REFERENCES rooms (number)
 	ON DELETE CASCADE ON UPDATE CASCADE

@@ -32,8 +32,9 @@ new Vue({
 			enableLaundryService: false,
 		},
 		openedRegistrationPopup: false,
-		isEditRegistrationMode: false,
 		openedServicesPopup: false,
+		isEditRegistrationMode: false,
+		isReservationMode: false,
 		methodsOfPayment: [
 			"Наличный",
 			"Безналичный"
@@ -61,11 +62,12 @@ new Vue({
 		}
 	},
 	methods: {
-		openRegistrationPopup(event, index) {
+		openRegistrationPopup(event, mode, index = 0) {
+			this.resetRegistrationData();
 			this.popupHeader = "Оформить регистрацию:";
 			this.freeRoomNumbers = Room.getAvailableRooms(this.rooms).map(element => element.number);
 			
-			if (index !== undefined) {
+			if (mode === "editRegistrationMode") {
 				this.isEditRegistrationMode = true;
 				this.popupHeader = "Редактировать регистрацию:";
 				this.freeRoomNumbers.push(this.displayedRegistrations[index].roomNumber);
@@ -81,15 +83,25 @@ new Vue({
 				this.registration.surchargeCost = 0;
 			}
 			
+			if (mode === "reservationMode") {
+				this.popupHeader = "Оформить бронь:";
+				this.isReservationMode = true;
+				this.registration.paidStatus = true;
+			}
+			
 			this.openedRegistrationPopup = true;
 		},
 		closeRegistrationPopup() {
-			this.clearRegistration();
 			this.openedRegistrationPopup = false;
 			this.isEditRegistrationMode = false;
+			this.isReservationMode = false;
 		},
 		isSelectedGuest(id) {
 			return this.registration.guestsID.split(",").includes(id.toString());
+		},
+		onChangeRoomNumber() {
+			this.registration.price = Room.getPriceByNumber(this.rooms, Number(this.registration.roomNumber));
+			this.setSumPrice();
 		},
 		onChangeDateOfArrival() {
 			this.freeRoomNumbers = Room.getAvailableRooms(this.rooms, new Date(this.registration.dateOfArrival)).map(element => element.number);
@@ -99,16 +111,12 @@ new Vue({
 		onChangeDateOfDeparture() {
 			this.setSumPrice();
 		},
-		onChangeRoomNumber() {
-			this.registration.price = Room.getPriceByNumber(this.rooms, Number(this.registration.roomNumber));
-			this.setSumPrice();
-		},
 		onChangeGuestsID(event) {
 			this.registration.guestsID = "";
 			[...event.target.selectedOptions].forEach((option) => this.registration.guestsID += `${option.index},`);
 			this.registration.guestsID = this.registration.guestsID.slice(0, -1);
 		},
-		onChangeServices(event) {
+		onChangeServices() {
 			this.registration.priceServices = 0;
 			const duration = (new Date(this.registration.dateOfDeparture) - new Date(this.registration.dateOfArrival)) / 86400000;
 			if (this.services.enableBreakfast) {
@@ -134,19 +142,22 @@ new Vue({
 			this.registration = {
 				roomNumber: null,
 				price: null,
+				surchargeCost: 0,
 				priceServices: 0,
 				dateOfArrival: null,
 				dateOfDeparture: null,
 				methodOfPayment: null,
-				guestsID: 0,
+				guestsID: "",
 				wholeAmount: 0,
+				initialWholeAmount: 0,
 				paidStatus: false
 			};
 			this.services = {
-				breakfast: 0,
-				taxi: 0,
-				washing: 0
-			};
+				enableBreakfast: false,
+				enableTransfer: false,
+				enableRestaurantService: false,
+				enableLaundryService: false,
+			}
 		},
 		openServicesPopup() {
 			this.openedServicesPopup = true;
@@ -188,21 +199,6 @@ new Vue({
 			};
 			pdfMake.createPdf(docDefinition).open();
 		},
-		clearRegistration() {
-			this.registration = {
-				roomNumber: null,
-				price: null,
-				priceServices: 0,
-				surchargeCost: 0,
-				dateOfArrival: null,
-				dateOfDeparture: null,
-				methodOfPayment: null,
-				guestsID: "",
-				wholeAmount: 0,
-				initialWholeAmount: 0,
-				paidStatus: false
-			}
-		},
 		addRegistration() {
 			this.addRegistrationData(this.registration, () => {
 				this.registrations.push(
@@ -212,7 +208,7 @@ new Vue({
 						this.registration.priceServices,
 						new Date(this.registration.dateOfArrival),
 						new Date(this.registration.dateOfDeparture),
-						this.registration.methodOfPayment,
+						(this.isReservationMode ? "" : this.registration.methodOfPayment),
 						this.registration.guestsID)
 				);
 				const room = Room.getRoomByNumber(this.rooms, this.registration.roomNumber)[0];

@@ -1,12 +1,13 @@
 import DateFormater from "/js/data/Date-formater.js";
 
 export default class Room {
-	constructor(number, category, dateOfArrival, dateOfDeparture, price) {
+	constructor(number, category, dateOfArrival, dateOfDeparture, price, reserved) {
 		this.number = number;
 		this.category = category;
 		this.dateOfArrival = dateOfArrival;
 		this.dateOfDeparture = dateOfDeparture;
 		this.status = Boolean(dateOfArrival);
+		this.reserved = reserved;
 		this.price = price;
 	}
 	
@@ -15,6 +16,7 @@ export default class Room {
 	}
 	
 	getStatus() {
+		if (this.reserved) return "Забронировано";
 		return (this.status) ? "Занято" : "Свободно"
 	}
 	
