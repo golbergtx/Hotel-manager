@@ -14,7 +14,8 @@ new Vue({
 			phone: "",
 			address: "",
 			passportDetails: "",
-			dateOfBirth: ""
+			dateOfBirth: "",
+			discountCode: ""
 		},
 		openedGuestPopup: false,
 		guestPopupCaption: "",
@@ -67,6 +68,7 @@ new Vue({
 					this.displayedGuests[this.editGuestIndex].address = this.guest.address;
 					this.displayedGuests[this.editGuestIndex].passportDetails = this.guest.passportDetails;
 					this.displayedGuests[this.editGuestIndex].dateOfBirth = new Date(this.guest.dateOfBirth);
+					this.displayedGuests[this.editGuestIndex].discountCode = this.guest.discountCode;
 				});
 			} else if (this.editType === "create") {
 				this.sendGuestData("add-guest", this.guest, (result) => {
@@ -76,7 +78,8 @@ new Vue({
 						this.guest.phone,
 						this.guest.address,
 						this.guest.passportDetails,
-						new Date(this.guest.dateOfBirth)
+						new Date(this.guest.dateOfBirth),
+						this.guest.discountCode
 					));
 				});
 			}
@@ -113,7 +116,8 @@ new Vue({
 				guest.phone,
 				guest.address,
 				guest.passportDetails,
-				guest.dateOfBirth
+				guest.dateOfBirth,
+				guest.discountCode
 			);
 		});
 		this.displayedGuests = this.guests;

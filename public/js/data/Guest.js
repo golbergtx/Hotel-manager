@@ -1,7 +1,7 @@
 import DateFormater from "/js/data/Date-formater.js";
 
 export default class Guest {
-	constructor(id, firstName, lastName, phone, address, passportDetails, dateOfBirth) {
+	constructor(id, firstName, lastName, phone, address, passportDetails, dateOfBirth, discountCode) {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -9,6 +9,7 @@ export default class Guest {
 		this.address = address;
 		this.passportDetails = passportDetails;
 		this.dateOfBirth = dateOfBirth;
+		this.discountCode = discountCode;
 	}
 	
 	getFullName() {

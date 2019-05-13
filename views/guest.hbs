@@ -29,6 +29,7 @@
 			<td>Адрес</td>
 			<td>Паспорт</td>
 			<td>Дата рождения</td>
+			<td>Код знижки</td>
 			<td>Редактировать</td>
 			<td>Удалить</td>
 		</tr>
@@ -39,6 +40,7 @@
 			<td v-text="guest.address"></td>
 			<td v-text="guest.passportDetails"></td>
 			<td v-text="guest.getDateOfBirth()"></td>
+			<td v-text="guest.discountCode"></td>
 			<td>
 				<button class="edit-guest-btn" @click="editGuest(index)"></button>
 			</td>
@@ -74,6 +76,10 @@
 		<div class="popup-input-wrapper">
 			<label for="">Дата рождения</label>
 			<input type="date" v-model="guest.dateOfBirth">
+		</div>
+		<div class="popup-input-wrapper">
+			<label for="">Код знижки</label>
+			<input type="text" v-model="guest.discountCode">
 		</div>
 		<button class="save-data-btn" @click="saveGuestData">Подтвердить</button>
 		<button class="close-popup-btn" @click="closeGuestPopup"></button>
