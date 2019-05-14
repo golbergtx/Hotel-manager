@@ -78,8 +78,8 @@
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Гости</label>
-			<select class="multiple-input" @change="onChangeGuestsID" multiple>
-				<option v-for="guest in guests" v-text="guest.getFullName()" :selected="isSelectedGuest(guest.id)"></option>
+			<select class="multiple-input guest-list" @change="onChangeGuestsID" multiple>
+				<option v-for="guest in guests" v-text="guest.getFullName()"></option>
 			</select>
 		</div>
 		<div class="popup-input-wrapper" v-if="isEditRegistrationMode">

@@ -66,6 +66,7 @@ new Vue({
 			this.resetRegistrationData();
 			this.popupHeader = "Оформить регистрацию:";
 			this.freeRoomNumbers = Room.getAvailableRooms(this.rooms).map(element => element.number);
+			document.querySelectorAll(".guest-list > option").forEach(option => option.selected = false);
 			
 			if (mode === "editRegistrationMode") {
 				this.isEditRegistrationMode = true;
@@ -81,6 +82,8 @@ new Vue({
 				this.setSumPrice();
 				this.registration.initialWholeAmount = this.registration.wholeAmount;
 				this.registration.surchargeCost = 0;
+				document.querySelectorAll(".guest-list > option")
+					.forEach((option, index) => option.selected = this.isSelectedGuest(this.guests[index].id));
 			}
 			
 			if (mode === "reservationMode") {
@@ -115,6 +118,7 @@ new Vue({
 			this.registration.guestsID = "";
 			[...event.target.selectedOptions].forEach((option) => this.registration.guestsID += `${option.index},`);
 			this.registration.guestsID = this.registration.guestsID.slice(0, -1);
+			this.setSumPrice();
 		},
 		onChangeServices() {
 			this.registration.priceServices = 0;
@@ -128,6 +132,10 @@ new Vue({
 			this.setSumPrice();
 		},
 		setSumPrice() {
+			let isDiscountActive;
+			if (this.registration.guestsID !== "") {
+				isDiscountActive = this.registration.guestsID.split(",").some(guestID => this.guests[guestID].discountCode != null);
+			}
 			if (this.registration.dateOfArrival && this.registration.dateOfDeparture) {
 				const duration = (new Date(this.registration.dateOfDeparture) - new Date(this.registration.dateOfArrival)) / 86400000;
 				const price = this.registration.price || 0;
@@ -136,6 +144,7 @@ new Vue({
 				this.registration.wholeAmount = 0;
 			}
 			this.registration.wholeAmount += this.registration.priceServices;
+			if (isDiscountActive) this.registration.wholeAmount *= 0.9;
 			this.registration.surchargeCost = this.registration.wholeAmount - this.registration.initialWholeAmount;
 		},
 		resetRegistrationData() {
@@ -298,7 +307,8 @@ new Vue({
 				guest.phone,
 				guest.address,
 				guest.passportDetails,
-				guest.dateOfBirth
+				guest.dateOfBirth,
+				guest.discountCode
 			);
 		});
 		this.registrations = registrationsData.map(registration => {
