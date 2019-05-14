@@ -22,30 +22,31 @@ new Vue({
 			methodOfPayment: null,
 			guestsID: "",
 			wholeAmount: 0,
-			initialWholeAmount: 0,
-			paidStatus: false
+			initialWholeAmount: 0
 		},
 		services: {
 			enableBreakfast: false,
 			enableTransfer: false,
 			enableRestaurantService: false,
 			enableLaundryService: false,
+			restaurantService: [],
+			laundryService: [],
+			priceBreakfast: 30,
+			priceTransfer: 50,
+			selectedRestaurantService: {},
+			selectedLaundryService: {}
 		},
 		openedRegistrationPopup: false,
 		openedServicesPopup: false,
 		isEditRegistrationMode: false,
 		isReservationMode: false,
 		methodsOfPayment: [
-			"Наличный",
-			"Безналичный"
+			"Готівковий",
+			"Безготівковий"
 		],
-		priceServices: {
-			breakfast: 30,
-			transfer: 50,
-		},
 		popupHeader: "",
 		popupErrorMessage: "Вільних номерів немає!",
-		showPopupErrorMessage: false,
+		showPopupErrorMessage: false
 	},
 	watch: {
 		guestNameFilter(val) {
@@ -64,13 +65,13 @@ new Vue({
 	methods: {
 		openRegistrationPopup(event, mode, index = 0) {
 			this.resetRegistrationData();
-			this.popupHeader = "Оформить регистрацию:";
+			this.popupHeader = "Оформити реєстрацію:";
 			this.freeRoomNumbers = Room.getAvailableRooms(this.rooms).map(element => element.number);
 			document.querySelectorAll(".guest-list > option").forEach(option => option.selected = false);
 			
 			if (mode === "editRegistrationMode") {
 				this.isEditRegistrationMode = true;
-				this.popupHeader = "Редактировать регистрацию:";
+				this.popupHeader = "Редагувати реєстрацію:";
 				this.freeRoomNumbers.push(this.displayedRegistrations[index].roomNumber);
 				this.registration.roomNumber = this.displayedRegistrations[index].roomNumber;
 				this.registration.dateOfArrival = DateFormater.getFormatDate(this.displayedRegistrations[index].dateOfArrival, "-", true);
@@ -87,9 +88,8 @@ new Vue({
 			}
 			
 			if (mode === "reservationMode") {
-				this.popupHeader = "Оформить бронь:";
+				this.popupHeader = "Оформити бронь:";
 				this.isReservationMode = true;
-				this.registration.paidStatus = true;
 			}
 			
 			this.openedRegistrationPopup = true;
@@ -99,9 +99,11 @@ new Vue({
 			this.isEditRegistrationMode = false;
 			this.isReservationMode = false;
 		},
+		
 		isSelectedGuest(id) {
 			return this.registration.guestsID.split(",").includes(id.toString());
 		},
+		
 		onChangeRoomNumber() {
 			this.registration.price = Room.getPriceByNumber(this.rooms, Number(this.registration.roomNumber));
 			this.setSumPrice();
@@ -120,17 +122,37 @@ new Vue({
 			this.registration.guestsID = this.registration.guestsID.slice(0, -1);
 			this.setSumPrice();
 		},
+		
+		openServicesPopup() {
+			this.openedServicesPopup = true;
+		},
+		closeServicesPopup() {
+			this.openedServicesPopup = false;
+		},
+		
 		onChangeServices() {
 			this.registration.priceServices = 0;
 			const duration = (new Date(this.registration.dateOfDeparture) - new Date(this.registration.dateOfArrival)) / 86400000;
+			
 			if (this.services.enableBreakfast) {
-				this.registration.priceServices += this.priceServices.breakfast * duration * this.registration.guestsID.split(",").length;
+				this.registration.priceServices += this.services.priceBreakfast * duration * this.registration.guestsID.split(",").length;
 			}
 			if (this.services.enableTransfer) {
-				this.registration.priceServices += this.priceServices.transfer * duration * this.registration.guestsID.split(",").length;
+				this.registration.priceServices += this.services.priceTransfer * duration * this.registration.guestsID.split(",").length;
 			}
+			Object.values(this.services.selectedRestaurantService).forEach(service => this.registration.priceServices += service.cost * service.count);
+			Object.values(this.services.selectedLaundryService).forEach(service => this.registration.priceServices += service.cost * service.count);
 			this.setSumPrice();
 		},
+		onChangeRestaurantService(event, service) {
+			setSelectedService(Number(event.target.value), service, this.services.selectedRestaurantService);
+			this.onChangeServices();
+		},
+		onChangeLaundryService(event, service) {
+			setSelectedService(Number(event.target.value), service, this.services.selectedLaundryService);
+			this.onChangeServices();
+		},
+		
 		setSumPrice() {
 			let isDiscountActive;
 			if (this.registration.guestsID !== "") {
@@ -158,24 +180,18 @@ new Vue({
 				methodOfPayment: null,
 				guestsID: "",
 				wholeAmount: 0,
-				initialWholeAmount: 0,
-				paidStatus: false
+				initialWholeAmount: 0
 			};
-			this.services = {
-				enableBreakfast: false,
-				enableTransfer: false,
-				enableRestaurantService: false,
-				enableLaundryService: false,
-			}
+			this.services.enableBreakfast = false;
+			this.services.enableTransfer = false;
+			this.services.enableRestaurantService = false;
+			this.services.enableLaundryService = false;
+			this.services.selectedRestaurantService = {};
+			this.services.selectedLaundryService = {};
 		},
-		openServicesPopup() {
-			this.openedServicesPopup = true;
-			this.registration.paidStatus = false;
-		},
-		closeServicesPopup() {
-			this.openedServicesPopup = false;
-		},
+		
 		openPDFCheck() {
+			//TODO refactoring, corrections
 			const clientName = Guest.getGuestByID(this.guests, this.registration.guestsID).getFullName();
 			const docDefinition = {
 				content: [
@@ -208,6 +224,7 @@ new Vue({
 			};
 			pdfMake.createPdf(docDefinition).open();
 		},
+		
 		addRegistration() {
 			this.addRegistrationData(this.registration, () => {
 				this.registrations.push(
@@ -237,6 +254,7 @@ new Vue({
 				this.registrations.splice(index, 1);
 			});
 		},
+		
 		addRegistrationData(registrationPage, callback) {
 			const xhr = new XMLHttpRequest();
 			xhr.open("POST", "add-registration");
@@ -255,6 +273,7 @@ new Vue({
 				if (xhr.status === 200) callback && callback();
 			}
 		},
+		
 		getRoomsData() {
 			const xhr = new XMLHttpRequest();
 			xhr.open("POST", "get-rooms", false);
@@ -267,6 +286,15 @@ new Vue({
 		getGuestsData() {
 			const xhr = new XMLHttpRequest();
 			xhr.open("POST", "get-guests", false);
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			xhr.send();
+			if (xhr.status === 200) {
+				return JSON.parse(xhr.response);
+			}
+		},
+		getServicesData() {
+			const xhr = new XMLHttpRequest();
+			xhr.open("POST", "get-services", false);
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			xhr.send();
 			if (xhr.status === 200) {
@@ -289,7 +317,9 @@ new Vue({
 	mounted() {
 		const roomsData = this.getRoomsData();
 		const guestData = this.getGuestsData();
+		const service = this.getServicesData();
 		const registrationsData = this.getRegistrationData();
+		const {restaurantService, laundryService} = service;
 		
 		this.rooms = roomsData.map(room => {
 			const registration = registrationsData.find(element => element.roomNumber === room.number) || {};
@@ -322,8 +352,28 @@ new Vue({
 				registration.guestsID
 			);
 		});
+		
+		formatService(restaurantService, this.services.restaurantService);
+		formatService(laundryService, this.services.laundryService);
 		this.displayedRegistrations = this.registrations;
 	}
 });
 
-//TODO Services module
+function formatService(serviceData, formattedService) {
+	const categories = new Set();
+	serviceData.forEach(service => categories.add(service.category));
+	categories.forEach(category => {
+		formattedService.push({
+			name: category,
+			list: serviceData.filter(service => service.category === category)
+		})
+	});
+}
+
+function setSelectedService(value, service, selectedServices) {
+	selectedServices[service.id] = {
+		cost: service.cost,
+		count: value
+	};
+	if (value === 0) delete selectedServices[service.id];
+}

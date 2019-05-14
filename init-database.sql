@@ -29,13 +29,27 @@ CREATE TABLE `hotel`.`registrations` (
 	id INT PRIMARY KEY AUTO_INCREMENT,
 	roomNumber INT NOT NULL,
 	price DECIMAL  NOT NULL,
-    priceServices DECIMAL  NOT NULL,
+    priceServices DECIMAL NOT NULL,
 	dateOfArrival DATE NOT NULL,
 	dateOfDeparture DATE NOT NULL,
 	methodOfPayment VARCHAR(30),
 	guestsID VARCHAR(30) NOT NULL,
 	FOREIGN KEY (roomNumber) REFERENCES rooms (number)
 	ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE `hotel`.`restaurantService` (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(30) NOT NULL,
+	cost DECIMAL NOT NULL,
+	category VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE `hotel`.`laundryService` (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(30) NOT NULL,
+	cost DECIMAL NOT NULL,
+	category VARCHAR(30) NOT NULL
 );
 
 INSERT users(login, password, name)
@@ -74,3 +88,35 @@ VALUES
 (3, 400, 0, "2019-03-03", "2019-04-20", "Наличный", "3"),
 (4, 600, 0, "2019-03-04", "2019-04-25", "Безналичный", "4"),
 (5, 600, 0, "2019-03-05", "2019-04-30", "Наличный", "5,6,7");
+
+INSERT restaurantService(name, cost, category)
+VALUES
+("Віскі", 30, "Бар"),
+("Сок", 40, "Бар"),
+("Вода", 45, "Бар"),
+("Борщ", 20, "Супи"),
+("Харчо", 22, "Супи"),
+("Солянка", 25, "Супи"),
+("Фарширований перець", 30, "Гарячі страви"),
+("Кукурудзяна лазанья ", 32, "Гарячі страви"),
+("Млинці з сиром", 28, "Гарячі страви"),
+("Цезар", 22, "Салати"),
+("Мимоза", 15, "Салати"),
+("Кальмари", 17, "Салати"),
+("Торт", 35, "Десерти"),
+("Заварне", 38, "Десерти");
+
+INSERT laundryService(name, cost, category)
+VALUES
+("Піджак", 90, "Прання"),
+("Піджак", 75, "Прасування"),
+("Піджак", 160, "Хімчистка"),
+("Брюки", 80, "Прання"),
+("Брюки", 60, "Прасування"),
+("Брюки", 185, "Хімчистка"),
+("Сорочка", 90, "Прання"),
+("Сорочка", 75, "Прасування"),
+("Сорочка", 110, "Хімчистка"),
+("Футболка", 70, "Прання"),
+("Футболка", 50, "Прасування"),
+("Футболка", 95, "Хімчистка")

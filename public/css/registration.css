@@ -1,34 +1,49 @@
+.filter-wrapper .open-popup-btn:nth-of-type(2){
+	margin-left: 10px;
+}
 .edit-td{
 	display: flex;
+	align-items: center;
 	justify-content: center;
+	height: 56px;
 }
-.edit-registration-btn{
+.finance-td button,
+.edit-td button{
 	width: 70px;
 	height: 50px;
 	border: none;
 	outline: none;
+}
+.pay-btn{
+	background: url("/images/wallet-icon.png") no-repeat center/contain;
+}
+.check-btn{
+	background: url("/images/check-icon.png") no-repeat center/contain;
+}
+.edit-registration-btn{
 	background: url("/images/edit-icon.png") no-repeat center/contain;
 }
 .delete-registration-btn{
-	width: 70px;
-	height: 50px;
-	border: none;
-	outline: none;
 	background: url("/images/cross-icon.png") no-repeat center/contain;
 }
 .popup-footer{
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 }
-.save-data-btn{
-	margin: 0 10px 0 0;
-}
-.approve-pay-text{
-	margin-left: 60px;
-}
-.approve-pay-checkbox{
-	width: 38px;
+.popup-footer button{
 	height: 38px;
+	margin: 0 10px 10px 0;
+	padding: 0 20px;
+	color: #ffffff;
+	font-size: 20px;
+	border-radius: 5px;
+	background-color: #78635a;
+}
+.popup-footer button a{
+	color: #ffffff;
+	font-size: 20px;
+	text-decoration: none;
 }
 select.multiple-input{
 	height: 100px;
@@ -36,4 +51,26 @@ select.multiple-input{
 .popup-input-wrapper input[type="checkbox"]{
 	width: 30px;
 	margin-right: auto;
+}
+.services-popup{
+	top: 100px;
+	transform: translate(-50%, 0);
+}
+.service-category{
+	font-weight: bold;
+	font-size: 20px;
+}
+.service-block{
+	display: flex;
+	align-items: center;
+	width: 500px;
+	margin: 0 0 10px 30px;
+}
+.service-block p{
+	margin: 0;
+}
+.service-block input{
+	margin-left: auto;
+	width: 50px;
+	border: 1px solid #727475;
 }

@@ -217,6 +217,32 @@ app.post("/delete-guest", (req, res) => {
 		}
 	});
 });
+app.post("/get-services", (req, res) => {
+	const restaurantService = new Promise((resolve, reject) => {
+		database.query(`SELECT * FROM restaurantService`, (err, result) => {
+			if (err) {
+				console.log(err);
+				reject(err);
+			} else {
+				resolve(result);
+			}
+		});
+	});
+	const laundryService = new Promise((resolve, reject) => {
+		database.query(`SELECT * FROM laundryService`, (err, result) => {
+			if (err) {
+				console.log(err);
+				reject(err);
+			} else {
+				resolve(result);
+			}
+		});
+	});
+	Promise.all([restaurantService, laundryService]).then(result => res.status(200).json({
+		restaurantService: result[0],
+		laundryService: result[1]
+	}));
+});
 
 // middleware
 app.use("/", (req, res, next) => {

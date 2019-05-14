@@ -12,26 +12,27 @@
 <body>
 {{>header}}
 <section class="title-wrapper">
-	<h1 class="title-text">Заселение</h1>
+	<h1 class="title-text">Заселення</h1>
 </section>
 <article>
 	<div class="filter-wrapper">
-		<p class="filter-text">Фильтр:</p>
-		<input type="text" placeholder="Имя гостя" v-model="guestNameFilter">
-		<button class="open-popup-btn" @click="openRegistrationPopup($event, 'reservationMode')">Забронировать</button>
-		<button class="open-popup-btn" @click="openRegistrationPopup">Оформить</button>
+		<p class="filter-text">Фільтр:</p>
+		<input type="text" placeholder="Им'я гостя" v-model="guestNameFilter">
+		<button class="open-popup-btn" @click="openRegistrationPopup($event, 'reservationMode')">Забронювати</button>
+		<button class="open-popup-btn" @click="openRegistrationPopup">Оформити</button>
 	</div>
-
+	
 	<table class="table-content-wrapper">
 		<tr class="table-content-caption">
-			<td>Номер комнаты</td>
-			<td>Цена</td>
-			<td>Дата заселения</td>
-			<td>Дата выселения</td>
-			<td>Метод оплаты</td>
-			<td>Общая сумма</td>
+			<td>Номер кімнати</td>
+			<td>Ціна</td>
+			<td>Дата заселення</td>
+			<td>Дата виселення</td>
+			<td>Метод оплати</td>
+			<td>Загальна сума</td>
 			<td>ID гостей</td>
-			<td>Редактировать</td>
+			<td>Оплата, чек</td>
+			<td>Редагувати</td>
 		</tr>
 		<tr v-for="(registration, index) in displayedRegistrations">
 			<td v-text="registration.roomNumber"></td>
@@ -41,17 +42,22 @@
 			<td v-text="registration.methodOfPayment"></td>
 			<td v-text="registration.getSumPrice()"></td>
 			<td v-text="registration.guestsID"></td>
+			<td class="finance-td">
+				<button class="pay-btn"><a href=""></a></button>
+				<button class="check-btn" @click="openPDFCheck(index)"></button>
+			</td>
 			<td class="edit-td">
 				<button class="delete-registration-btn" @click="deleteRegistration(index)"></button>
 				<button class="edit-registration-btn" @click="openRegistrationPopup($event, 'editRegistrationMode', index)"></button>
 			</td>
 		</tr>
 	</table>
-
+	
 	<div class="popup-overlay" v-show="openedRegistrationPopup"></div>
 	<div class="popup" v-show="openedRegistrationPopup">
 		<h3 class="popup-caption" v-text="popupHeader"></h3>
 		<span class="popup-error-message" v-if="showPopupErrorMessage" v-text="popupErrorMessage"></span>
+
 		<div class="popup-input-wrapper">
 			<label for="">Номер</label>
 			<select v-model="registration.roomNumber" @change="onChangeRoomNumber">
@@ -59,7 +65,7 @@
 			</select>
 		</div>
 		<div class="popup-input-wrapper">
-			<label for="">Цена</label>
+			<label for="">Ціна</label>
 			<input type="text" readonly v-model="registration.price">
 		</div>
 		<div class="popup-input-wrapper">
@@ -67,17 +73,17 @@
 			<input type="date" v-model="registration.dateOfArrival" @change="onChangeDateOfArrival">
 		</div>
 		<div class="popup-input-wrapper">
-			<label for="">Дата выселения</label>
+			<label for="">Дата виселення</label>
 			<input type="date" v-model="registration.dateOfDeparture" @change="onChangeDateOfDeparture">
 		</div>
 		<div class="popup-input-wrapper" v-if="!isReservationMode">
-			<label for="">Метод оплаты</label>
+			<label for="">Метод оплати</label>
 			<select v-model="registration.methodOfPayment">
 				<option v-for="(method) in methodsOfPayment" v-text="method"></option>
 			</select>
 		</div>
 		<div class="popup-input-wrapper">
-			<label for="">Гости</label>
+			<label for="">Гості</label>
 			<select class="multiple-input guest-list" @change="onChangeGuestsID" multiple>
 				<option v-for="guest in guests" v-text="guest.getFullName()"></option>
 			</select>
@@ -87,45 +93,67 @@
 			<input type="text" readonly v-model="registration.surchargeCost">
 		</div>
 		<div class="popup-input-wrapper" v-if="!isReservationMode">
-			<label for="">Общая сумма</label>
+			<label for="">Загальна сума</label>
 			<input type="text" readonly v-model="registration.wholeAmount">
 		</div>
+
 		<div class="popup-footer">
-			<button class="save-data-btn" :class="{disable: showPopupErrorMessage || !registration.paidStatus}"
-			        @click="addRegistration">Подтвердить</button>
-			<button class="save-data-btn" :class="{disable: showPopupErrorMessage}"
-			        @click="openServicesPopup">Доп. услуги</button>
-			<span class="approve-pay-text" v-if="!isReservationMode">Подтвердить оплату</span>
-			<input type="checkbox" class="approve-pay-checkbox" v-model="registration.paidStatus" v-if="!isReservationMode">
+			<button :class="{disable: showPopupErrorMessage}" @click="addRegistration">Підтвердити</button>
+			<button :class="{disable: showPopupErrorMessage}" @click="openServicesPopup">Дод. послуги</button>
+			<button :class="{disable: showPopupErrorMessage}"><a href="#">Сплатити</a></button>
+			<button :class="{disable: showPopupErrorMessage}" @click="openPDFCheck" v-if="!isReservationMode">Отримати чек</button>
 		</div>
-		<button class="save-data-btn" :class="{disable: showPopupErrorMessage || !registration.paidStatus}"
-		        @click="openPDFCheck" v-if="!isReservationMode">Получить чек</button>
+
 		<button class="close-popup-btn" @click="closeRegistrationPopup"></button>
 	</div>
-
+	
 	<div class="popup-overlay" v-show="openedServicesPopup"></div>
-	<div class="popup" v-show="openedServicesPopup">
+	<div class="popup services-popup" v-show="openedServicesPopup">
 		<h3 class="popup-caption">Дополнительные услуги:</h3>
+
 		<div class="popup-input-wrapper">
 			<label for="">Завтрак:</label>
-			<input type="checkbox" v-model.number="services.enableBreakfast" @change="onChangeServices">
+			<input type="checkbox" v-model="services.enableBreakfast" @change="onChangeServices">
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Трансфер:</label>
-			<input type="checkbox" v-model.number="services.enableTransfer" @change="onChangeServices">
+			<input type="checkbox" v-model="services.enableTransfer" @change="onChangeServices">
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Рум сервис:</label>
-			<input type="checkbox" v-model.number="services.enableRestaurantService" @change="onChangeServices">
+			<input type="checkbox" v-model="services.enableRestaurantService">
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Прачечная:</label>
-			<input type="checkbox" v-model.number="services.enableLaundryService" @change="onChangeServices">
+			<input type="checkbox" v-model="services.enableLaundryService" @change="onChangeServices">
 		</div>
+
+		<div v-show="services.enableRestaurantService">
+			<div v-for="service in services.restaurantService">
+				<span class="service-category" v-text="service.name"></span>:
+				<div v-for="item in service.list" class="service-block">
+					<p><span v-text="item.name"></span> - <span v-text="item.cost"></span> грн.</p>
+					<input type="number" @change="onChangeRestaurantService($event, item)" value="0" min="0">
+				</div>
+			</div>
+			<hr>
+		</div>
+		<div v-show="services.enableLaundryService">
+			<div v-for="service in services.laundryService">
+				<span class="service-category" v-text="service.name"></span>:
+				<div v-for="item in service.list" class="service-block">
+					<p><span v-text="item.name"></span> - <span v-text="item.cost"></span> грн.</p>
+					<input type="number" @change="onChangeLaundryService($event, item)" value="0" min="0">
+				</div>
+			</div>
+			<hr>
+		</div>
+
 		<div class="popup-input-wrapper">
-			<label for="">Общая сумма:</label>
+			<label for="">Загальна сума:</label>
 			<input type="number" readonly v-model="registration.wholeAmount">
 		</div>
+
 		<button class="close-popup-btn" @click="closeServicesPopup"></button>
 	</div>
 </article>
