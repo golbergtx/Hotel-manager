@@ -154,7 +154,7 @@ new Vue({
 		},
 		
 		setSumPrice() {
-			let isDiscountActive;
+			let isDiscountActive;  //TODO
 			if (this.registration.guestsID !== "") {
 				isDiscountActive = this.registration.guestsID.split(",").some(guestID => this.guests[guestID].discountCode != null);
 			}
@@ -166,7 +166,7 @@ new Vue({
 				this.registration.wholeAmount = 0;
 			}
 			this.registration.wholeAmount += this.registration.priceServices;
-			if (isDiscountActive) this.registration.wholeAmount *= 0.9;
+			//if (isDiscountActive) this.registration.wholeAmount *= 0.9; //TODO
 			this.registration.surchargeCost = this.registration.wholeAmount - this.registration.initialWholeAmount;
 		},
 		resetRegistrationData() {
@@ -255,11 +255,11 @@ new Vue({
 			});
 		},
 		
-		addRegistrationData(registrationPage, callback) {
+		addRegistrationData(registration, callback) {
 			const xhr = new XMLHttpRequest();
 			xhr.open("POST", "add-registration");
 			xhr.setRequestHeader("Content-Type", "application/json");
-			xhr.send(JSON.stringify(registrationPage));
+			xhr.send(JSON.stringify(registration));
 			xhr.onloadend = () => {
 				if (xhr.status === 200) callback && callback();
 			}

@@ -109,10 +109,10 @@
 	
 	<div class="popup-overlay" v-show="openedServicesPopup"></div>
 	<div class="popup services-popup" v-show="openedServicesPopup">
-		<h3 class="popup-caption">Дополнительные услуги:</h3>
+		<h3 class="popup-caption">Додаткові послуги:</h3>
 
 		<div class="popup-input-wrapper">
-			<label for="">Завтрак:</label>
+			<label for="">Сніданок:</label>
 			<input type="checkbox" v-model="services.enableBreakfast" @change="onChangeServices">
 		</div>
 		<div class="popup-input-wrapper">
@@ -120,11 +120,11 @@
 			<input type="checkbox" v-model="services.enableTransfer" @change="onChangeServices">
 		</div>
 		<div class="popup-input-wrapper">
-			<label for="">Рум сервис:</label>
+			<label for="">Рум сервіс:</label>
 			<input type="checkbox" v-model="services.enableRestaurantService">
 		</div>
 		<div class="popup-input-wrapper">
-			<label for="">Прачечная:</label>
+			<label for="">Пральня:</label>
 			<input type="checkbox" v-model="services.enableLaundryService" @change="onChangeServices">
 		</div>
 
