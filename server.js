@@ -313,4 +313,4 @@ app.use("/", (req, res) => {
 	res.redirect("/room");
 });
 
-app.listen(3001);
+app.listen(3000);
