@@ -17,7 +17,7 @@
 <article>
 	<div class="filter-wrapper">
 		<p class="filter-text">Фільтр:</p>
-		<input type="text" placeholder="Им'я гостя" v-model="guestNameFilter">
+		<input type="text" placeholder="Ім'я гостя" v-model="guestNameFilter">
 		<button class="open-popup-btn" @click="openRegistrationPopup($event, 'reservationMode')">Забронювати</button>
 		<button class="open-popup-btn" @click="openRegistrationPopup">Оформити</button>
 	</div>
@@ -43,7 +43,9 @@
 			<td v-text="registration.getSumPrice()"></td>
 			<td v-text="registration.guestsID"></td>
 			<td class="finance-td">
-				<button class="pay-btn"><a href=""></a></button>
+				<button class="pay-btn">
+					<a href="https://easypay.ua/catalog/bank/popolnenie-carty/card-deposit-visa-mastercard" target="_blank"></a>
+				</button>
 				<button class="check-btn" @click="openPDFCheck($event, index)"></button>
 			</td>
 			<td class="edit-td">
@@ -98,9 +100,11 @@
 		</div>
 
 		<div class="popup-footer">
-			<button :class="{disable: showPopupErrorMessage}" @click="addRegistration">Підтвердити</button>
+			<button :class="{disable: showPopupErrorMessage}" @click="saveRegistration">Підтвердити</button>
 			<button :class="{disable: showPopupErrorMessage}" @click="openServicesPopup">Дод. послуги</button>
-			<button :class="{disable: showPopupErrorMessage}" v-if="!isEditRegistrationMode"><a href="#">Сплатити</a></button>
+			<button :class="{disable: showPopupErrorMessage}" v-if="!isEditRegistrationMode">
+				<a href="https://easypay.ua/catalog/bank/popolnenie-carty/card-deposit-visa-mastercard" target="_blank">Сплатити</a>
+			</button>
 			<button :class="{disable: showPopupErrorMessage}" @click="openPDFCheck" v-if="!isReservationMode">Отримати чек</button>
 		</div>
 

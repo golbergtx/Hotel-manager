@@ -143,6 +143,29 @@ app.post("/add-registration", (req, res) => {
 		}
 	});
 });
+app.post("/update-registration", (req, res) => {
+	const data = [
+		req.body.roomNumber,
+		req.body.price,
+		req.body.priceServices,
+		new Date(req.body.dateOfArrival),
+		new Date(req.body.dateOfDeparture),
+		req.body.methodOfPayment,
+		req.body.guestsID,
+		req.body.servicesJSON,
+		parseInt(req.body.id)
+	];
+	
+	database.query(`UPDATE registrations SET roomNumber = ?, price = ?, priceServices = ?, dateOfArrival = ?, dateOfDeparture = ?, methodOfPayment = ?,
+	guestsID = ?, servicesJSON = ? WHERE id = ?`, data, err => {
+		if (err) {
+			console.log(err);
+			res.status(500).end();
+		} else {
+			res.status(200).end();
+		}
+	});
+});
 app.post("/delete-registration", (req, res) => {
 	const roomNumber = req.body.roomNumber;
 	
@@ -165,6 +188,27 @@ app.post("/get-guests", (req, res) => {
 		}
 	});
 });
+app.post("/add-guest", (req, res) => {
+	const data = [
+		req.body.firstName,
+		req.body.lastName,
+		req.body.phone,
+		req.body.address,
+		req.body.passportDetails,
+		new Date(req.body.dateOfBirth),
+		req.body.discountCode
+	];
+	
+	database.query(`INSERT INTO guests SET firstName = ?, lastName = ?, phone = ?, address = ?, passportDetails = ?,
+	dateOfBirth = ?, discountCode = ?`, data, (err, result) => {
+		if (err) {
+			console.log(err);
+			res.status(500).end();
+		} else {
+			res.status(200).json({id: result.insertId});
+		}
+	});
+});
 app.post("/update-guest", (req, res) => {
 	const data = [
 		req.body.firstName,
@@ -173,36 +217,17 @@ app.post("/update-guest", (req, res) => {
 		req.body.address,
 		req.body.passportDetails,
 		new Date(req.body.dateOfBirth),
+		req.body.discountCode,
 		parseInt(req.body.id)
 	];
 	
 	database.query(`UPDATE guests SET firstName = ?, lastName = ?, phone = ?, address = ?, passportDetails = ?,
-	dateOfBirth = ? WHERE id = ?`, data, err => {
+	dateOfBirth = ?, discountCode = ? WHERE id = ?`, data, err => {
 		if (err) {
 			console.log(err);
 			res.status(500).end();
 		} else {
 			res.status(200).end();
-		}
-	});
-});
-app.post("/add-guest", (req, res) => {
-	const data = [
-		req.body.firstName,
-		req.body.lastName,
-		req.body.phone,
-		req.body.address,
-		req.body.passportDetails,
-		new Date(req.body.dateOfBirth)
-	];
-	
-	database.query(`INSERT INTO guests SET firstName = ?, lastName = ?, phone = ?, address = ?, passportDetails = ?,
-	dateOfBirth = ?`, data, (err, result) => {
-		if (err) {
-			console.log(err);
-			res.status(500).end();
-		} else {
-			res.status(200).json({id: result.insertId});
 		}
 	});
 });
@@ -288,4 +313,4 @@ app.use("/", (req, res) => {
 	res.redirect("/room");
 });
 
-app.listen(3000);
+app.listen(3001);

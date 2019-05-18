@@ -12,20 +12,20 @@
 <div class="overlay"></div>
 <img src="/images/logo.png" class="site-logo" alt="Logo">
 <section class="login-form-wrapper">
-	<p class="login-caption">Авторизация</p>
+	<p class="login-caption">Авторизація</p>
 	<form id="loginForm" @submit.prevent="submit" action="#" method="post">
-		<p v-if="showErrorLoginMessage" class="error-message">Неверный логин или пароль!</p>
+		<p v-if="showErrorLoginMessage" class="error-message">Невірний логін або пароль!</p>
 		<div class="input-wrapper">
-			<label for="">Логин</label>
-			<input type="text" placeholder="Логин" required v-model="login">
+			<label for="">Логін</label>
+			<input type="text" placeholder="Логін" required v-model="login">
 		</div>
 		<div class="input-wrapper">
 			<label for="">Пароль</label>
 			<input type="password" placeholder="Пароль" required v-model="password">
 		</div>
-		<button type="submit" class="form-btn">Войти</button>
+		<button type="submit" class="form-btn">Увійти</button>
 		<button class="form-btn">
-			<a href="/user-registration">Регистрация</a>
+			<a href="/user-registration">Реєстрація</a>
 		</button>
 	</form>
 </section>

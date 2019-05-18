@@ -84,7 +84,7 @@ VALUES
 
 INSERT registrations(roomNumber, price, priceServices, dateOfArrival, dateOfDeparture, methodOfPayment, guestsID, servicesJSON)
 VALUES
-(1, 400, 0, "2019-03-01", "2019-04-10", "Наличный", "1", '{"enableBreakfast":false,"enableTransfer":false,"restaurant":{},"laundry":{}}'),
+(1, 400, 0, "2019-03-01", "2019-04-10", "Наличный", "1", '{"enableBreakfast":true,"enableTransfer":true,"restaurant":{"8":{"name":"Кукурудзяна лазанья ","cost":32,"count":3},"13":{"name":"Торт","cost":35,"count":2}},"laundry":{"3":{"name":"Піджак","cost":160,"count":4},"8":{"name":"Сорочка","cost":75,"count":2}}}'),
 (2, 400, 200, "2019-03-02", "2019-04-15", "Безналичный", "2", '{"enableBreakfast":false,"enableTransfer":false,"restaurant":{},"laundry":{}}'),
 (3, 400, 0, "2019-03-03", "2019-04-20", "Наличный", "3", '{"enableBreakfast":false,"enableTransfer":false,"restaurant":{},"laundry":{}}'),
 (4, 600, 0, "2019-03-04", "2019-04-25", "Безналичный", "4", '{"enableBreakfast":false,"enableTransfer":false,"restaurant":{},"laundry":{}}'),

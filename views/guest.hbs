@@ -23,15 +23,15 @@
 
 	<table class="table-content-wrapper">
 		<tr class="table-content-caption">
-			<td>Имя</td>
-			<td>Фамилия</td>
-			<td>Номер телефона</td>
-			<td>Адрес</td>
+			<td>Ім'я</td>
+			<td>Прізвище</td>
+			<td>Номер телефону</td>
+			<td>Адреса</td>
 			<td>Паспорт</td>
-			<td>Дата рождения</td>
+			<td>Дата народження</td>
 			<td>Код знижки</td>
-			<td>Редактировать</td>
-			<td>Удалить</td>
+			<td>Редагувати</td>
+			<td>Видалити</td>
 		</tr>
 		<tr v-for="(guest, index) in displayedGuests">
 			<td v-text="guest.firstName"></td>
@@ -54,19 +54,19 @@
 	<div class="popup" v-show="openedGuestPopup">
 		<h3 class="popup-caption" v-text="guestPopupCaption"></h3>
 		<div class="popup-input-wrapper">
-			<label for="">Имя</label>
+			<label for="">Ім'я</label>
 			<input type="text" v-model="guest.firstName">
 		</div>
 		<div class="popup-input-wrapper">
-			<label for="">Фамилия</label>
+			<label for="">Прізвище</label>
 			<input type="text" v-model="guest.lastName">
 		</div>
 		<div class="popup-input-wrapper">
-			<label for="">Номер тефона</label>
+			<label for="">Номер телефону</label>
 			<input type="text" v-model="guest.phone">
 		</div>
 		<div class="popup-input-wrapper">
-			<label for="">Адрес</label>
+			<label for="">Адреса</label>
 			<input type="text" v-model="guest.address">
 		</div>
 		<div class="popup-input-wrapper">
@@ -74,14 +74,14 @@
 			<input type="text" v-model="guest.passportDetails">
 		</div>
 		<div class="popup-input-wrapper">
-			<label for="">Дата рождения</label>
+			<label for="">Дата народження</label>
 			<input type="date" v-model="guest.dateOfBirth">
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Код знижки</label>
 			<input type="text" v-model="guest.discountCode">
 		</div>
-		<button class="save-data-btn" @click="saveGuestData">Подтвердить</button>
+		<button class="save-data-btn" @click="saveGuestData">Підтвердити</button>
 		<button class="close-popup-btn" @click="closeGuestPopup"></button>
 	</div>
 </article>

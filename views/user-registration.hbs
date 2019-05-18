@@ -12,24 +12,24 @@
 <div class="overlay"></div>
 <img src="/images/logo.png" class="site-logo" alt="Logo">
 <section class="registration-form-wrapper">
-	<p class="registration-caption">Регистрация:</p>
+	<p class="registration-caption">Реєстрація:</p>
 	<form id="registrationForm" class="registry-form" @submit.prevent="submit" action="#" method="post">
-		<p class="error-message" v-if="showErrorLoginMessage">Вы ввели не правильные данные!</p>
-		<p class="error-message" v-if="loginExist">Данный логин уже существует!</p>
+		<p class="error-message" v-if="showErrorLoginMessage">Ви ввели неправильні дані!</p>
+		<p class="error-message" v-if="loginExist">Даний логін вже існує !</p>
 		<div class="input-wrapper">
-			<label for="">Логин</label>
-			<input type="text" maxlength="40" placeholder="Логин" required v-model="login">
+			<label for="">Логін</label>
+			<input type="text" maxlength="40" placeholder="Логін" required v-model="login">
 		</div>
 		<div class="input-wrapper">
 			<label for="">Пароль</label>
 			<input type="password" maxlength="40" placeholder="Пароль" required v-model="password">
 		</div>
 		<div class="input-wrapper">
-			<label for="">Имя</label>
-			<input type="text" maxlength="40" placeholder="Имя" required v-model="firstName">
+			<label for="">Ім'я</label>
+			<input type="text" maxlength="40" placeholder="Ім'я" required v-model="firstName">
 		</div>
-		<button type="submit" class="form-btn">Регистрация</button>
-		<button type="submit" class="form-btn"><a href="/login">Войти</a></button>
+		<button type="submit" class="form-btn">Реєстрація</button>
+		<button type="submit" class="form-btn"><a href="/login">Увійти</a></button>
 	</form>
 </section>
 <script src="/js/vue.js"></script>

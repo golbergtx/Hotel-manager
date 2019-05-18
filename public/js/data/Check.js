@@ -4,7 +4,7 @@ import Registration from "./Registration.js";
 export default class Check {
 	static docDefinition = null;
 	
-	static makePDF(registration, roomCategory, guests) {
+	static makePDF(registration, roomCategory, guests, isDiscountActive) {
 		const services = JSON.parse(registration.servicesJSON);
 		const breakfast = services.enableBreakfast ? "Включений" : "Відсутній";
 		const transfer = services.enableTransfer ? "Включений" : "Відсутній";
@@ -13,6 +13,9 @@ export default class Check {
 		
 		Object.values(services.restaurant).forEach(service => restaurant.push([service.name, service.cost, service.count]));
 		Object.values(services.laundry).forEach(service => laundry.push([service.name, service.cost, service.count]));
+		
+		const wholeAmount = Registration.prototype.getSumPrice.call(registration);
+		const wholeAmountWithDiscount = isDiscountActive ? `${Math.round(parseInt(wholeAmount) * 90) / 100} $` : wholeAmount;
 		
 		this.docDefinition = {
 			content: [
@@ -23,25 +26,25 @@ export default class Check {
 					margin: [150, 0, 0, 0]
 				},
 				"_______________________________________________________________________________________________",
-				{text: 'Квитанція:', style: ['header']},
+				{text: "Квитанція:", style: ["header"]},
 				{
 					table: {
 						headerRows: 1,
 						widths: [200, 100],
 						body: [
-							['Номер комнаты:', registration.roomNumber],
-							['Категория:', roomCategory],
-							['Дата заселения:', Registration.prototype.getDateOfArrival.call(registration)],
-							['Дата выселения:', Registration.prototype.getDateOfDeparture.call(registration)],
-							['Цена за сутки: ', registration.price],
-							['Метод оплаты:  ', registration.methodOfPayment]
+							["Номер кімнати:", registration.roomNumber],
+							["Категорія:", roomCategory],
+							["Дата заселення:", Registration.prototype.getDateOfArrival.call(registration)],
+							["Дата виселення:", Registration.prototype.getDateOfDeparture.call(registration)],
+							["Ціна за добу: ", registration.price],
+							["Метод оплати:  ", registration.methodOfPayment]
 						]
 					}
 				},
-				{text: 'Додаткові послуги:', style: ['header']},
-				{text: `Сніданок:  ${breakfast}`, style: ['text']},
-				{text: `Трансфер:  ${transfer}`, style: ['text']},
-				{text: 'Рум сервіс:', style: ['header']},
+				{text: "Додаткові послуги:", style: ["header"]},
+				{text: `Сніданок:  ${breakfast}`, style: ["text"]},
+				{text: `Трансфер:  ${transfer}`, style: ["text"]},
+				{text: "Рум сервіс:", style: ["header"]},
 				{
 					table: {
 						headerRows: 1,
@@ -49,7 +52,7 @@ export default class Check {
 						body: restaurant
 					}
 				},
-				{text: 'Пральня:', style: ['header']},
+				{text: "Пральня:", style: ["header"]},
 				{
 					table: {
 						headerRows: 1,
@@ -57,12 +60,13 @@ export default class Check {
 						body: laundry
 					}
 				},
-				{text: 'Гості:', style: ['header']},
+				{text: "Гості:", style: ["header"]},
 				{
 					ul: guests
 				},
 				"_______________________________________________________________________________________________",
-				{text: `Загальна сума: ${Registration.prototype.getSumPrice.call(registration)}`, style: ['header']},
+				{text: `Загальна сума: ${wholeAmount}`, style: ["header"]},
+				{text: `Загальна сума зі знижкою: ${wholeAmountWithDiscount}`, style: ["header"]},
 			],
 			styles: {
 				header: {
@@ -77,8 +81,8 @@ export default class Check {
 		};
 	}
 	
-	static openPDF(registration, roomCategory, guests) {
-		this.makePDF(registration, roomCategory, guests);
+	static openPDF(registration, roomCategory, guests, isDiscountActive) {
+		this.makePDF(registration, roomCategory, guests, isDiscountActive);
 		pdfMake.createPdf(this.docDefinition).open();
 	}
 }

@@ -16,28 +16,28 @@
 </section>
 <article>
 	<div class="filter-wrapper">
-		<p class="filter-text">Фильтр:</p>
+		<p class="filter-text">Фільтр:</p>
 		<input type="number" class="filter-input" placeholder="Номер" v-model="numberFilter" @input="applyFilters">
-		<input type="text" class="filter-input" placeholder="Категория" v-model="categoryFilter" @input="applyFilters">
-		<p class="filter-text">Показать свободные номера:</p>
+		<input type="text" class="filter-input" placeholder="Категорія" v-model="categoryFilter" @input="applyFilters">
+		<p class="filter-text">Показати вільні номери :</p>
 		<input type="checkbox" class="checkbox" v-model="showAvailableRooms" @change="applyFilters">
 	</div>
 	<div class="filter-wrapper date-filter-wrapper">
-		<p class="filter-text">Дата заселения :</p>
+		<p class="filter-text">Дата заселення :</p>
 		<input type="date" class="filter-input" v-model="dateOfArrivalFilter" @change="applyFilters">
-		<p class="filter-text">Дата выселения :</p>
+		<p class="filter-text">Дата виселення :</p>
 		<input type="date" class="filter-input" v-model="dateOfDepartureFilter" @change="applyFilters">
 	</div>
 
 	<table class="table-content-wrapper">
 		<tr class="table-content-caption">
-			<td>Номер комнаты</td>
-			<td>Категория</td>
-			<td>Дата заселения</td>
-			<td>Дата выселения</td>
-			<td>Цена</td>
+			<td>Номер кімнати</td>
+			<td>Категорія</td>
+			<td>Дата заселення</td>
+			<td>Дата виселення</td>
+			<td>Ціна</td>
 			<td>Статус</td>
-			<td>Редактировать</td>
+			<td>Редагувати</td>
 		</tr>
 		<tr v-for="(room, index) in displayedRooms">
 			<td v-text="room.number"></td>
@@ -54,21 +54,21 @@
 
 	<div class="popup-overlay" v-show="openedEditPopup"></div>
 	<div class="popup" v-show="openedEditPopup">
-		<h3 class="popup-caption">Редактировать номер:</h3>
+		<h3 class="popup-caption">Редагувати номер:</h3>
 		<span class="popup-error-message" v-if="showPopupErrorMessage" v-text="popupErrorMessage"></span>
 		<div class="popup-input-wrapper">
 			<label for="">Номер</label>
 			<input type="number" v-model="editRoomData.number">
 		</div>
 		<div class="popup-input-wrapper">
-			<label for="">Категория</label>
+			<label for="">Категорія</label>
 			<input type="text" v-model="editRoomData.category">
 		</div>
 		<div class="popup-input-wrapper">
-			<label for="">Цена</label>
+			<label for="">Ціна</label>
 			<input type="number" v-model="editRoomData.price">
 		</div>
-		<button class="save-data-btn" :class="{disable: showPopupErrorMessage}" @click="updateRoom">Подтвердить</button>
+		<button class="save-data-btn" :class="{disable: showPopupErrorMessage}" @click="updateRoom">Підтвердити</button>
 		<button class="close-popup-btn" @click="closeEditPopup"></button>
 	</div>
 </article>

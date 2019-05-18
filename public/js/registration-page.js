@@ -14,6 +14,7 @@ new Vue({
 		displayedRegistrations: [],
 		guestNameFilter: "",
 		registration: {
+			id: null,
 			roomNumber: null,
 			price: null,
 			surchargeCost: 0,
@@ -42,6 +43,7 @@ new Vue({
 		openedServicesPopup: false,
 		isEditRegistrationMode: false,
 		isReservationMode: false,
+		editRegistrationIndex: 0,
 		methodsOfPayment: [
 			"Готівковий",
 			"Безготівковий"
@@ -73,8 +75,10 @@ new Vue({
 			
 			if (mode === "editRegistrationMode") {
 				this.isEditRegistrationMode = true;
+				this.editRegistrationIndex = index;
 				this.popupHeader = "Редагувати реєстрацію:";
 				this.freeRoomNumbers.push(this.displayedRegistrations[index].roomNumber);
+				this.registration.id = this.displayedRegistrations[index].id;
 				this.registration.roomNumber = this.displayedRegistrations[index].roomNumber;
 				this.registration.dateOfArrival = DateFormater.getFormatDate(this.displayedRegistrations[index].dateOfArrival, "-", true);
 				this.registration.dateOfDeparture = DateFormater.getFormatDate(this.displayedRegistrations[index].dateOfDeparture, "-", true);
@@ -156,19 +160,14 @@ new Vue({
 		},
 		
 		setSumPrice() {
-			let isDiscountActive;  //TODO
-			if (this.registration.guestsID !== "") {
-				isDiscountActive = this.registration.guestsID.split(",").some(guestID => this.guests[guestID].discountCode != null);
-			}
 			if (this.registration.dateOfArrival && this.registration.dateOfDeparture) {
 				const duration = (new Date(this.registration.dateOfDeparture) - new Date(this.registration.dateOfArrival)) / 86400000;
 				const price = this.registration.price || 0;
-				this.registration.wholeAmount = price * duration;
+				this.registration.wholeAmount = price * Math.round(duration);
 			} else {
 				this.registration.wholeAmount = 0;
 			}
 			this.registration.wholeAmount += this.registration.priceServices;
-			//if (isDiscountActive) this.registration.wholeAmount *= 0.9; //TODO
 			this.registration.surchargeCost = this.registration.wholeAmount - this.registration.initialWholeAmount;
 		},
 		setRegistrationServices() {
@@ -181,6 +180,7 @@ new Vue({
 		},
 		resetRegistrationData() {
 			this.registration = {
+				id: null,
 				roomNumber: null,
 				price: null,
 				surchargeCost: 0,
@@ -202,8 +202,8 @@ new Vue({
 		},
 		
 		openPDFCheck(event, index) {
-			let registration, category, guests;
-			if (index) {
+			let registration, category, guests, isDiscountActive = false;
+			if (index !== undefined) {
 				registration = this.displayedRegistrations[index];
 			}
 			else {
@@ -214,26 +214,40 @@ new Vue({
 			}
 			category = Room.getRoomByNumber(this.rooms, registration.roomNumber)[0].category;
 			guests = registration.guestsID.split(",").map(guestID => {
-				return Guest.getGuestByID(this.guests, Number(guestID)).getFullName()
+				const guest = this.guests[guestID];
+				(guest.discountCode != null) && (isDiscountActive = true);
+				return guest.getFullName()
 			});
-			Check.openPDF(registration, category, guests);
+			Check.openPDF(registration, category, guests, isDiscountActive);
 		},
 		
-		// TODO edit data
-		addRegistration() {
+		saveRegistration() {
+			let action = "add-registration";
+			const isEditRegistrationMode = this.isEditRegistrationMode;
+			if (isEditRegistrationMode) action = "update-registration";
 			this.setRegistrationServices();
-			this.addRegistrationData(this.registration, () => {
-				this.registrations.push(
-					Registration.createRegistration(
-						this.registration.roomNumber,
-						this.registration.price,
-						this.registration.priceServices,
-						new Date(this.registration.dateOfArrival),
-						new Date(this.registration.dateOfDeparture),
-						(this.isReservationMode ? "" : this.registration.methodOfPayment),
-						this.registration.guestsID,
-						this.registration.servicesJSON)
-				);
+			this.sendRegistrationData(action, this.registration, () => {
+				if (isEditRegistrationMode) {
+					this.registrations[this.editRegistrationIndex].roomNumber = this.registration.roomNumber;
+					this.registrations[this.editRegistrationIndex].priceServices = this.registration.priceServices;
+					this.registrations[this.editRegistrationIndex].dateOfArrival = new Date(this.registration.dateOfArrival);
+					this.registrations[this.editRegistrationIndex].dateOfDeparture = new Date(this.registration.dateOfDeparture);
+					this.registrations[this.editRegistrationIndex].methodOfPayment = this.registration.methodOfPayment;
+					this.registrations[this.editRegistrationIndex].guestsID = this.registration.guestsID;
+					this.registrations[this.editRegistrationIndex].servicesJSON = this.registration.servicesJSON;
+				} else {
+					this.registrations.push(
+						Registration.createRegistration(
+							this.registration.roomNumber,
+							this.registration.price,
+							this.registration.priceServices,
+							new Date(this.registration.dateOfArrival),
+							new Date(this.registration.dateOfDeparture),
+							(this.isReservationMode ? "" : this.registration.methodOfPayment),
+							this.registration.guestsID,
+							this.registration.servicesJSON)
+					);
+				}
 				const room = Room.getRoomByNumber(this.rooms, this.registration.roomNumber)[0];
 				room.dateOfArrival = new Date(this.registration.dateOfArrival);
 				room.dateOfDeparture = new Date(this.registration.dateOfDeparture);
@@ -252,9 +266,9 @@ new Vue({
 			});
 		},
 		
-		addRegistrationData(registration, callback) {
+		sendRegistrationData(action, registration, callback) {
 			const xhr = new XMLHttpRequest();
-			xhr.open("POST", "add-registration");
+			xhr.open("POST", action);
 			xhr.setRequestHeader("Content-Type", "application/json");
 			xhr.send(JSON.stringify(registration));
 			xhr.onloadend = () => {

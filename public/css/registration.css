@@ -17,6 +17,11 @@
 .pay-btn{
 	background: url("/images/wallet-icon.png") no-repeat center/contain;
 }
+.pay-btn a{
+	display: block;
+	width: 100%;
+	height: 100%;
+}
 .check-btn{
 	background: url("/images/check-icon.png") no-repeat center/contain;
 }
@@ -34,13 +39,13 @@
 .popup-footer button{
 	height: 38px;
 	margin: 0 10px 10px 0;
-	padding: 0 20px;
 	color: #ffffff;
 	font-size: 20px;
 	border-radius: 5px;
 	background-color: #78635a;
 }
 .popup-footer button a{
+	padding: 0 20px;
 	color: #ffffff;
 	font-size: 20px;
 	text-decoration: none;
