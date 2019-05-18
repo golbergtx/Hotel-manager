@@ -129,11 +129,12 @@ app.post("/add-registration", (req, res) => {
 		new Date(req.body.dateOfArrival),
 		new Date(req.body.dateOfDeparture),
 		req.body.methodOfPayment,
-		req.body.guestsID
+		req.body.guestsID,
+		req.body.servicesJSON
 	];
 	
 	database.query(`INSERT INTO registrations SET roomNumber = ?, price = ?, priceServices = ?, dateOfArrival = ?, dateOfDeparture = ?, methodOfPayment = ?,
-	guestsID = ?`, data, err => {
+	guestsID = ?, servicesJSON = ?`, data, err => {
 		if (err) {
 			console.log(err);
 			res.status(500).end();

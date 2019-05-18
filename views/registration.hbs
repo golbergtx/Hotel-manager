@@ -44,7 +44,7 @@
 			<td v-text="registration.guestsID"></td>
 			<td class="finance-td">
 				<button class="pay-btn"><a href=""></a></button>
-				<button class="check-btn" @click="openPDFCheck(index)"></button>
+				<button class="check-btn" @click="openPDFCheck($event, index)"></button>
 			</td>
 			<td class="edit-td">
 				<button class="delete-registration-btn" @click="deleteRegistration(index)"></button>
@@ -100,7 +100,7 @@
 		<div class="popup-footer">
 			<button :class="{disable: showPopupErrorMessage}" @click="addRegistration">Підтвердити</button>
 			<button :class="{disable: showPopupErrorMessage}" @click="openServicesPopup">Дод. послуги</button>
-			<button :class="{disable: showPopupErrorMessage}"><a href="#">Сплатити</a></button>
+			<button :class="{disable: showPopupErrorMessage}" v-if="!isEditRegistrationMode"><a href="#">Сплатити</a></button>
 			<button :class="{disable: showPopupErrorMessage}" @click="openPDFCheck" v-if="!isReservationMode">Отримати чек</button>
 		</div>
 

@@ -2,6 +2,7 @@ import Room from "./data/Room.js";
 import Guest from "./data/Guest.js";
 import Registration from "./data/Registration.js";
 import DateFormater from "./data/Date-formater.js";
+import Check from "./data/Check.js";
 
 new Vue({
 	el: "article",
@@ -22,7 +23,8 @@ new Vue({
 			methodOfPayment: null,
 			guestsID: "",
 			wholeAmount: 0,
-			initialWholeAmount: 0
+			initialWholeAmount: 0,
+			servicesJSON: ""
 		},
 		services: {
 			enableBreakfast: false,
@@ -169,6 +171,14 @@ new Vue({
 			//if (isDiscountActive) this.registration.wholeAmount *= 0.9; //TODO
 			this.registration.surchargeCost = this.registration.wholeAmount - this.registration.initialWholeAmount;
 		},
+		setRegistrationServices() {
+			this.registration.servicesJSON = JSON.stringify({
+				enableBreakfast: this.services.enableBreakfast,
+				enableTransfer: this.services.enableTransfer,
+				restaurant: this.services.selectedRestaurantService,
+				laundry: this.services.selectedLaundryService
+			});
+		},
 		resetRegistrationData() {
 			this.registration = {
 				roomNumber: null,
@@ -180,7 +190,8 @@ new Vue({
 				methodOfPayment: null,
 				guestsID: "",
 				wholeAmount: 0,
-				initialWholeAmount: 0
+				initialWholeAmount: 0,
+				servicesJSON: ""
 			};
 			this.services.enableBreakfast = false;
 			this.services.enableTransfer = false;
@@ -190,42 +201,27 @@ new Vue({
 			this.services.selectedLaundryService = {};
 		},
 		
-		openPDFCheck() {
-			//TODO refactoring, corrections
-			const clientName = Guest.getGuestByID(this.guests, this.registration.guestsID).getFullName();
-			const docDefinition = {
-				content: [
-					{text: 'HOTEL', style: ['header']},
-					`Клиент:  ${clientName}`,
-					`Номер комнаты:  ${this.registration.roomNumber}`,
-					`Дата заселения:  ${this.registration.dateOfArrival}`,
-					`Дата выселения:  ${this.registration.dateOfDeparture}`,
-					`Цена за сутки:  ${this.registration.price} $`,
-					`Метод оплаты:  ${this.registration.methodOfPayment}`,
-					`____________________________________________________`,
-					{text: 'Дополнительные услуги:', style: ['subHeader']},
-					`Цена завтрака:  ${this.services.breakfast} $`,
-					`Цена такси:  ${this.services.taxi} $`,
-					`Цена прачечной:  ${this.services.washing} $`,
-					`____________________________________________________`,
-					{text: `Общая сумма: ${this.registration.wholeAmount} $`, style: ['subHeader']},
-				],
-				styles: {
-					header: {
-						fontSize: 22,
-						bold: true,
-						alignment: 'center'
-					},
-					subHeader: {
-						fontSize: 16,
-						bold: true
-					}
-				}
-			};
-			pdfMake.createPdf(docDefinition).open();
+		openPDFCheck(event, index) {
+			let registration, category, guests;
+			if (index) {
+				registration = this.displayedRegistrations[index];
+			}
+			else {
+				this.setRegistrationServices();
+				registration = Object.assign({}, this.registration);
+				registration.dateOfArrival = new Date(registration.dateOfArrival);
+				registration.dateOfDeparture = new Date(registration.dateOfDeparture);
+			}
+			category = Room.getRoomByNumber(this.rooms, registration.roomNumber)[0].category;
+			guests = registration.guestsID.split(",").map(guestID => {
+				return Guest.getGuestByID(this.guests, Number(guestID)).getFullName()
+			});
+			Check.openPDF(registration, category, guests);
 		},
 		
+		// TODO edit data
 		addRegistration() {
+			this.setRegistrationServices();
 			this.addRegistrationData(this.registration, () => {
 				this.registrations.push(
 					Registration.createRegistration(
@@ -235,7 +231,8 @@ new Vue({
 						new Date(this.registration.dateOfArrival),
 						new Date(this.registration.dateOfDeparture),
 						(this.isReservationMode ? "" : this.registration.methodOfPayment),
-						this.registration.guestsID)
+						this.registration.guestsID,
+						this.registration.servicesJSON)
 				);
 				const room = Room.getRoomByNumber(this.rooms, this.registration.roomNumber)[0];
 				room.dateOfArrival = new Date(this.registration.dateOfArrival);
@@ -349,7 +346,8 @@ new Vue({
 				registration.dateOfArrival,
 				registration.dateOfDeparture,
 				registration.methodOfPayment,
-				registration.guestsID
+				registration.guestsID,
+				registration.servicesJSON
 			);
 		});
 		
@@ -372,6 +370,7 @@ function formatService(serviceData, formattedService) {
 
 function setSelectedService(value, service, selectedServices) {
 	selectedServices[service.id] = {
+		name: service.name,
 		cost: service.cost,
 		count: value
 	};

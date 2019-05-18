@@ -1,7 +1,7 @@
 import DateFormater from "/js/data/Date-formater.js";
 
 export default class Registration {
-	constructor(id, roomNumber, price, priceServices, dateOfArrival, dateOfDeparture, methodOfPayment, guestsID) {
+	constructor(id, roomNumber, price, priceServices, dateOfArrival, dateOfDeparture, methodOfPayment, guestsID, servicesJSON) {
 		this.id = id;
 		this.roomNumber = roomNumber;
 		this.price = price;
@@ -10,6 +10,7 @@ export default class Registration {
 		this.dateOfDeparture = dateOfDeparture;
 		this.methodOfPayment = methodOfPayment || "Бронь";
 		this.guestsID = guestsID;
+		this.servicesJSON = servicesJSON;
 	}
 	
 	getDateOfArrival() {
@@ -39,7 +40,7 @@ export default class Registration {
 		return registrations.filter(registration => registration.guestsID.split(",").includes(id.toString()));
 	}
 	
-	static createRegistration(roomNumber, price, priceServices, dateOfArrival, dateOfDeparture, methodOfPayment, guestsID) {
-		return new Registration(null, roomNumber, price, priceServices, dateOfArrival, dateOfDeparture, methodOfPayment, guestsID)
+	static createRegistration(roomNumber, price, priceServices, dateOfArrival, dateOfDeparture, methodOfPayment, guestsID, servicesJSON) {
+		return new Registration(null, roomNumber, price, priceServices, dateOfArrival, dateOfDeparture, methodOfPayment, guestsID, servicesJSON)
 	}
 }
