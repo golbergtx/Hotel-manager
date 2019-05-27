@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+	      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="/css/main.css">
+	<link rel="stylesheet" href="/css/admin-panel.css">
+	<title>Admin panel</title>
+</head>
+<body>
+{{>header}}
+<section class="title-wrapper">
+	<h1 class="title-text">Адмін панель</h1>
+</section>
+<article>
+	<table class="table-content-wrapper">
+		<tr class="table-content-caption">
+			<td>Назва</td>
+			<td>Категорія</td>
+			<td>Ціна</td>
+			<td>Редагувати</td>
+		</tr>
+		<tr>
+			<td><b>Рум. сервіс</b></td>
+		</tr>
+		<tr v-for="(service, index) in restaurantService">
+			<td v-text="service.name"></td>
+			<td v-text="service.category"></td>
+			<td v-text="service.cost"></td>
+			<td class="edit-td">
+				<button class="edit-service-btn" @click="editService('restaurant', service)"></button>
+				<button class="delete-service-btn" @click="deleteService('restaurant', index)"></button>
+			</td>
+		</tr>
+		<tr>
+			<td><b>Пральня</b></td>
+		</tr>
+		<tr v-for="(service, index) in laundryService">
+			<td v-text="service.name"></td>
+			<td v-text="service.category"></td>
+			<td v-text="service.cost"></td>
+			<td class="edit-td">
+				<button class="edit-service-btn" @click="editService('laundry', serve)"></button>
+				<button class="delete-service-btn" @click="deleteService('laundry', index)"></button>
+			</td>
+		</tr>
+	</table>
+
+	<div class="popup-overlay" v-show="openedServicePopup"></div>
+	<div class="popup" v-show="openedServicePopup">
+		<h3 class="popup-caption">Редагувати сервіс:</h3>
+		<div class="popup-input-wrapper">
+			<label for="">Назва</label>
+			<input type="text" v-model="service.name">
+		</div>
+		<div class="popup-input-wrapper">
+			<label for="">Категорія</label>
+			<input type="text" v-model="service.category">
+		</div>
+		<div class="popup-input-wrapper">
+			<label for="">Ціна</label>
+			<input type="text" v-model="service.cost">
+		</div>
+		<button class="save-data-btn" @click="saveServiceData">Підтвердити</button>
+		<button class="close-popup-btn" @click="closeServicePopup"></button>
+	</div>
+</article>
+{{>footer}}
+<script src="/js/vue.js"></script>
+<script type="module" src="/js/admin-panel.js"></script>
+</body>
+</html>

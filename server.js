@@ -299,14 +299,17 @@ app.get("/log-out", (req, res) => {
 	user = null;
 	res.redirect("/user-login");
 });
-app.get("/room", function (req, res) {
+app.get("/room", (req, res) => {
 	res.render("room");
 });
-app.get("/registration", function (req, res) {
+app.get("/registration", (req, res) => {
 	res.render("registration");
 });
-app.get("/guest", function (req, res) {
+app.get("/guest", (req, res) => {
 	res.render("guest");
+});
+app.get("/admin-panel", (req, res) => {
+	res.render("admin-panel");
 });
 
 app.use("/", (req, res) => {

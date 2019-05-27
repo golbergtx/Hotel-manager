@@ -1,0 +1,18 @@
+.edit-td{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 56px;
+}
+.edit-td button{
+	width: 70px;
+	height: 50px;
+	border: none;
+	outline: none;
+}
+.edit-service-btn{
+	background: url("/images/edit-icon.png") no-repeat center/contain;
+}
+.delete-service-btn{
+	background: url("/images/cross-icon.png") no-repeat center/contain;
+}
