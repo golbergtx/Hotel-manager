@@ -70,16 +70,7 @@ app.post("/registration-user", (req, res) => {
 		}
 	);
 });
-app.post("/get-rooms", (req, res) => {
-	database.query(`SELECT * FROM rooms`, (err, result) => {
-		if (err) {
-			console.log(err);
-			res.status(500).end();
-		} else {
-			res.status(200).json(result);
-		}
-	});
-});
+
 app.post("/get-room", (req, res) => {
 	const number = req.body.number;
 	
@@ -91,6 +82,16 @@ app.post("/get-room", (req, res) => {
 			res.status(302).end();
 		} else {
 			res.status(404).end();
+		}
+	});
+});
+app.post("/get-rooms", (req, res) => {
+	database.query(`SELECT * FROM rooms`, (err, result) => {
+		if (err) {
+			console.log(err);
+			res.status(500).end();
+		} else {
+			res.status(200).json(result);
 		}
 	});
 });
@@ -111,6 +112,7 @@ app.post("/update-room", (req, res) => {
 		}
 	});
 });
+
 app.post("/get-registration", (req, res) => {
 	database.query(`SELECT * FROM registrations`, (err, result) => {
 		if (err) {
@@ -178,6 +180,7 @@ app.post("/delete-registration", (req, res) => {
 		}
 	});
 });
+
 app.post("/get-guests", (req, res) => {
 	database.query(`SELECT * FROM guests`, (err, result) => {
 		if (err) {
@@ -243,6 +246,7 @@ app.post("/delete-guest", (req, res) => {
 		}
 	});
 });
+
 app.post("/get-services", (req, res) => {
 	const restaurantService = new Promise((resolve, reject) => {
 		database.query(`SELECT * FROM restaurantService`, (err, result) => {
@@ -268,6 +272,66 @@ app.post("/get-services", (req, res) => {
 		restaurantService: result[0],
 		laundryService: result[1]
 	}));
+});
+app.post("/add-service", (req, res) => {
+	let tableName;
+	const data = [
+		req.body.name,
+		req.body.cost,
+		req.body.category
+	];
+	const typeID = req.body.typeID;
+	
+	if (typeID === "restaurant") tableName = "restaurantService";
+	if (typeID === "laundry") tableName = "laundryService";
+	
+	database.query(`INSERT INTO ${tableName} SET name = ?, cost = ?, category = ?`, data, (err, result) => {
+		if (err) {
+			console.log(err);
+			res.status(500).end();
+		} else {
+			res.status(200).json({id: result.insertId});
+		}
+	});
+});
+app.post("/update-service", (req, res) => {
+	let tableName;
+	const data = [
+		req.body.name,
+		req.body.cost,
+		req.body.category,
+		parseInt(req.body.id)
+	];
+	const typeID = req.body.typeID;
+	
+	if (typeID === "restaurant") tableName = "restaurantService";
+	if (typeID === "laundry") tableName = "laundryService";
+	
+	database.query(`UPDATE ${tableName} SET name = ?, cost = ?, category = ? WHERE id = ?`, data, err => {
+		if (err) {
+			console.log(err);
+			res.status(500).end();
+		} else {
+			res.status(200).end();
+		}
+	});
+});
+app.post("/delete-service", (req, res) => {
+	let tableName;
+	const typeID = req.body.typeID;
+	const id = req.body.service.id;
+	
+	if (typeID === "restaurant") tableName = "restaurantService";
+	if (typeID === "laundry") tableName = "laundryService";
+	
+	database.query(`DELETE FROM ${tableName} WHERE id = "${id}"`, err => {
+		if (err) {
+			console.log(err);
+			res.status(500).end();
+		} else {
+			res.status(200).end();
+		}
+	});
 });
 
 // middleware

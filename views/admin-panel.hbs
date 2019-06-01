@@ -15,6 +15,8 @@
 	<h1 class="title-text">Адмін панель</h1>
 </section>
 <article>
+	<button class="open-popup-btn" @click="createService">Додати</button>
+
 	<table class="table-content-wrapper">
 		<tr class="table-content-caption">
 			<td>Назва</td>
@@ -30,8 +32,8 @@
 			<td v-text="service.category"></td>
 			<td v-text="service.cost"></td>
 			<td class="edit-td">
-				<button class="edit-service-btn" @click="editService('restaurant', service)"></button>
-				<button class="delete-service-btn" @click="deleteService('restaurant', index)"></button>
+				<button class="edit-service-btn" @click="editService('restaurant', service, index)"></button>
+				<button class="delete-service-btn" @click="deleteService('restaurant', service, index)"></button>
 			</td>
 		</tr>
 		<tr>
@@ -42,15 +44,21 @@
 			<td v-text="service.category"></td>
 			<td v-text="service.cost"></td>
 			<td class="edit-td">
-				<button class="edit-service-btn" @click="editService('laundry', serve)"></button>
-				<button class="delete-service-btn" @click="deleteService('laundry', index)"></button>
+				<button class="edit-service-btn" @click="editService('laundry', service, index)"></button>
+				<button class="delete-service-btn" @click="deleteService('laundry', service, index)"></button>
 			</td>
 		</tr>
 	</table>
 
 	<div class="popup-overlay" v-show="openedServicePopup"></div>
 	<div class="popup" v-show="openedServicePopup">
-		<h3 class="popup-caption">Редагувати сервіс:</h3>
+		<h3 class="popup-caption" v-text="popupHeader"></h3>
+		<div class="popup-input-wrapper" v-if="!isEditServiceMode">
+			<label for="">Тип</label>
+			<select id="selectType" @change="onChangeType">
+				<option v-for="(type) in types" v-text="type.name"></option>
+			</select>
+		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Назва</label>
 			<input type="text" v-model="service.name">
