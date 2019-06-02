@@ -52,8 +52,8 @@
 		</tr>
 	</table>
 
-	<div class="popup-overlay" v-show="openedEditPopup"></div>
-	<div class="popup" v-show="openedEditPopup">
+	<div class="popup-overlay" :class="{show: openedEditPopup}"></div>
+	<div class="popup" :class="{show: openedEditPopup}">
 		<h3 class="popup-caption">Редагувати номер:</h3>
 		<span class="popup-error-message" v-if="showPopupErrorMessage" v-text="popupErrorMessage"></span>
 		<div class="popup-input-wrapper">

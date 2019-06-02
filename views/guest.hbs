@@ -50,8 +50,8 @@
 		</tr>
 	</table>
 
-	<div class="popup-overlay" v-show="openedGuestPopup"></div>
-	<div class="popup" v-show="openedGuestPopup">
+	<div class="popup-overlay" :class="{show: openedGuestPopup}"></div>
+	<div class="popup" :class="{show: openedGuestPopup}">
 		<h3 class="popup-caption" v-text="guestPopupCaption"></h3>
 		<div class="popup-input-wrapper">
 			<label for="">Ім'я</label>

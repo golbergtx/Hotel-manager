@@ -53,8 +53,8 @@
 		</tr>
 	</table>
 
-	<div class="popup-overlay" v-show="openedServicePopup"></div>
-	<div class="popup" v-show="openedServicePopup">
+	<div class="popup-overlay" :class="{show: openedServicePopup}"></div>
+	<div class="popup" :class="{show: openedServicePopup}">
 		<h3 class="popup-caption" v-text="popupHeader"></h3>
 		<div class="popup-input-wrapper" v-if="!isEditServiceMode">
 			<label for="">Тип</label>

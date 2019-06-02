@@ -55,8 +55,8 @@
 		</tr>
 	</table>
 	
-	<div class="popup-overlay" v-show="openedRegistrationPopup"></div>
-	<div class="popup" v-show="openedRegistrationPopup">
+	<div class="popup-overlay" :class="{show: openedRegistrationPopup}"></div>
+	<div class="popup" :class="{show: openedRegistrationPopup}">
 		<h3 class="popup-caption" v-text="popupHeader"></h3>
 		<span class="popup-error-message" v-if="showPopupErrorMessage" v-text="popupErrorMessage"></span>
 
@@ -111,8 +111,8 @@
 		<button class="close-popup-btn" @click="closeRegistrationPopup"></button>
 	</div>
 	
-	<div class="popup-overlay" v-show="openedServicesPopup"></div>
-	<div class="popup services-popup" v-show="openedServicesPopup">
+	<div class="popup-overlay" :class="{show: openedServicesPopup}"></div>
+	<div class="popup services-popup" :class="{show: openedServicesPopup}">
 		<h3 class="popup-caption">Додаткові послуги:</h3>
 
 		<div class="popup-input-wrapper">
