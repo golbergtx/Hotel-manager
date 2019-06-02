@@ -5,7 +5,8 @@ USE hotel;
 CREATE TABLE `hotel`.`users` (
 	login VARCHAR(30) NOT NULL,
 	password VARCHAR(30) NOT NULL,
-	name VARCHAR(30) NOT NULL
+	name VARCHAR(30) NOT NULL,
+	isAdmin BOOL DEFAULT false
 );
 
 CREATE TABLE `hotel`.`rooms` (
@@ -53,8 +54,8 @@ CREATE TABLE `hotel`.`laundryService` (
 	category VARCHAR(30) NOT NULL
 );
 
-INSERT users(login, password, name)
-VALUES ("admin", "admin" , "Tatyana");
+INSERT users(login, password, name, isAdmin)
+VALUES ("admin", "admin" , "Tatyana", true);
 
 INSERT rooms(number, category, price)
 VALUES

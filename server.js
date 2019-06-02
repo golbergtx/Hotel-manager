@@ -3,7 +3,9 @@ const express = require("express");
 const app = express();
 
 // modules
+const fs = require('fs');
 const hbs = require("hbs");
+const json2xls = require('json2xls');
 const bodyParser = require("body-parser");
 const User = require("./controllers/User");
 const Database = require("./controllers/Database");
@@ -29,7 +31,7 @@ app.post("/login", (req, res) => {
 			res.status(500).end();
 		}
 		if (result[0]) {
-			user = new User(result[0].login, result[0].password, result[0].name);
+			user = new User(result[0].login, result[0].password, result[0].name, result[0].isAdmin);
 			res.status(200).end();
 		} else {
 			res.status(401).end();
@@ -353,6 +355,17 @@ app.use("/", (req, res, next) => {
 });
 
 // get requests
+app.get("/download-guest", (req, res) => {
+	database.query(`SELECT * FROM guests`, (err, result) => {
+		if (err) {
+			console.log(err);
+		} else {
+			const xls = json2xls(result);
+			fs.writeFileSync('./reports/guest.xlsx', xls, 'binary');
+			res.sendFile(`${__dirname}/reports/guest.xlsx`);
+		}
+	});
+});
 app.get("/user-login", (req, res) => {
 	res.render("user-login");
 });
@@ -373,7 +386,8 @@ app.get("/guest", (req, res) => {
 	res.render("guest");
 });
 app.get("/admin-panel", (req, res) => {
-	res.render("admin-panel");
+	if (user.isAdmin) res.render("admin-panel");
+	else res.status(401).end();
 });
 
 app.use("/", (req, res) => {

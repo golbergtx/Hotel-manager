@@ -15,7 +15,10 @@
 	<h1 class="title-text">Адмін панель</h1>
 </section>
 <article>
-	<button class="open-popup-btn" @click="createService">Додати</button>
+	<div class="open-popup-btn-wrapper">
+		<button class="open-popup-btn" @click="downloadGuest">Завантажити список гостей</button>
+		<button class="open-popup-btn" @click="createService">Додати</button>
+	</div>
 
 	<table class="table-content-wrapper">
 		<tr class="table-content-caption">

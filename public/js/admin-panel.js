@@ -25,8 +25,21 @@ new Vue({
 			}
 		]
 	},
-	watch: {},
 	methods: {
+		downloadGuest() {
+			const xhr = new XMLHttpRequest();
+			xhr.open("GET", "download-guest");
+			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+			xhr.responseType = 'blob';
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState !== 4) return;
+				const link = document.createElement('a');
+				link.href = window.URL.createObjectURL(xhr.response);
+				link.download = "guest";
+				link.click();
+			};
+			xhr.send();
+		},
 		createService() {
 			this.popupHeader = "Додати сервіс:";
 			this.isEditServiceMode = false;

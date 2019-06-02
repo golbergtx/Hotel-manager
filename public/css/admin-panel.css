@@ -1,6 +1,11 @@
-.open-popup-btn{
+.open-popup-btn-wrapper{
 	display: flex;
+	justify-content: space-between;
+	width: 440px;
 	margin-left: auto;
+}
+.open-popup-btn{
+	margin-left: 0;
 }
 .table-content-wrapper{
 	margin-top: 50px;
