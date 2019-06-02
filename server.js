@@ -21,6 +21,9 @@ app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-w
 let user = null;
 
 // post requests
+app.post("/user", (req, res) => {
+	res.json(user).end();
+});
 app.post("/login", (req, res) => {
 	const userLogin = req.body.login;
 	const userPassword = req.body.password;
@@ -30,7 +33,7 @@ app.post("/login", (req, res) => {
 			console.log(err);
 			res.status(500).end();
 		}
-		if (result[0]) {
+		if (result[0] && userPassword === result[0].password.trim()) {
 			user = new User(result[0].login, result[0].password, result[0].name, result[0].isAdmin);
 			res.status(200).end();
 		} else {
@@ -41,7 +44,7 @@ app.post("/login", (req, res) => {
 app.post("/registration-user", (req, res) => {
 	const data = {
 		login: req.body.login,
-		password: req.body.password,
+		password: req.body.password.trim(),
 		name: req.body.name
 	};
 	

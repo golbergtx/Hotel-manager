@@ -1535,7 +1535,7 @@
     normalizeInject(child, vm);
     normalizeDirectives(child);
 
-    // Apply extends and mixins on the child options,
+    // Apply extends and scripts on the child options,
     // but only if it is a raw options object that isn't
     // the result of another mergeOptions call.
     // Only merged options has the _base property.
@@ -3196,7 +3196,7 @@
 
     data = data || {};
 
-    // resolve constructor options in case global mixins are applied after
+    // resolve constructor options in case global scripts are applied after
     // component constructor creation
     resolveConstructorOptions(Ctor);
 
