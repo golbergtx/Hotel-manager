@@ -16,8 +16,11 @@
 </section>
 <article>
 	<div class="open-popup-btn-wrapper">
-		<button class="open-popup-btn" @click="downloadGuest">Завантажити список гостей</button>
-		<button class="open-popup-btn" @click="createService">Додати</button>
+		<button class="open-popup-btn" @click="createUser">Зарєєструвати користувача</button>
+		<button class="open-popup-btn" @click="downloadGuestReport">Завантажити список гостей</button>
+		<button class="open-popup-btn" @click="downloadRestaurantReport">Завантажити звіт рум. сервіс</button>
+		<button class="open-popup-btn" @click="downloadLaundryReport">Завантажити звіт - пральня</button>
+		<button class="open-popup-btn" @click="createService">Додати сервіс</button>
 	</div>
 
 	<table class="table-content-wrapper">
@@ -53,13 +56,33 @@
 		</tr>
 	</table>
 
+	<div class="popup-overlay" :class="{show: openedUserPopup}"></div>
+	<div class="popup" :class="{show: openedUserPopup}">
+		<h3 class="popup-caption" v-text="popupHeader"></h3>
+		<p class="error-message" v-if="loginExist">Даний логін вже існує !</p>
+		<div class="popup-input-wrapper">
+			<label for="">Логін</label>
+			<input type="text" maxlength="40" v-model="user.login">
+		</div>
+		<div class="popup-input-wrapper">
+			<label for="">Пароль</label>
+			<input type="password" maxlength="40" v-model="user.password">
+		</div>
+		<div class="popup-input-wrapper">
+			<label for="">Ім'я</label>
+			<input type="text" maxlength="40" v-model="user.name">
+		</div>
+		<button class="save-data-btn" @click="saveUserData">Підтвердити</button>
+		<button class="close-popup-btn" @click="closeUserPopup"></button>
+	</div>
+
 	<div class="popup-overlay" :class="{show: openedServicePopup}"></div>
 	<div class="popup" :class="{show: openedServicePopup}">
 		<h3 class="popup-caption" v-text="popupHeader"></h3>
 		<div class="popup-input-wrapper" v-if="!isEditServiceMode">
 			<label for="">Тип</label>
-			<select id="selectType" @change="onChangeType">
-				<option v-for="(type) in types" v-text="type.name"></option>
+			<select id="selectType" @change="onChangeServiceType">
+				<option v-for="(type) in serviceType" v-text="type.name"></option>
 			</select>
 		</div>
 		<div class="popup-input-wrapper">
@@ -77,6 +100,8 @@
 		<button class="save-data-btn" @click="saveServiceData">Підтвердити</button>
 		<button class="close-popup-btn" @click="closeServicePopup"></button>
 	</div>
+
+	<info-popup ref="infoPopup"></info-popup>
 </article>
 {{>footer}}
 <script src="/js/vue.js"></script>

@@ -16,8 +16,8 @@ export default class Room {
 	}
 	
 	getStatus() {
-		if (this.reserved) return "Забронировано";
-		return (this.status) ? "Занято" : "Свободно"
+		if (this.reserved) return "Заброньовано";
+		return (this.status) ? "Занято" : "Вільно"
 	}
 	
 	getDateOfArrival() {

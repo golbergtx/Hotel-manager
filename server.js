@@ -9,6 +9,7 @@ const json2xls = require('json2xls');
 const bodyParser = require("body-parser");
 const User = require("./controllers/User");
 const Database = require("./controllers/Database");
+const DataFormater = require("./controllers/Date-formater");
 const database = Database.connection("localhost", "root", "password", "hotel");
 
 // app config
@@ -339,6 +340,16 @@ app.post("/delete-service", (req, res) => {
 	});
 });
 
+app.post("/download-guest-report", (req, res) => {
+	createGuestReport("guest", () => res.sendFile(`${__dirname}/reports/guest.xlsx`));
+});
+app.post("/download-restaurant-report", (req, res) => {
+	createServiceReport("restaurant", () => res.sendFile(`${__dirname}/reports/services.xlsx`));
+});
+app.post("/download-laundry-report", (req, res) => {
+	createServiceReport("laundry", () => res.sendFile(`${__dirname}/reports/services.xlsx`));
+});
+
 // middleware
 app.use("/", (req, res, next) => {
 	if (req.path === "/user-login" || req.path === "/user-registration") {
@@ -358,17 +369,6 @@ app.use("/", (req, res, next) => {
 });
 
 // get requests
-app.get("/download-guest", (req, res) => {
-	database.query(`SELECT * FROM guests`, (err, result) => {
-		if (err) {
-			console.log(err);
-		} else {
-			const xls = json2xls(result);
-			fs.writeFileSync('./reports/guest.xlsx', xls, 'binary');
-			res.sendFile(`${__dirname}/reports/guest.xlsx`);
-		}
-	});
-});
 app.get("/user-login", (req, res) => {
 	res.render("user-login");
 });
@@ -398,3 +398,62 @@ app.use("/", (req, res) => {
 });
 
 app.listen(3000);
+
+
+function createGuestReport(type, callback) {
+	database.query(`SELECT * FROM guests`, (err, result) => {
+		if (err) {
+			console.log(err);
+		} else {
+			const reportData = [];
+			result.forEach(guest => {
+				reportData.push({
+					["First name"]: guest.firstName,
+					["Last name"]: guest.lastName,
+					["Phone number"]: guest.phone,
+					["Address"]: guest.address,
+					["Passport details"]: guest.passportDetails,
+					["Date of Birth"]: DataFormater.getFormatDate(new Date(guest.dateOfBirth)),
+					["Discount code"]: guest.discountCode
+				})
+			});
+			
+			const xls = json2xls(reportData);
+			fs.writeFileSync('./reports/guest.xlsx', xls, 'binary');
+			if (callback) callback();
+		}
+	});
+}
+function createServiceReport(type, callback) {
+	database.query(`SELECT * FROM registrations`, (err, result) => {
+		if (err) {
+			console.log(err);
+		} else {
+			const reportData = [];
+			let registrations = result;
+			
+			registrations.forEach(registration => {
+				let service = {};
+				const services = JSON.parse(registration.servicesJSON);
+				if (type === "restaurant") service = services.restaurant;
+				if (type === "laundry") service = services.laundry;
+				
+				Object.values(service).forEach(service => {
+					reportData.push({
+						["Room number"]: registration.roomNumber,
+						["Date of Arrival"]: DataFormater.getFormatDate(new Date(registration.dateOfArrival)),
+						["Date of departure"]: DataFormater.getFormatDate(new Date(registration.dateOfDeparture)),
+						["Name"]: service.name,
+						["Count"]: service.count,
+						["Cost"]: service.cost,
+						["Sum"]: service.count * service.cost
+					})
+				});
+			});
+			
+			const xls = json2xls(reportData);
+			fs.writeFileSync('./reports/services.xlsx', xls, 'binary');
+			if (callback) callback();
+		}
+	});
+}

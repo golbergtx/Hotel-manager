@@ -181,3 +181,21 @@ input{
 	border-radius: 5px;
 	background-color: #78635a;
 }
+.info-popup{
+	display: none;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	top: 20px;
+	left: 20px;
+	width: 300px;
+	height: 50px;
+	border-radius: 5px;
+	background: rgba(0, 0, 0, 0.8);
+}
+.info-popup.show{
+	display: flex;
+}
+.info-popup p{
+	color: #ffffff;
+}

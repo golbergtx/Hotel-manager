@@ -20,7 +20,7 @@ CREATE TABLE `hotel`.`guests` (
 	firstName VARCHAR(30) NOT NULL,
 	lastName VARCHAR(30) NOT NULL,
 	phone VARCHAR(30) NOT NULL,
-	address VARCHAR(30) NOT NULL,
+	address VARCHAR(60) NOT NULL,
 	passportDetails VARCHAR(30) NOT NULL,
 	dateOfBirth DATE NOT NULL,
 	discountCode VARCHAR(30)
