@@ -11,6 +11,7 @@
 <body>
 <div class="overlay"></div>
 <img src="/images/logo.png" class="site-logo" alt="Logo">
+
 <section class="login-form-wrapper">
 	<p class="login-caption">Авторизація</p>
 	<form id="loginForm" @submit.prevent="submit" action="#" method="post">
@@ -24,9 +25,7 @@
 			<input type="password" placeholder="Пароль" required v-model="password">
 		</div>
 		<button type="submit" class="form-btn">Увійти</button>
-		<button class="form-btn">
-			<a href="/user-registration">Реєстрація</a>
-		</button>
+		<button class="form-btn"><a href="/user-registration">Реєстрація</a></button>
 	</form>
 </section>
 <script src="/js/vue.js"></script>

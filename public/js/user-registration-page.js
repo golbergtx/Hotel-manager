@@ -5,21 +5,19 @@ new Vue({
 		password: "",
 		firstName: "",
 		loginExist: false,
-		registrySuccessFull: false,
-		showErrorLoginMessage: false
+		registrySuccessFull: false
 	},
 	methods: {
 		submit() {
 			const data = `login=${encodeURIComponent(this.login)}&password=${encodeURIComponent(this.password)}
 				&name=${encodeURIComponent(this.firstName)}`;
-			this.sendDataToServer(data);
+			
+			this.sendData(data);
 			if (this.registrySuccessFull) {
 				window.location = "/";
-			} else {
-				this.showErrorLoginMessage = true;
 			}
 		},
-		sendDataToServer(body) {
+		sendData(body) {
 			const xhr = new XMLHttpRequest();
 			xhr.open("POST", "registration-user", false);
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -29,7 +27,7 @@ new Vue({
 			} else if (xhr.status === 409) {
 				this.loginExist = true;
 			} else {
-				this.registrySuccessFull = false;
+				alert("Oops! Something went wrong");
 			}
 		}
 	}

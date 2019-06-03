@@ -71,6 +71,7 @@
 		<button class="save-data-btn" :class="{disable: showPopupErrorMessage}" @click="updateRoom">Підтвердити</button>
 		<button class="close-popup-btn" @click="closeEditPopup"></button>
 	</div>
+	<info-popup ref="infoPopup"></info-popup>
 </article>
 {{>footer}}
 <script src="/js/vue.js"></script>

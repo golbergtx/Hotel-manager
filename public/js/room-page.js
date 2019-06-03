@@ -1,4 +1,7 @@
 import Room from "./data/Room.js";
+import infoPopup from "./scripts/info-popup.js"
+
+Vue.component('info-popup', infoPopup);
 
 new Vue({
 	el: "article",
@@ -38,6 +41,7 @@ new Vue({
 				new Date(this.dateOfDepartureFilter)
 			);
 		},
+		
 		openEditPopup(index) {
 			this.openedEditPopup = true;
 			this.editRoomNumber = this.displayedRooms[index].number;
@@ -49,18 +53,30 @@ new Vue({
 			this.openedEditPopup = false;
 		},
 		updateRoom() {
+			if (!this.isValidEditRoomData()) {
+				alert("Заповніть всі поля!");
+				return
+			}
 			if (this.editRoomNumber !== Number(this.editRoomData.number)) {
-				if (this.checkRoom(this.editRoomData.number)) {
+				if (this.isRoomExists(this.editRoomData.number)) {
 					this.showPopupErrorMessage = true;
 					setTimeout(() => this.showPopupErrorMessage = false, 3000);
 					return;
 				}
 			}
-			this.updateRoomData(this.editRoomNumber);
-			this.editRoom(this.editRoomNumber);
-			this.closeEditPopup();
+			const data = this.editRoomData;
+			data.editNumber = this.editRoomNumber;
+			this.sendData("update-room", JSON.stringify(data), (response, status) => {
+				if (status === 200) {
+					this.$refs.infoPopup.openInfoPopup("Оновлено!");
+					this.editRoom(this.editRoomNumber);
+					this.closeEditPopup();
+				} else {
+					this.$refs.infoPopup.openInfoPopup("Oops! Something went wrong");
+				}
+			});
 		},
-		checkRoom(number) {
+		isRoomExists(number) {
 			const xhr = new XMLHttpRequest();
 			xhr.open("POST", "get-room", false);
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -71,45 +87,46 @@ new Vue({
 				return false;
 			}
 		},
-		updateRoomData(editRoomNumber) {
-			const data = this.editRoomData;
-			data.editNumber = editRoomNumber;
-			const xhr = new XMLHttpRequest();
-			xhr.open("POST", "update-room");
-			xhr.setRequestHeader("Content-Type", "application/json");
-			xhr.send(JSON.stringify(data));
-		},
 		editRoom(editRoomNumber) {
 			const room = this.rooms.find((element) => element.number === editRoomNumber);
 			room.editRoom(this.editRoomData);
 		},
-		getRoomsData() {
+		isValidEditRoomData() {
+			return Object.values(this.editRoomData).every(element => element !== "");
+		},
+		
+		sendData(action, data, callback) {
 			const xhr = new XMLHttpRequest();
-			xhr.open("POST", "get-rooms", false);
-			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			xhr.send();
-			if (xhr.status === 200) {
-				return JSON.parse(xhr.response);
+			xhr.open("POST", action);
+			xhr.setRequestHeader("Content-Type", "application/json");
+			xhr.send(data);
+			xhr.onloadend = () => {
+				if (callback) callback(xhr.response, xhr.status);
 			}
 		},
-		getRegistrationData() {
+		getData(action) {
 			const xhr = new XMLHttpRequest();
-			xhr.open("POST", "get-registration", false);
-			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			xhr.open("POST", action, false);
 			xhr.send();
 			if (xhr.status === 200) {
 				return JSON.parse(xhr.response, (key, value) => {
 					if (key.startsWith("date")) return new Date(value);
 					return value
 				});
+			} else {
+				alert("Oops! Something went wrong");
 			}
 		}
 	},
 	mounted() {
-		const roomsData = this.getRoomsData();
-		const registrationsData = this.getRegistrationData();
+		const roomsData = this.getData("get-rooms");
+		const registrationsData = this.getData("get-registration");
 		this.rooms = roomsData.map(room => {
-			const registration = registrationsData.find(element => element.roomNumber === room.number) || {};
+			const registration = registrationsData.find(registration => {
+				if (registration.dateOfDeparture < new Date()) return false;
+				return registration.roomNumber === room.number
+			}) || {};
+			
 			return new Room(room.number,
 				room.category,
 				registration.dateOfArrival,

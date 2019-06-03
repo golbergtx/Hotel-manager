@@ -9,22 +9,25 @@ new Vue({
 	methods: {
 		submit() {
 			const data = `login=${encodeURIComponent(this.login)}&password=${encodeURIComponent(this.password)}`;
-			this.loginSuccessFull = this.loginToServer(data);
+			
+			this.loginToServer(data);
 			if (this.loginSuccessFull) {
 				window.location = "/";
 			} else {
 				this.showErrorLoginMessage = true;
 			}
 		},
-		loginToServer(body) {
+		loginToServer(data) {
 			const xhr = new XMLHttpRequest();
 			xhr.open("POST", "/login", false);
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			xhr.send(body);
-			if (xhr.status != 200) {
-				return false;
+			xhr.send(data);
+			if (xhr.status === 200) {
+				this.loginSuccessFull = true;
+			} else if (xhr.status === 401) {
+				this.loginSuccessFull = false;
 			} else {
-				return true;
+				alert("Oops! Something went wrong");
 			}
 		}
 	}

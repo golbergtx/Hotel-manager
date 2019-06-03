@@ -315,7 +315,6 @@ new Vue({
 		getRegistrationData() {
 			const xhr = new XMLHttpRequest();
 			xhr.open("POST", "get-registration", false);
-			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			xhr.send();
 			if (xhr.status === 200) {
 				return JSON.parse(xhr.response, (key, value) => {
@@ -333,7 +332,10 @@ new Vue({
 		const {restaurantService, laundryService} = service;
 		
 		this.rooms = roomsData.map(room => {
-			const registration = registrationsData.find(element => element.roomNumber === room.number) || {};
+			const registration = registrationsData.find(registration => {
+				if (registration.dateOfDeparture < new Date()) return false;
+				return registration.roomNumber === room.number
+			}) || {};
 			return new Room(room.number,
 				room.category,
 				registration.dateOfArrival,
@@ -363,7 +365,7 @@ new Vue({
 				registration.guestsID,
 				registration.servicesJSON
 			);
-		});
+		}).filter(registration => registration.dateOfDeparture > new Date());
 		
 		formatService(restaurantService, this.services.restaurantService);
 		formatService(laundryService, this.services.laundryService);

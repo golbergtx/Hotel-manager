@@ -11,10 +11,10 @@
 <body>
 <div class="overlay"></div>
 <img src="/images/logo.png" class="site-logo" alt="Logo">
+
 <section class="registration-form-wrapper">
 	<p class="registration-caption">Реєстрація:</p>
 	<form id="registrationForm" class="registry-form" @submit.prevent="submit" action="#" method="post">
-		<p class="error-message" v-if="showErrorLoginMessage">Ви ввели неправильні дані!</p>
 		<p class="error-message" v-if="loginExist">Даний логін вже існує !</p>
 		<div class="input-wrapper">
 			<label for="">Логін</label>
