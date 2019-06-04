@@ -226,15 +226,16 @@ new Vue({
 			const isEditRegistrationMode = this.isEditRegistrationMode;
 			if (isEditRegistrationMode) action = "update-registration";
 			this.setRegistrationServices();
-			this.sendRegistrationData(action, this.registration, () => {
+			this.sendData(action, JSON.stringify(this.registration), () => {
 				if (isEditRegistrationMode) {
-					this.registrations[this.editRegistrationIndex].roomNumber = this.registration.roomNumber;
-					this.registrations[this.editRegistrationIndex].priceServices = this.registration.priceServices;
-					this.registrations[this.editRegistrationIndex].dateOfArrival = new Date(this.registration.dateOfArrival);
-					this.registrations[this.editRegistrationIndex].dateOfDeparture = new Date(this.registration.dateOfDeparture);
-					this.registrations[this.editRegistrationIndex].methodOfPayment = this.registration.methodOfPayment;
-					this.registrations[this.editRegistrationIndex].guestsID = this.registration.guestsID;
-					this.registrations[this.editRegistrationIndex].servicesJSON = this.registration.servicesJSON;
+					const registration = this.registrations[this.editRegistrationIndex];
+					registration.roomNumber = this.registration.roomNumber;
+					registration.priceServices = this.registration.priceServices;
+					registration.dateOfArrival = new Date(this.registration.dateOfArrival);
+					registration.dateOfDeparture = new Date(this.registration.dateOfDeparture);
+					registration.methodOfPayment = this.registration.methodOfPayment;
+					registration.guestsID = this.registration.guestsID;
+					registration.servicesJSON = this.registration.servicesJSON;
 				} else {
 					this.registrations.push(
 						Registration.createRegistration(
@@ -257,7 +258,7 @@ new Vue({
 			this.closeRegistrationPopup();
 		},
 		deleteRegistration(index) {
-			this.deleteRegistrationData(this.registrations[index].roomNumber, () => {
+			this.sendData("delete-registration", JSON.stringify({roomNumber: this.registrations[index].roomNumber}), () => {
 				const room = Room.getRoomByNumber(this.rooms, this.registrations[index].roomNumber)[0];
 				room.dateOfArrival = "";
 				room.dateOfDeparture = "";
@@ -275,46 +276,20 @@ new Vue({
 				if (xhr.status === 200) callback && callback();
 			}
 		},
-		deleteRegistrationData(roomNumber, callback) {
+		
+		sendData(action, data, callback) {
 			const xhr = new XMLHttpRequest();
-			xhr.open("POST", "delete-registration");
+			xhr.open("POST", action);
 			xhr.setRequestHeader("Content-Type", "application/json");
-			xhr.send(JSON.stringify({roomNumber: roomNumber}));
+			xhr.send(data);
 			xhr.onloadend = () => {
-				if (xhr.status === 200) callback && callback();
+				if (callback) callback(xhr.response, xhr.status);
 			}
 		},
 		
-		getRoomsData() {
+		getData(action) {
 			const xhr = new XMLHttpRequest();
-			xhr.open("POST", "get-rooms", false);
-			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			xhr.send();
-			if (xhr.status === 200) {
-				return JSON.parse(xhr.response);
-			}
-		},
-		getGuestsData() {
-			const xhr = new XMLHttpRequest();
-			xhr.open("POST", "get-guests", false);
-			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			xhr.send();
-			if (xhr.status === 200) {
-				return JSON.parse(xhr.response);
-			}
-		},
-		getServicesData() {
-			const xhr = new XMLHttpRequest();
-			xhr.open("POST", "get-services", false);
-			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			xhr.send();
-			if (xhr.status === 200) {
-				return JSON.parse(xhr.response);
-			}
-		},
-		getRegistrationData() {
-			const xhr = new XMLHttpRequest();
-			xhr.open("POST", "get-registration", false);
+			xhr.open("POST", action, false);
 			xhr.send();
 			if (xhr.status === 200) {
 				return JSON.parse(xhr.response, (key, value) => {
@@ -325,10 +300,10 @@ new Vue({
 		}
 	},
 	mounted() {
-		const roomsData = this.getRoomsData();
-		const guestData = this.getGuestsData();
-		const service = this.getServicesData();
-		const registrationsData = this.getRegistrationData();
+		const roomsData = this.getData("get-rooms");
+		const guestData = this.getData("get-guests");
+		const service = this.getData("get-services");
+		const registrationsData = this.getData("get-registration");
 		const {restaurantService, laundryService} = service;
 		
 		this.rooms = roomsData.map(room => {
