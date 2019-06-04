@@ -52,38 +52,39 @@
 
 	<div class="popup-overlay" :class="{show: openedGuestPopup}"></div>
 	<div class="popup" :class="{show: openedGuestPopup}">
-		<h3 class="popup-caption" v-text="guestPopupCaption"></h3>
+		<h3 class="popup-caption" v-text="popupHeader"></h3>
 		<div class="popup-input-wrapper">
 			<label for="">Ім'я</label>
-			<input type="text" v-model="guest.firstName">
+			<input type="text" v-model="editGuestData.firstName">
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Прізвище</label>
-			<input type="text" v-model="guest.lastName">
+			<input type="text" v-model="editGuestData.lastName">
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Номер телефону</label>
-			<input type="text" v-model="guest.phone">
+			<input type="text" v-model="editGuestData.phone">
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Адреса</label>
-			<input type="text" v-model="guest.address">
+			<input type="text" v-model="editGuestData.address">
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Паспорт</label>
-			<input type="text" v-model="guest.passportDetails">
+			<input type="text" v-model="editGuestData.passportDetails">
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Дата народження</label>
-			<input type="date" v-model="guest.dateOfBirth">
+			<input type="date" v-model="editGuestData.dateOfBirth">
 		</div>
 		<div class="popup-input-wrapper">
 			<label for="">Код знижки</label>
-			<input type="text" v-model="guest.discountCode">
+			<input type="text" v-model="editGuestData.discountCode">
 		</div>
 		<button class="save-data-btn" @click="saveGuestData">Підтвердити</button>
 		<button class="close-popup-btn" @click="closeGuestPopup"></button>
 	</div>
+	<info-popup ref="infoPopup"></info-popup>
 </article>
 {{>footer}}
 <script src="/js/vue.js"></script>
