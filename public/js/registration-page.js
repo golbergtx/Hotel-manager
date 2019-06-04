@@ -124,7 +124,7 @@ new Vue({
 		},
 		onChangeGuestsID(event) {
 			this.registration.guestsID = "";
-			[...event.target.selectedOptions].forEach((option) => this.registration.guestsID += `${option.index},`);
+			[...event.target.selectedOptions].forEach((option) =>this.registration.guestsID += `${this.guests[option.index].id},`);
 			this.registration.guestsID = this.registration.guestsID.slice(0, -1);
 			this.setSumPrice();
 		},
@@ -202,7 +202,7 @@ new Vue({
 		},
 		
 		openPDFCheck(event, index) {
-			let registration, category, guests, isDiscountActive = false;
+			let registration, category, guests = [], isDiscountActive = false;
 			if (index !== undefined) {
 				registration = this.displayedRegistrations[index];
 			}
@@ -213,11 +213,14 @@ new Vue({
 				registration.dateOfDeparture = new Date(registration.dateOfDeparture);
 			}
 			category = Room.getRoomByNumber(this.rooms, registration.roomNumber)[0].category;
-			guests = registration.guestsID.split(",").map(guestID => {
-				const guest = this.guests[guestID];
-				(guest.discountCode != null) && (isDiscountActive = true);
-				return guest.getFullName()
-			});
+            
+            if (registration.guestsID !== "") {
+                guests = registration.guestsID.split(",").map(guestID => {
+                    const guest = this.guests[guestID];
+                    (guest.discountCode != null) && (isDiscountActive = true);
+                    return guest.getFullName()
+                });
+            }
 			Check.openPDF(registration, category, guests, isDiscountActive);
 		},
 		
